@@ -1,0 +1,429 @@
+{
+  "data_version": 5,
+  "generated_at": "2026-06-30 00:03",
+  "strategy_order": [
+    "etf",
+    "ah",
+    "dividend",
+    "equity"
+  ],
+  "strategies": {
+    "etf": {
+      "id": "etf",
+      "featured_variant": "6M skip 1M",
+      "execution_note": "Month-end momentum ranking; trades execute on the next month's first trading day at 50/50 when the selected ETF set changes; weights drift naturally otherwise with no monthly rebalance.",
+      "latest_rebalance": "2026-06-29",
+      "holdings_as_of": "2026-06-29",
+      "holdings": [
+        {
+          "symbol": "512220",
+          "name": "TMT",
+          "weight": 0.5605649194430522,
+          "name_en": "TMT ETF"
+        },
+        {
+          "symbol": "562910",
+          "name": "高端制造",
+          "weight": 0.4394350805569478,
+          "name_en": "Advanced Manufacturing ETF"
+        }
+      ],
+      "cash_weight": 0.0,
+      "projected_month_end": {
+        "signal_date": "2026-06-29",
+        "holdings": [
+          {
+            "symbol": "512220",
+            "name": "TMT",
+            "weight": 0.5,
+            "name_en": "TMT ETF"
+          },
+          {
+            "symbol": "562910",
+            "name": "高端制造",
+            "weight": 0.5,
+            "name_en": "Advanced Manufacturing ETF"
+          }
+        ],
+        "entries": [],
+        "exits": [],
+        "unchanged": true
+      },
+      "metrics": {
+        "cagr": 0.1101599264429387,
+        "sharpe": 0.4983738726073429,
+        "max_drawdown": -0.34132564384795694,
+        "final_nav": 2.5125430436357927,
+        "turnover_per_year": 5.853086604486239
+      },
+      "benchmark_metrics": {
+        "cagr": 0.02850484748238946,
+        "sharpe": 0.1493977869518378,
+        "max_drawdown": -0.456026204848647,
+        "final_nav": 1.2811785200723225
+      },
+      "nav_start": "2017-09-01",
+      "cost_bps": 30.0,
+      "backtest_start": "2017-09-01",
+      "backtest_end": "2026-06-29",
+      "universe": {
+        "513050": "中概互联",
+        "159928": "消费",
+        "510230": "金融",
+        "510880": "红利",
+        "512120": "医药",
+        "512220": "TMT",
+        "562910": "高端制造",
+        "HYDRO_EQ": "水电等权"
+      },
+      "nav_src": "nav/etf.json",
+      "nav_points": 2138
+    },
+    "ah": {
+      "id": "ah",
+      "latest_rebalance": "2026-06-30",
+      "holdings_as_of": "2026-06-30",
+      "holdings": [
+        {
+          "pair": "兆易创新(603986/03986)",
+          "weight": 0.15787576466471534,
+          "ah_premium": -0.17871319050418977,
+          "pair_en": "GigaDevice (603986/03986)"
+        },
+        {
+          "pair": "药明康德(603259/02359)",
+          "weight": 0.11341167889251386,
+          "ah_premium": -0.06111552382723262,
+          "pair_en": "WuXi AppTec (603259/02359)"
+        },
+        {
+          "pair": "澜起科技(688008/06809)",
+          "weight": 0.10814943588902808,
+          "ah_premium": -0.27956805220619885,
+          "pair_en": "Montage Technology (688008/06809)"
+        },
+        {
+          "pair": "恒瑞医药(600276/01276)",
+          "weight": 0.09497988812754851,
+          "ah_premium": 0.061763914172116685,
+          "pair_en": "Hengrui Medicine (600276/01276)"
+        },
+        {
+          "pair": "交通银行(601328/03328)",
+          "weight": 0.09199871169164751,
+          "ah_premium": 0.0788989978558563,
+          "pair_en": "Bank of Communications (601328/03328)"
+        },
+        {
+          "pair": "招商银行(600036/03968)",
+          "weight": 0.0904293384185437,
+          "ah_premium": -0.06969028360432761,
+          "pair_en": "China Merchants Bank (600036/03968)"
+        },
+        {
+          "pair": "胜宏科技(300476/02476)",
+          "weight": 0.08956509903446205,
+          "ah_premium": 0.07804687527407861,
+          "pair_en": "Shengyi Technology (300476/02476)"
+        },
+        {
+          "pair": "宁德时代(300750/03750)",
+          "weight": 0.08702491430879895,
+          "ah_premium": -0.3532604421985559,
+          "pair_en": "CATL (300750/03750)"
+        },
+        {
+          "pair": "中国平安(601318/02318)",
+          "weight": 0.08698188188155352,
+          "ah_premium": 0.07926815989115954,
+          "pair_en": "Ping An Insurance (601318/02318)"
+        },
+        {
+          "pair": "潍柴动力(000338/02338)",
+          "weight": 0.07958328709118832,
+          "ah_premium": -0.10216876867454638,
+          "pair_en": "Weichai Power (000338/02338)"
+        }
+      ],
+      "projected_month_end": {
+        "signal_date": "2026-06-30",
+        "holdings": [
+          {
+            "pair": "宁德时代(300750/03750)",
+            "weight": 0.1,
+            "ah_premium": -0.3532604421985559,
+            "pair_en": "CATL (300750/03750)"
+          },
+          {
+            "pair": "澜起科技(688008/06809)",
+            "weight": 0.1,
+            "ah_premium": -0.2795680522061988,
+            "pair_en": "Montage Technology (688008/06809)"
+          },
+          {
+            "pair": "兆易创新(603986/03986)",
+            "weight": 0.1,
+            "ah_premium": -0.1787131905041897,
+            "pair_en": "GigaDevice (603986/03986)"
+          },
+          {
+            "pair": "潍柴动力(000338/02338)",
+            "weight": 0.1,
+            "ah_premium": -0.1021687686745463,
+            "pair_en": "Weichai Power (000338/02338)"
+          },
+          {
+            "pair": "招商银行(600036/03968)",
+            "weight": 0.1,
+            "ah_premium": -0.0696902836043276,
+            "pair_en": "China Merchants Bank (600036/03968)"
+          },
+          {
+            "pair": "药明康德(603259/02359)",
+            "weight": 0.1,
+            "ah_premium": -0.0611155238272326,
+            "pair_en": "WuXi AppTec (603259/02359)"
+          },
+          {
+            "pair": "XD紫金矿(601899/02899)",
+            "weight": 0.1,
+            "ah_premium": 0.0558586150607476,
+            "pair_en": "Zijin Mining (601899/02899)"
+          },
+          {
+            "pair": "恒瑞医药(600276/01276)",
+            "weight": 0.1,
+            "ah_premium": 0.0617639141721166,
+            "pair_en": "Hengrui Medicine (600276/01276)"
+          },
+          {
+            "pair": "胜宏科技(300476/02476)",
+            "weight": 0.1,
+            "ah_premium": 0.0780468752740786,
+            "pair_en": "Shengyi Technology (300476/02476)"
+          },
+          {
+            "pair": "交通银行(601328/03328)",
+            "weight": 0.1,
+            "ah_premium": 0.0788989978558563,
+            "pair_en": "Bank of Communications (601328/03328)"
+          }
+        ],
+        "entries": [
+          {
+            "pair": "XD紫金矿(601899/02899)",
+            "weight": 0.1,
+            "ah_premium": 0.0558586150607476,
+            "pair_en": "Zijin Mining (601899/02899)"
+          }
+        ],
+        "exits": [
+          {
+            "pair": "中国平安(601318/02318)",
+            "weight": 0.08698188188155352,
+            "ah_premium": 0.07926815989115954,
+            "pair_en": "Ping An Insurance (601318/02318)"
+          }
+        ],
+        "unchanged": false
+      },
+      "metrics": {
+        "cagr": 0.20332614991069353,
+        "sharpe": 1.0091566610284528,
+        "max_drawdown": -0.3215855112125964,
+        "final_equity": 6.9505154820382975,
+        "turnover_per_year": 4.511356146799472,
+        "average_names": 9.841794569067297
+      },
+      "benchmark_metrics": {
+        "cagr": 0.050719076828748655,
+        "sharpe": 0.2673565615425724,
+        "max_drawdown": -0.421570282605196
+      },
+      "nav_start": "2016-01-04",
+      "cost_bps": 30.0,
+      "universe_pairs": 194,
+      "nav_src": "nav/ah.json",
+      "nav_points": 2541
+    },
+    "dividend": {
+      "id": "dividend",
+      "featured_variant": "12M momentum",
+      "execution_note": "月末信号，次月首个交易日调仓；仅当持仓变化时交易；成本30bps",
+      "latest_rebalance": "2026-06-29",
+      "holdings_as_of": "2026-06-29",
+      "holdings": [
+        {
+          "symbol": "159915",
+          "name": "创业板ETF",
+          "weight": 1.0,
+          "name_en": "ChiNext ETF"
+        }
+      ],
+      "projected_month_end": {
+        "signal_date": "2026-06-29",
+        "holdings": [
+          {
+            "symbol": "159915",
+            "name": "创业板ETF",
+            "weight": 1.0,
+            "name_en": "ChiNext ETF"
+          }
+        ],
+        "entries": [],
+        "exits": [],
+        "unchanged": true
+      },
+      "metrics": {
+        "cagr": 0.24511562687644362,
+        "sharpe": 1.0081124881959536,
+        "max_drawdown": -0.22775584573337393,
+        "final_nav": 4.790142785004686,
+        "turnover_per_year": 1.399425287356322
+      },
+      "benchmark_metrics": {
+        "cagr": 0.04007974719565799,
+        "sharpe": 0.215467361219237,
+        "max_drawdown": -0.4560262048486472,
+        "final_nav": 1.3242031996186492
+      },
+      "nav_start": "2019-05-06",
+      "cost_bps": 30.0,
+      "backtest_start": "2019-05-06",
+      "backtest_end": "2026-06-29",
+      "universe": {
+        "510880": "红利ETF",
+        "159915": "创业板ETF"
+      },
+      "holding_stats": [
+        {
+          "symbol": "510880",
+          "name": "红利ETF",
+          "name_en": "Dividend ETF",
+          "pct_months": 44.827586206896555
+        },
+        {
+          "symbol": "159915",
+          "name": "创业板ETF",
+          "name_en": "ChiNext ETF",
+          "pct_months": 55.172413793103445
+        }
+      ],
+      "nav_src": "nav/dividend.json",
+      "nav_points": 1735
+    },
+    "equity": {
+      "id": "equity",
+      "latest_rebalance": "2023-11-30",
+      "holdings": [
+        {
+          "symbol": "300124",
+          "weight": 0.3333333333333333,
+          "name": "汇川技术",
+          "name_en": "Inovance Technology"
+        },
+        {
+          "symbol": "600153",
+          "weight": 0.3333333333333333,
+          "name": "建发股份",
+          "name_en": "C&D Inc."
+        },
+        {
+          "symbol": "600196",
+          "weight": 0.3333333333333333,
+          "name": "复星医药",
+          "name_en": "Fosun Pharma"
+        }
+      ],
+      "watchlist": [
+        {
+          "symbol": "300124",
+          "name": "汇川技术",
+          "name_en": "Inovance Technology",
+          "announcement_time": "2024-09-06",
+          "title": "关于第六期股权激励计划首次授予部分股票期权注销完成的公告"
+        }
+      ],
+      "watchlist_month": "2024-11-30",
+      "metrics": {
+        "cagr": 0.00717096407673945,
+        "sharpe": 0.08190708780166857,
+        "max_drawdown": -0.19262359863601153,
+        "final_nav": 1.0804857129506753,
+        "turnover_per_year": 1.3138046499873641
+      },
+      "event_study": [
+        {
+          "horizon_months": 1,
+          "events": 65,
+          "unique_symbols": 31,
+          "mean_stock_return": 0.060636407230034495,
+          "median_stock_return": 0.037735849056603765,
+          "stock_win_rate": 0.6153846153846154,
+          "mean_index_return": 0.006622784028892699,
+          "mean_excess_return": 0.05401362320114181,
+          "median_excess_return": 0.04727935203058342,
+          "excess_win_rate": 0.6307692307692307,
+          "excess_t_stat": 2.9506143449603854
+        },
+        {
+          "horizon_months": 3,
+          "events": 64,
+          "unique_symbols": 30,
+          "mean_stock_return": 0.11213604742836811,
+          "median_stock_return": 0.0966672501516661,
+          "stock_win_rate": 0.65625,
+          "mean_index_return": 0.021506165943430106,
+          "mean_excess_return": 0.090629881484938,
+          "median_excess_return": 0.047377299855885735,
+          "excess_win_rate": 0.65625,
+          "excess_t_stat": 2.6878136875534007
+        },
+        {
+          "horizon_months": 6,
+          "events": 63,
+          "unique_symbols": 29,
+          "mean_stock_return": 0.22898109254509874,
+          "median_stock_return": 0.18979933110367897,
+          "stock_win_rate": 0.6666666666666666,
+          "mean_index_return": 0.030396632719246426,
+          "mean_excess_return": 0.1985844598258523,
+          "median_excess_return": 0.16458839835859917,
+          "excess_win_rate": 0.6825396825396826,
+          "excess_t_stat": 4.728505037458122
+        },
+        {
+          "horizon_months": 12,
+          "events": 61,
+          "unique_symbols": 29,
+          "mean_stock_return": 0.43064691628496876,
+          "median_stock_return": 0.3253551274567037,
+          "stock_win_rate": 0.6557377049180327,
+          "mean_index_return": 0.09797479802644922,
+          "mean_excess_return": 0.3326721182585196,
+          "median_excess_return": 0.24989640094179943,
+          "excess_win_rate": 0.7049180327868853,
+          "excess_t_stat": 4.544127052257036
+        }
+      ],
+      "core_events": 66,
+      "core_symbols": 31,
+      "nav_start": "2014-01-02",
+      "cost_bps": 20.0,
+      "filters": {
+        "lookback_months": 3,
+        "min_listing_days": 180,
+        "min_avg_amount_20d": 50000000.0,
+        "min_holdings": 3,
+        "top_n": 5,
+        "cost_bps_list": [
+          5.0,
+          20.0,
+          50.0
+        ]
+      },
+      "nav_src": "nav/equity.json",
+      "nav_points": 3014
+    }
+  }
+}
