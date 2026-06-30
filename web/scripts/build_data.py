@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 8
+DATA_VERSION = 10
 SRC = ROOT / "src"
 
 sys.path.insert(0, str(SRC))
@@ -157,7 +157,6 @@ SLOT_RECOMMENDATION_FILE = RESULTS / "equity_incentive_slot_recommendation.json"
 SLOT_METRICS_FILE = RESULTS / "equity_incentive_slot_metrics.csv"
 TUSHARE_EVENTS_FILE = ROOT / "data" / "raw" / "equity_incentive_tushare" / "tushare_equity_incentive_events.csv"
 EQUITY_COST_BPS = 20.0
-EQUITY_CORE_TERMS = ("草案", "预案", "首次授予", "授予公告", "修订稿", "员工持股计划")
 EQUITY_NEGATIVE_TERMS = (
     "解锁",
     "解除限售",
@@ -744,17 +743,12 @@ def load_slot_holdings() -> tuple[str, list[dict], dict]:
 
 
 def _mark_strict_core_events(events):
-    import pandas as pd
+    from qtlight.equity_incentive_optimized_backtest import mark_core_events
 
     out = events.copy()
     if "title_clean" not in out.columns:
         out["title_clean"] = out["title"]
-    title = out["title_clean"]
-    has_plan_term = title.str.contains("股权激励|员工持股", regex=True, na=False)
-    has_core = title.str.contains("|".join(EQUITY_CORE_TERMS), regex=True, na=False)
-    has_negative = title.str.contains("|".join(EQUITY_NEGATIVE_TERMS), regex=True, na=False)
-    out["is_core_event"] = has_plan_term & has_core & ~has_negative
-    return out
+    return mark_core_events(out)
 
 
 def _load_hs300_csi500_symbols() -> set[str]:
@@ -802,10 +796,11 @@ def load_recent_core_events(current_symbols: set[str]) -> tuple[str, list[dict]]
 def load_tushare_event_study() -> dict:
     import pandas as pd
 
-    scope = "tushare_all_a_share_vs_hs300_symbol_month_first"
+    scope_suffix = "_symbol_month_first"
     summary_df = pd.read_csv(RESULTS / "equity_incentive_tushare_event_study_summary.csv")
     strict = summary_df[
-        (summary_df["sample_scope"] == scope) & (summary_df["event_definition"] == "strict_core")
+        summary_df["sample_scope"].str.endswith(scope_suffix)
+        & (summary_df["event_definition"] == "strict_core")
     ].sort_values("horizon_months")
 
     best_df = pd.read_csv(RESULTS / "equity_incentive_tushare_best_horizons.csv")
@@ -881,10 +876,10 @@ def build_equity() -> dict:
         },
         "rules_zh": recommendation.get("rules_zh", []),
         "rules_en": [
-            "Events: Tushare strict core (draft/plan/first grant/ESOP); first announcement per symbol-month.",
-            "Entry: buy at month-end close after announcement; 10% weight per new slot.",
+            "Events: equity incentive strict core (draft/plan/first grant); ESOP only 「YYYY/phase N employee stock plan (draft)」; first announcement per symbol-month.",
+            "Entry: buy at month-end close after announcement; 5% weight per new slot (max 20).",
             "Hold: fixed 9 months; exit at month-end.",
-            "Capacity: up to 10 concurrent slots (≤100% gross); when full, skip new signals.",
+            "Capacity: up to 20 concurrent slots (≤100% gross); when full, skip new signals.",
             "Costs: 20 bps one-way.",
         ],
         "watchlist": watchlist,
