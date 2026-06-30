@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
+REPO="${GITHUB_REPO:-mapledong/china_stock_strategy}"
+DEFAULT_BRANCH="${DEFAULT_BRANCH:-main}"
+
 echo "==> Building dashboard data..."
 .venv/bin/python web/scripts/build_data.py
 
@@ -36,4 +39,4 @@ git push origin HEAD
 
 echo ""
 echo "Deploy workflow will run on GitHub Actions."
-echo "After it finishes, open: https://<USER>.github.io/<REPO>/"
+echo "After it finishes, open: https://mapledong.github.io/china_stock_strategy/"
