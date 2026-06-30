@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 10
+DATA_VERSION = 13
 SRC = ROOT / "src"
 
 sys.path.insert(0, str(SRC))
@@ -150,11 +150,13 @@ AH_TOP_N = 10
 DIVIDEND_CHINEXT_DIR = RESULTS / "dividend_chinext_momentum"
 DIVIDEND_CHINEXT_STRATEGY = "12M momentum"
 PAIR_NAMES = {"510880": "红利ETF", "159915": "创业板ETF"}
-SLOT_STRATEGY = "queue_9m_skip_hs300_csi500"
-SLOT_EQUITY_FILE = RESULTS / "equity_incentive_slot_equity.csv"
-SLOT_HOLDINGS_FILE = RESULTS / "equity_incentive_slot_holdings.csv"
-SLOT_RECOMMENDATION_FILE = RESULTS / "equity_incentive_slot_recommendation.json"
-SLOT_METRICS_FILE = RESULTS / "equity_incentive_slot_metrics.csv"
+SLOT_STRATEGY = "daily_7x14_ma200_swap_esop_filter"
+DAILY_EQUITY_FILE = RESULTS / "equity_incentive_daily_canonical_equity.csv"
+DAILY_HOLDINGS_FILE = RESULTS / "equity_incentive_daily_canonical_holdings.csv"
+DAILY_TRADES_FILE = RESULTS / "equity_incentive_daily_canonical_trades.csv"
+DAILY_SIGNALS_FILE = RESULTS / "equity_incentive_daily_canonical_signals.csv"
+DAILY_RECOMMENDATION_FILE = RESULTS / "equity_incentive_daily_canonical_recommendation.json"
+NAV_PLOT_START = "2017-09-01"
 TUSHARE_EVENTS_FILE = ROOT / "data" / "raw" / "equity_incentive_tushare" / "tushare_equity_incentive_events.csv"
 EQUITY_COST_BPS = 20.0
 EQUITY_NEGATIVE_TERMS = (
@@ -687,30 +689,21 @@ def load_symbol_name_maps() -> tuple[dict[str, str], dict[str, str]]:
 def compute_slot_equity_nav() -> tuple[list[dict], str]:
     import pandas as pd
 
-    from qtlight.etf_momentum_rotation import get_hs300_index
+    equity_df = pd.read_csv(DAILY_EQUITY_FILE, parse_dates=["date"])
+    equity_df = equity_df.set_index("date").sort_index()
+    start_dt = _first_on_or_after(equity_df.index, NAV_PLOT_START)
+    window = equity_df.loc[start_dt:]
 
-    equity_df = pd.read_csv(SLOT_EQUITY_FILE)
-    equity_df["日期"] = pd.to_datetime(equity_df["日期"])
-    equity_df = equity_df.set_index("日期").sort_index()
-
-    monthly_strategy = equity_df[SLOT_STRATEGY]
-    monthly_bench = equity_df["沪深300"]
-    start_dt = _first_on_or_after(monthly_strategy.index, monthly_strategy.index[0].date().isoformat())
-
-    hs300_close = get_hs300_index()
-    end_dt = min(hs300_close.index.max(), monthly_strategy.index.max())
-    calendar = hs300_close.index[(hs300_close.index >= start_dt) & (hs300_close.index <= end_dt)]
-
-    strategy_daily = monthly_strategy.reindex(calendar, method="ffill")
-    bench_daily = monthly_bench.reindex(calendar, method="ffill")
+    strategy_col = SLOT_STRATEGY if SLOT_STRATEGY in window.columns else window.columns[0]
+    bench_col = "沪深300" if "沪深300" in window.columns else "hs300"
 
     daily = pd.DataFrame(
         {
-            "strategy_nav": strategy_daily / float(strategy_daily.iloc[0]),
-            "hs300_nav": bench_daily / float(bench_daily.iloc[0]),
+            "strategy_nav": window[strategy_col] / float(window[strategy_col].iloc[0]),
+            "hs300_nav": window[bench_col] / float(window[bench_col].iloc[0]),
         }
     )
-    nav_start = calendar[0].date().isoformat()
+    nav_start = start_dt.date().isoformat()
     return daily_nav_rows(daily, "strategy_nav", "hs300_nav"), nav_start
 
 
@@ -718,9 +711,9 @@ def load_slot_holdings() -> tuple[str, list[dict], dict]:
     import pandas as pd
 
     zh, en = load_symbol_name_maps()
-    holdings_df = pd.read_csv(SLOT_HOLDINGS_FILE)
-    row = holdings_df[holdings_df["strategy"] == SLOT_STRATEGY].iloc[-1]
-    latest_date = str(row["month"])[:10]
+    holdings_df = pd.read_csv(DAILY_HOLDINGS_FILE)
+    row = holdings_df.iloc[-1]
+    latest_date = str(row["date"])[:10]
     raw_symbols = row.get("symbols")
     symbols = (
         [symbol.strip() for symbol in str(raw_symbols).split(",") if symbol.strip()]
@@ -729,7 +722,7 @@ def load_slot_holdings() -> tuple[str, list[dict], dict]:
     )
     positions = int(row["positions"])
     gross_weight = float(row["gross_weight"])
-    slot_weight = gross_weight / positions if positions > 0 else 0.0
+    slot_weight = gross_weight / positions if positions > 0 else 0.07
     holdings = [
         {
             "symbol": symbol,
@@ -793,6 +786,200 @@ def load_recent_core_events(current_symbols: set[str]) -> tuple[str, list[dict]]
     return watchlist_month, watchlist
 
 
+def compute_equity_month_end_projection(recommendation: dict) -> dict:
+    import pandas as pd
+
+    if not DAILY_TRADES_FILE.exists() or not DAILY_SIGNALS_FILE.exists():
+        return {}
+
+    trade_log = pd.read_csv(DAILY_TRADES_FILE, parse_dates=["date"])
+    signals = pd.read_csv(
+        DAILY_SIGNALS_FILE,
+        parse_dates=["entry_date", "exit_date", "announcement_time"],
+    )
+    equity_df = pd.read_csv(DAILY_EQUITY_FILE, parse_dates=["date"])
+    calendar = pd.DatetimeIndex(equity_df["date"].sort_values())
+    as_of = pd.Timestamp(recommendation.get("as_of") or recommendation["full_sample_metrics"]["end_date"])
+    slot_weight = float(recommendation["position_sizing"]["initial_weight_per_new_event"])
+    zh, en = load_symbol_name_maps()
+    return _build_equity_month_end_projection(
+        as_of,
+        calendar,
+        trade_log,
+        recommendation.get("open_positions", []),
+        signals,
+        slot_weight,
+        zh,
+        en,
+    )
+
+
+def _equity_change_row(
+    symbol: str,
+    weight: float,
+    zh: dict[str, str],
+    en: dict[str, str],
+    *,
+    reason: str = "",
+    trade_date: str = "",
+    status: str = "held",
+) -> dict:
+    return {
+        "symbol": symbol,
+        "name": zh.get(symbol, symbol),
+        "name_en": en.get(symbol, zh.get(symbol, symbol)),
+        "weight": weight,
+        "reason": reason,
+        "trade_date": trade_date,
+        "status": status,
+    }
+
+
+def _build_equity_month_end_projection(
+    as_of: pd.Timestamp,
+    calendar: pd.DatetimeIndex,
+    trade_log: pd.DataFrame,
+    open_positions: list[dict],
+    signals: pd.DataFrame,
+    slot_weight: float,
+    zh: dict[str, str],
+    en: dict[str, str],
+) -> dict:
+    import pandas as pd
+
+    if calendar.empty or (not open_positions and trade_log.empty):
+        return {}
+
+    month_start = as_of.replace(day=1)
+    month_end = month_start + pd.offsets.MonthEnd(0)
+    month_days = calendar[(calendar >= month_start) & (calendar <= month_end)]
+    if month_days.empty:
+        return {}
+    signal_date = month_days[-1]
+
+    if trade_log.empty:
+        trade_log = pd.DataFrame(columns=["date", "action", "symbol", "weight", "reason", "event_kind"])
+    else:
+        trade_log = trade_log.copy()
+        trade_log["date"] = pd.to_datetime(trade_log["date"])
+
+    month_trades = trade_log[(trade_log["date"] >= month_start) & (trade_log["date"] <= signal_date)]
+    current_symbols = {str(pos["symbol"]).zfill(6) for pos in open_positions}
+
+    entry_rows: list[dict] = []
+    exit_rows: list[dict] = []
+    seen_entry: set[str] = set()
+    seen_exit: set[str] = set()
+
+    for _, row in month_trades[month_trades["action"] == "entry"].iterrows():
+        symbol = str(row["symbol"]).zfill(6)
+        if symbol in seen_entry:
+            continue
+        seen_entry.add(symbol)
+        entry_rows.append(
+            _equity_change_row(
+                symbol,
+                float(row["weight"]),
+                zh,
+                en,
+                reason=str(row.get("reason", "")),
+                trade_date=pd.Timestamp(row["date"]).date().isoformat(),
+                status="executed",
+            )
+        )
+
+    for _, row in month_trades[month_trades["action"] == "exit"].iterrows():
+        symbol = str(row["symbol"]).zfill(6)
+        if symbol in seen_exit:
+            continue
+        seen_exit.add(symbol)
+        exit_rows.append(
+            _equity_change_row(
+                symbol,
+                float(row["weight"]),
+                zh,
+                en,
+                reason=str(row.get("reason", "")),
+                trade_date=pd.Timestamp(row["date"]).date().isoformat(),
+                status="executed",
+            )
+        )
+
+    if not signals.empty:
+        pending = signals.copy()
+        pending["entry_date"] = pd.to_datetime(pending["entry_date"])
+        pending = pending[
+            (pending["entry_date"] > as_of)
+            & (pending["entry_date"] <= signal_date)
+            & (~pending["symbol"].astype(str).str.zfill(6).isin(current_symbols))
+        ]
+        for _, row in pending.iterrows():
+            symbol = str(row["symbol"]).zfill(6)
+            if symbol in seen_entry:
+                continue
+            seen_entry.add(symbol)
+            entry_rows.append(
+                _equity_change_row(
+                    symbol,
+                    slot_weight,
+                    zh,
+                    en,
+                    reason=f"pending_{row['event_kind']}",
+                    trade_date=pd.Timestamp(row["entry_date"]).date().isoformat(),
+                    status="pending",
+                )
+            )
+
+    for pos in open_positions:
+        exit_day = pd.Timestamp(pos["exit_date"])
+        if exit_day <= as_of or exit_day > signal_date:
+            continue
+        symbol = str(pos["symbol"]).zfill(6)
+        if symbol in seen_exit:
+            continue
+        seen_exit.add(symbol)
+        exit_rows.append(
+            _equity_change_row(
+                symbol,
+                float(pos["weight"]),
+                zh,
+                en,
+                reason="expiry",
+                trade_date=exit_day.date().isoformat(),
+                status="scheduled",
+            )
+        )
+
+    projected_symbols = set(current_symbols)
+    for row in exit_rows:
+        if row["status"] == "scheduled":
+            projected_symbols.discard(row["symbol"])
+    for row in entry_rows:
+        if row["status"] == "pending":
+            projected_symbols.add(row["symbol"])
+
+    open_by_symbol = {str(pos["symbol"]).zfill(6): pos for pos in open_positions}
+    projected_holdings = [
+        _equity_change_row(
+            symbol,
+            float(open_by_symbol.get(symbol, {}).get("weight", slot_weight)),
+            zh,
+            en,
+        )
+        for symbol in sorted(projected_symbols)
+    ]
+
+    return {
+        "signal_date": signal_date.date().isoformat(),
+        "month": month_start.strftime("%Y-%m"),
+        "as_of": as_of.date().isoformat(),
+        "holdings": projected_holdings,
+        "entries": entry_rows,
+        "exits": exit_rows,
+        "unchanged": not entry_rows and not exit_rows,
+    }
+
+
 def load_tushare_event_study() -> dict:
     import pandas as pd
 
@@ -845,9 +1032,8 @@ def load_tushare_event_study() -> dict:
 def build_equity() -> dict:
     import pandas as pd
 
-    recommendation = json.loads(SLOT_RECOMMENDATION_FILE.read_text())
-    metrics_row = pd.read_csv(SLOT_METRICS_FILE)
-    metrics_row = metrics_row[metrics_row["strategy"] == SLOT_STRATEGY].iloc[0]
+    recommendation = json.loads(DAILY_RECOMMENDATION_FILE.read_text())
+    display_metrics = recommendation.get("display_metrics", recommendation["recommended_strategy"])
     tushare_event_study = load_tushare_event_study()
 
     latest_date, holdings, slot_meta = load_slot_holdings()
@@ -857,6 +1043,7 @@ def build_equity() -> dict:
     nav_rows, nav_start = compute_slot_equity_nav()
     rec = recommendation["recommended_strategy"]
     sizing = recommendation["position_sizing"]
+    projected_month_end = compute_equity_month_end_projection(recommendation)
 
     return {
         "id": "equity",
@@ -870,30 +1057,31 @@ def build_equity() -> dict:
             "slot_weight": float(sizing["initial_weight_per_new_event"]),
             "gross_weight": slot_meta["gross_weight"],
             "hold_months": int(rec["hold_months"]),
-            "replacement": rec["replacement"],
+            "replacement": "ma200_swap",
             "universe": rec["universe"],
-            "avg_positions": float(metrics_row["avg_positions"]),
+            "avg_positions": float(rec.get("avg_positions", 0)),
         },
         "rules_zh": recommendation.get("rules_zh", []),
         "rules_en": [
-            "Events: equity incentive strict core (draft/plan/first grant); ESOP only 「YYYY/phase N employee stock plan (draft)」; first announcement per symbol-month.",
-            "Entry: buy at month-end close after announcement; 5% weight per new slot (max 20).",
-            "Hold: fixed 9 months; exit at month-end.",
-            "Capacity: up to 20 concurrent slots (≤100% gross); when full, skip new signals.",
+            "Events: equity incentive strict core; ESOP draft titles only.",
+            "ESOP entry: first tradable day close after announcement, close > MA200; skip limit-up days.",
+            "Equity incentive entry: first tradable day close after announcement; skip limit-up days.",
+            "Hold 9 months; 7% per slot, max 14; when full, sell MA200-below holdings (worst first) to fund new names.",
             "Costs: 20 bps one-way.",
         ],
         "watchlist": watchlist,
         "watchlist_month": watchlist_month,
+        "projected_month_end": projected_month_end,
         "metrics": {
-            "cagr": float(metrics_row["cagr"]),
-            "sharpe": float(metrics_row["sharpe"]),
-            "max_drawdown": float(metrics_row["max_drawdown"]),
-            "final_nav": float(metrics_row["final_nav"]),
-            "turnover_per_year": float(metrics_row["turnover_per_year"]),
-            "excess_cagr": float(metrics_row["excess_cagr"]),
+            "cagr": float(display_metrics["cagr"]),
+            "sharpe": float(display_metrics["sharpe"]),
+            "max_drawdown": float(display_metrics["max_drawdown"]),
+            "final_nav": float(display_metrics["final_nav"]),
+            "turnover_per_year": float(rec.get("turnover_per_year", 0)),
+            "excess_cagr": float(display_metrics.get("excess_cagr", 0)),
         },
         "benchmark_metrics": {
-            "cagr": float(metrics_row["benchmark_cagr"]),
+            "cagr": float(display_metrics.get("benchmark_cagr", 0)),
             "sharpe": None,
             "max_drawdown": None,
             "final_nav": None,
@@ -918,8 +1106,8 @@ def build_equity() -> dict:
         "core_symbols": tushare_event_study["core_symbols"],
         "nav": nav_rows,
         "nav_start": nav_start,
-        "backtest_start": str(metrics_row["start_date"])[:10],
-        "backtest_end": str(metrics_row["end_date"])[:10],
+        "backtest_start": NAV_PLOT_START,
+        "backtest_end": recommendation.get("full_sample_metrics", {}).get("end_date", nav_start)[:10],
         "cost_bps": EQUITY_COST_BPS,
     }
 

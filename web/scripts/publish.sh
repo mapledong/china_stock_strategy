@@ -1,42 +1,38 @@
 #!/usr/bin/env bash
-# Regenerate dashboard data and push to GitHub (triggers Pages deploy).
+# Push refreshed web/data to GitHub — triggers Pages deploy only (no local research).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
-REPO="${GITHUB_REPO:-mapledong/china_stock_strategy}"
-DEFAULT_BRANCH="${DEFAULT_BRANCH:-main}"
+if [[ ! -f web/data/strategies.json ]]; then
+  echo "Missing web/data/strategies.json — run web/scripts/daily_update.sh locally first." >&2
+  exit 1
+fi
 
-echo "==> Building dashboard data..."
-.venv/bin/python web/scripts/build_data.py
-
-echo "==> Staging web assets..."
-git add web/ .github/workflows/deploy-dashboard.yml
+echo "==> Staging dashboard assets (web/ only)..."
+git add web/
 
 if git diff --cached --quiet; then
-  echo "No web changes to commit."
-else
-  git commit -m "$(cat <<'EOF'
-Update strategy dashboard for public Pages deploy.
+  echo "No web changes to publish."
+  exit 0
+fi
+
+git commit -m "$(cat <<'EOF'
+Publish strategy dashboard data.
 
 EOF
 )"
-fi
 
 if ! git remote get-url origin &>/dev/null; then
   echo ""
   echo "No git remote 'origin' configured."
-  echo "Create a GitHub repo, then run:"
-  echo "  git remote add origin git@github.com:<USER>/<REPO>.git"
+  echo "  git remote add origin git@github.com:mapledong/china_stock_strategy.git"
   echo "  git push -u origin main"
-  echo ""
-  echo "Then enable GitHub Pages: Settings → Pages → Source: GitHub Actions"
-  exit 0
+  exit 1
 fi
 
-echo "==> Pushing to origin..."
+echo "==> Pushing to origin (GitHub Pages will redeploy)..."
 git push origin HEAD
 
 echo ""
-echo "Deploy workflow will run on GitHub Actions."
-echo "After it finishes, open: https://mapledong.github.io/china_stock_strategy/"
+echo "Live site: https://mapledong.github.io/china_stock_strategy/"
