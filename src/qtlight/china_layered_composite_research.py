@@ -260,6 +260,130 @@ def run_incremental_incentive(
     return ret_series, holdings
 
 
+def _incentive_inputs(spec: IncrementalIncentiveSpec) -> tuple[pd.DataFrame, pd.DataFrame]:
+    events = load_strict_core_events(spec.universe)
+    symbols = sorted(events["symbol"].unique())
+    prices = load_cached_monthly_prices(symbols)
+    price_symbols = set(prices.columns)
+    events = filter_tradable_events(events, price_symbols)
+    monthly_returns = prices.pct_change(fill_method=None)
+    signals = _prepare_incentive_signals(events, monthly_returns.index)
+    if spec.require_ma200_above:
+        signals, _ = filter_signals_ma200(signals, prices, spec.ma_window_months)
+    return signals, monthly_returns
+
+
+def incentive_positions_through_month(
+    spec: IncrementalIncentiveSpec,
+    through_month: pd.Timestamp,
+) -> list[dict]:
+    """Replay incremental incentive through a calendar month-end (matches backtest holdings)."""
+    signals, monthly_returns = _incentive_inputs(spec)
+    if monthly_returns.empty:
+        return []
+    through_month = pd.Timestamp(through_month).to_period("M").to_timestamp("M")
+    months = monthly_returns.index
+    positions: list[Position] = []
+    signals_by_month = {
+        month: group.sort_values(["announcement_time", "symbol"])
+        for month, group in signals.groupby("entry_month")
+    }
+
+    for month in months[:-1]:
+        remaining: list[Position] = []
+        for pos in positions:
+            if month >= pos.exit_month:
+                continue
+            remaining.append(pos)
+        positions = remaining
+
+        for _, signal in signals_by_month.get(month, pd.DataFrame()).iterrows():
+            symbol = str(signal["symbol"]).zfill(6)
+            if symbol not in monthly_returns.columns:
+                continue
+            if any(p.symbol == symbol for p in positions):
+                continue
+            if pd.isna(monthly_returns.at[month, symbol]):
+                continue
+            exit_month = month + pd.offsets.MonthEnd(spec.hold_months)
+            positions.append(
+                Position(
+                    symbol=symbol,
+                    entry_month=month,
+                    exit_month=exit_month,
+                    weight=spec.slot_weight,
+                    event_time=pd.Timestamp(signal["announcement_time"]),
+                )
+            )
+
+        positions = _scale_positions(positions, spec, month, monthly_returns)
+        if month >= through_month:
+            break
+
+    rows: list[dict] = []
+    for pos in positions:
+        rows.append(
+            {
+                "symbol": str(pos.symbol).zfill(6),
+                "weight": float(pos.weight),
+                "entry_month": pd.Timestamp(pos.entry_month).date().isoformat(),
+                "exit_month": pd.Timestamp(pos.exit_month).date().isoformat(),
+            }
+        )
+    return rows
+
+
+def project_incentive_month_end(
+    spec: IncrementalIncentiveSpec,
+    open_positions: list[dict],
+    signal_date: pd.Timestamp,
+) -> dict:
+    signal_month = pd.Timestamp(signal_date).to_period("M").to_timestamp("M")
+    signals, _ = _incentive_inputs(spec)
+    current_keys = {p["symbol"] for p in open_positions}
+
+    entry_rows: list[dict] = []
+    if not signals.empty:
+        pending = signals[signals["entry_month"] == signal_month]
+        for _, row in pending.iterrows():
+            sym = str(row["symbol"]).zfill(6)
+            if sym in current_keys:
+                continue
+            entry_rows.append(
+                {
+                    "symbol": sym,
+                    "weight": spec.slot_weight,
+                    "trade_date": signal_month.date().isoformat(),
+                    "reason": "monthly_incremental",
+                    "status": "pending",
+                }
+            )
+
+    exit_rows: list[dict] = []
+    for pos in open_positions:
+        exit_month = pd.Timestamp(pos["exit_month"]).to_period("M").to_timestamp("M")
+        if exit_month != signal_month:
+            continue
+        exit_rows.append(
+            {
+                "symbol": pos["symbol"],
+                "weight": pos["weight"],
+                "trade_date": signal_month.date().isoformat(),
+                "reason": "expiry",
+                "status": "scheduled",
+            }
+        )
+
+    return {
+        "unchanged": not entry_rows and not exit_rows,
+        "signal_date": signal_date.date().isoformat(),
+        "entries": entry_rows,
+        "exits": exit_rows,
+        "note_zh": "月频增量：公告后首个可交易月纳入，持有 9 个月；总敞口超 15% 时等比压缩。",
+        "note_en": "Monthly incremental: first tradable month after announcement, 9M hold; scale to 15% cap.",
+    }
+
+
 def _load_daily_sleeves() -> pd.DataFrame:
     missing = [p for p in (AH_NAV_PATH, ETF_NAV_PATH, DIV_NAV_PATH) if not p.exists()]
     if missing:

@@ -72,7 +72,7 @@ def run_ah_tushare_with_targets(
     monthly_targets: pd.DataFrame,
     label: str,
     daily_bundle: dict | None = None,
-) -> tuple[pd.Series, pd.Series]:
+) -> tuple[pd.Series, pd.Series, pd.DataFrame]:
     """Run AH execution backtest from cached Tushare daily data."""
     if daily_bundle is None:
         pro = get_pro_api()
@@ -85,7 +85,7 @@ def run_ah_tushare_with_targets(
         dates = benchmark.index[benchmark.index >= pd.Timestamp(START)]
         daily_bundle = load_tushare_selected_daily(selected_keys, metadata, dates, pro)
 
-    equity, _, turnover = run_execution_backtest(
+    equity, weights, turnover = run_execution_backtest(
         monthly_targets=monthly_targets,
         returns=daily_bundle["returns"],
         pct_change=daily_bundle["pct_change"],
@@ -98,7 +98,7 @@ def run_ah_tushare_with_targets(
     nav.name = label
     turnover.name = label
     print(f"AH {label}: turnover/year={turnover_per_year:.2f}x, final={nav.iloc[-1]:.3f}")
-    return nav, turnover
+    return nav, turnover, weights
 
 
 QUARTER_CYCLE_PRESETS: dict[str, tuple[int, ...]] = {
@@ -132,7 +132,7 @@ def scan_quarter_rebalance_months() -> dict:
     rows: list[dict] = []
     for cycle_name, months in QUARTER_CYCLE_PRESETS.items():
         targets = build_targets_quarterly_buffer(monthly_premium, rebalance_months=months)
-        ah_nav, ah_turn = run_ah_tushare_with_targets(targets, cycle_name, daily_bundle=daily_bundle)
+        ah_nav, ah_turn, _ = run_ah_tushare_with_targets(targets, cycle_name, daily_bundle=daily_bundle)
         combo = _build_composite_daily(ah_nav, LOW_TURNOVER_SPEC, inc_returns, daily_base)
         enriched = _enrich_analytics(combo)
         overlap = enriched.loc["2018-04-02":]
@@ -155,7 +155,7 @@ def scan_quarter_rebalance_months() -> dict:
 
     # monthly AH baseline for reference
     monthly_targets = build_targets(monthly_premium)
-    ah_nav_m, ah_turn_m = run_ah_tushare_with_targets(monthly_targets, "monthly", daily_bundle=daily_bundle)
+    ah_nav_m, ah_turn_m, _ = run_ah_tushare_with_targets(monthly_targets, "monthly", daily_bundle=daily_bundle)
     combo_m = _build_composite_daily(ah_nav_m, LOW_TURNOVER_SPEC, inc_returns, daily_base)
     enriched_m = _enrich_analytics(combo_m).loc["2018-04-02":]
     start_m = enriched_m.index.min()
@@ -241,14 +241,18 @@ def run_low_turnover_research() -> dict:
     monthly_targets = build_targets(monthly_premium)
     quarterly_targets = build_targets_quarterly_buffer(monthly_premium)
 
-    ah_monthly_nav, ah_monthly_turn = run_ah_tushare_with_targets(monthly_targets, "monthly")
-    ah_quarterly_nav, ah_quarterly_turn = run_ah_tushare_with_targets(quarterly_targets, "quarterly_buffer")
+    ah_monthly_nav, ah_monthly_turn, _ = run_ah_tushare_with_targets(monthly_targets, "monthly")
+    ah_quarterly_nav, ah_quarterly_turn, ah_quarterly_weights = run_ah_tushare_with_targets(
+        quarterly_targets, "quarterly_buffer"
+    )
+    ah_quarterly_weights.to_csv(RESULTS / f"{OUTPUT_PREFIX}_ah_drift_weights.csv")
 
     ah_monthly_nav.to_csv(RESULTS / f"{OUTPUT_PREFIX}_ah_monthly_nav.csv")
     ah_quarterly_nav.to_csv(RESULTS / f"{OUTPUT_PREFIX}_ah_quarterly_buffer_nav.csv")
 
     daily_base = _load_daily_sleeves()
     inc_returns, inc_holdings, _ = _build_incentive_monthly_nav(LOW_TURNOVER_SPEC.incentive)
+    inc_holdings.to_csv(RESULTS / f"{OUTPUT_PREFIX}_incentive_holdings_monthly.csv", index=False)
 
     # Baseline conservative uses monthly AH from existing equity file
     baseline_combo = run_composite(CONSERVATIVE_SPEC, daily_base, inc_returns)
