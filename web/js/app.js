@@ -68,14 +68,14 @@ const I18N = {
     "dividend.guide3.title": "何时可能换仓",
     "dividend.guide3.desc": "仅当动量领先者从红利切到创业板（或反向）时换仓；历史约各持有约一半月份。",
     "dividend.holdingStats": "历史持仓占比",
-    "equity.actionTitle": "槽位队列：20 槽 × 5%，持有 9 个月，满员 skip",
-    "equity.actionDesc": "HS300+CSI500 可交易回测（2014–今）：5%×20 槽、满员 skip；CAGR ~15.3%，Sharpe ~0.74，最大回撤 ~-31%。",
+    "equity.actionTitle": "日频槽位：14×7%，持有 9 个月；ESOP>MA200 入场，满员 MA200 下方换仓",
+    "equity.actionDesc": "HS300+CSI500 可交易回测（2017-09 起展示）：日频 7%×14；CAGR ~20.1%，Sharpe ~0.98，最大回撤 ~-27%。",
     "equity.guide1.title": "Tushare 逐股扫描公告",
     "equity.guide1.desc": "anns_d 遍历 5,288 只股票；股权激励保留草案/预案/首次授予；员工持股严格匹配「YYYY年/第N期员工持股计划（草案）」，剔除过户/持有人会议/法律意见等程序性公告。",
     "equity.guide2.title": "最优持有 9–12 个月",
     "equity.guide2.desc": "strict core 约 3,400 事件、770 只有价样本：12M 平均超额 ~+11.9%（t≈8.7）；9M ~+9.7%（t≈8.5）。中位数超额仍为负，需分散持仓。",
-    "equity.guide3.title": "槽位队列 vs 事件研究",
-    "equity.guide3.desc": "HS300+CSI500 可交易回测 5%×20：CAGR ~15.3%、Sharpe ~0.74、回撤 ~-31%；满员 skip，最多 20 只并发持仓。",
+    "equity.guide3.title": "日频槽位 vs 事件研究",
+    "equity.guide3.desc": "日频 7%×14：公告后首个可交易日收盘买入；ESOP 需 close>MA200；满员时卖出 MA200 下方存量腾位。2017-09 起 CAGR ~20.1%、Sharpe ~0.98。",
     "equity.eventStudy": "全 A 股事件研究（vs 沪深300）",
     "equity.eventStudyMeta": "Strict core · 同股同月首次 · {symbols} 只股票 · {events} 条事件",
     "equity.recommendedHold": "推荐",
@@ -85,6 +85,20 @@ const I18N = {
     "equity.coreEvents": "核心事件",
     "equity.symbols": "涉及股票",
     "equity.staleNote": "组合持仓数据截至上述日期；候选池已更新至更近日期，下次调仓时将刷新。",
+    "equity.monthEndChanges": "本月调仓变动（月底信号）",
+    "equity.monthEndDesc": "按截至 {date} 的持仓与信号，汇总本月已执行及剩余交易日待执行的纳入/剔除（日频策略，有信号即日执行）。",
+    "equity.monthEndUnchanged": "本月暂无新增纳入或到期/换仓剔除。",
+    "equity.toAdd": "新纳入",
+    "equity.toRemove": "剔除",
+    "equity.tradeDate": "执行日",
+    "equity.tradeReason": "原因",
+    "equity.reason.executed": "已执行",
+    "equity.reason.pending": "待执行",
+    "equity.reason.scheduled": "待到期",
+    "equity.reason.esop": "员工持股",
+    "equity.reason.equity_incentive": "股权激励",
+    "equity.reason.expiry": "9M到期",
+    "equity.reason.ma200_swap": "MA200换仓",
   },
   en: {
     brand: "China Stock Strategies",
@@ -153,14 +167,14 @@ const I18N = {
     "dividend.guide3.title": "When holdings may change",
     "dividend.guide3.desc": "Switch only when momentum leadership flips between dividend and ChiNext; historically each is held roughly half the time.",
     "dividend.holdingStats": "Historical holding mix",
-    "equity.actionTitle": "Slot queue: 20 slots × 5%, hold 9M, skip when full",
-    "equity.actionDesc": "Tradable HS300+CSI500 backtest (2014–present): 5%×20 slots, skip when full; ~15.3% CAGR, Sharpe ~0.74, max DD ~-31%.",
+    "equity.actionTitle": "Daily slots: 14×7%, hold 9M; ESOP>MA200 entry, MA200-below swap when full",
+    "equity.actionDesc": "Tradable HS300+CSI500 backtest (display from 2017-09): daily 7%×14; ~20.1% CAGR, Sharpe ~0.98, max DD ~-27%.",
     "equity.guide1.title": "Per-stock Tushare scan",
     "equity.guide1.desc": "anns_d across 5,288 listings; equity incentive keeps draft/plan/first grant; ESOP requires 「YYYY/phase N employee stock plan (draft)」 only.",
     "equity.guide2.title": "Optimal hold: 9–12 months",
     "equity.guide2.desc": "~3,400 strict-core events, 770 priced symbols: 12M mean excess ~+11.9% (t≈8.7); 9M ~+9.7% (t≈8.5). Median excess stays negative — diversify.",
-    "equity.guide3.title": "Slot queue vs event study",
-    "equity.guide3.desc": "HS300+CSI500 tradable backtest with 5%×20: ~15.3% CAGR, Sharpe ~0.74, ~-31% max DD; skip-when-full, up to 20 concurrent names.",
+    "equity.guide3.title": "Daily slots vs event study",
+    "equity.guide3.desc": "Daily 7%×14: buy at close on first tradable day after announcement; ESOP requires close>MA200; when full, sell MA200-below holdings. ~20.1% CAGR, Sharpe ~0.98 from 2017-09.",
     "equity.eventStudy": "All-A event study (vs CSI 300)",
     "equity.eventStudyMeta": "Strict core · first event per symbol-month · {symbols} stocks · {events} events",
     "equity.recommendedHold": "Best",
@@ -170,6 +184,20 @@ const I18N = {
     "equity.coreEvents": "Core events",
     "equity.symbols": "Symbols",
     "equity.staleNote": "Portfolio holdings as of date above; candidate pool is more recent and will refresh on next rebalance.",
+    "equity.monthEndChanges": "This month's changes (month-end signal)",
+    "equity.monthEndDesc": "Entries and exits executed or still scheduled this month through {date} (daily strategy — trades on signal days).",
+    "equity.monthEndUnchanged": "No new entries or expiry/swap exits this month.",
+    "equity.toAdd": "Add",
+    "equity.toRemove": "Remove",
+    "equity.tradeDate": "Date",
+    "equity.tradeReason": "Reason",
+    "equity.reason.executed": "Done",
+    "equity.reason.pending": "Pending",
+    "equity.reason.scheduled": "Due",
+    "equity.reason.esop": "ESOP",
+    "equity.reason.equity_incentive": "Equity incentive",
+    "equity.reason.expiry": "9M expiry",
+    "equity.reason.ma200_swap": "MA200 swap",
   },
 };
 
@@ -189,7 +217,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 11;
+const APP_VERSION = 13;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -408,6 +436,67 @@ function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKe
         ${asOfLine}
         <span>${t("common.rebalance")}: <strong>${fmtDate(rebalanceDate)}</strong></span>
         <span>${t("common.nextRebalance")}: <strong>${t("common.monthEnd")}</strong> → ${t("common.monthEndNextDay")}</span>
+      </div>
+    </div>`;
+}
+
+function equityReasonLabel(reason, status) {
+  const statusKey = status ? `equity.reason.${status}` : null;
+  const statusText = statusKey && I18N[lang][statusKey] ? I18N[lang][statusKey] : status || "";
+  let reasonText = reason || "";
+  if (reason === "expiry") reasonText = t("equity.reason.expiry");
+  else if (reason === "ma200_swap") reasonText = t("equity.reason.ma200_swap");
+  else if (reason === "esop" || reason === "pending_esop") reasonText = t("equity.reason.esop");
+  else if (reason === "equity_incentive" || reason === "pending_equity_incentive")
+    reasonText = t("equity.reason.equity_incentive");
+  if (statusText && reasonText && statusText !== reasonText) return `${reasonText} · ${statusText}`;
+  return reasonText || statusText || "—";
+}
+
+function renderEquityChangeRows(rows) {
+  if (!rows?.length) {
+    return `<p class="note-text">—</p>`;
+  }
+  return tableWrap(`<table>
+      <thead><tr><th>${t("common.asset")}</th><th>${t("common.weight")}</th><th>${t("equity.tradeDate")}</th><th>${t("equity.tradeReason")}</th></tr></thead>
+      <tbody>
+        ${rows
+          .map(
+            (h) => `
+          <tr class="row-highlight">
+            <td><span class="symbol-badge">${h.symbol}</span>${lang === "zh" ? h.name : h.name_en || STOCK_NAMES_EN[h.symbol] || h.name}</td>
+            <td>${pct(h.weight, 0)}</td>
+            <td>${h.trade_date || "—"}</td>
+            <td>${equityReasonLabel(h.reason, h.status)}</td>
+          </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`);
+}
+
+function renderEquityMonthEndSection(projection) {
+  if (!projection) return "";
+  const desc = projection.unchanged
+    ? t("equity.monthEndUnchanged")
+    : t("equity.monthEndDesc").replace("{date}", fmtDate(projection.signal_date));
+  const monthLabel = projection.month || fmtDate(projection.signal_date).slice(0, 7);
+  return `
+    <div class="card projection-card">
+      <div class="card-header">
+        <h3 class="card-title">${t("equity.monthEndChanges")}</h3>
+        <span class="card-subtitle">${monthLabel}</span>
+      </div>
+      <p class="note-text">${desc}</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div>
+          <h4 class="card-subtitle">${t("equity.toAdd")}</h4>
+          ${renderEquityChangeRows(projection.entries)}
+        </div>
+        <div>
+          <h4 class="card-subtitle">${t("equity.toRemove")}</h4>
+          ${renderEquityChangeRows(projection.exits)}
+        </div>
       </div>
     </div>`;
 }
@@ -890,6 +979,7 @@ function renderEquityPanel(s) {
           </table>`)}
       </div>
     </div>
+    ${renderEquityMonthEndSection(s.projected_month_end)}
     ${
       watchlistRows
         ? `
