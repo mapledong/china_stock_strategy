@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 5
+DATA_VERSION = 8
 SRC = ROOT / "src"
 
 sys.path.insert(0, str(SRC))
@@ -48,6 +48,18 @@ STOCK_NAMES_EN = {
     "688248": "CSG Tech",
     "300666": "Konfoong Materials",
     "600655": "Yuyuan Inc.",
+    "002241": "Goertek",
+    "002371": "NAURA Technology",
+    "002558": "Giant Network",
+    "002624": "Perfect World",
+    "300274": "Sungrow Power",
+    "300750": "CATL",
+    "600438": "Tongwei",
+    "603501": "Will Semiconductor",
+    "002841": "CVTE",
+    "600031": "Sany Heavy Industry",
+    "601012": "LONGi Green Energy",
+    "002001": "Zhejiang NHU",
 }
 
 ETF_NAMES_EN = {
@@ -138,8 +150,32 @@ AH_TOP_N = 10
 DIVIDEND_CHINEXT_DIR = RESULTS / "dividend_chinext_momentum"
 DIVIDEND_CHINEXT_STRATEGY = "12M momentum"
 PAIR_NAMES = {"510880": "红利ETF", "159915": "创业板ETF"}
-EQUITY_STRATEGY = "equal_weight_all"
+SLOT_STRATEGY = "queue_9m_skip_hs300_csi500"
+SLOT_EQUITY_FILE = RESULTS / "equity_incentive_slot_equity.csv"
+SLOT_HOLDINGS_FILE = RESULTS / "equity_incentive_slot_holdings.csv"
+SLOT_RECOMMENDATION_FILE = RESULTS / "equity_incentive_slot_recommendation.json"
+SLOT_METRICS_FILE = RESULTS / "equity_incentive_slot_metrics.csv"
+TUSHARE_EVENTS_FILE = ROOT / "data" / "raw" / "equity_incentive_tushare" / "tushare_equity_incentive_events.csv"
 EQUITY_COST_BPS = 20.0
+EQUITY_CORE_TERMS = ("草案", "预案", "首次授予", "授予公告", "修订稿", "员工持股计划")
+EQUITY_NEGATIVE_TERMS = (
+    "解锁",
+    "解除限售",
+    "回购注销",
+    "注销",
+    "终止",
+    "停止",
+    "考核",
+    "进展",
+    "完成情况",
+    "解除",
+    "行权",
+    "归属",
+    "名单",
+    "核查意见",
+    "提示性公告",
+)
+INDEX_UNIVERSE_FILE = ROOT / "data" / "raw" / "equity_incentive_optimized" / "index_universe_hs300_zz500.csv"
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -633,142 +669,263 @@ def _enrich_etf_holdings(items: list[dict]) -> list[dict]:
     return items
 
 
-def compute_equity_daily_nav() -> tuple[list[dict], str]:
+def load_symbol_name_maps() -> tuple[dict[str, str], dict[str, str]]:
+    zh = dict(STOCK_NAMES)
+    en = dict(STOCK_NAMES_EN)
+    if TUSHARE_EVENTS_FILE.exists():
+        for row in read_csv(TUSHARE_EVENTS_FILE):
+            symbol = str(row.get("symbol", "")).zfill(6)
+            if not symbol or symbol == "000000":
+                continue
+            name = row.get("name") or symbol
+            if symbol not in zh:
+                zh[symbol] = name
+            if symbol not in en:
+                en[symbol] = name
+    return zh, en
+
+
+def compute_slot_equity_nav() -> tuple[list[dict], str]:
     import pandas as pd
 
-    from qtlight.equity_incentive_optimized_backtest import load_daily_panels
+    from qtlight.etf_momentum_rotation import get_hs300_index
 
-    diagnostics = pd.read_csv(RESULTS / "equity_incentive_optimized_diagnostics.csv")
-    diagnostics = diagnostics[
-        (diagnostics["strategy"] == EQUITY_STRATEGY) & (diagnostics["cost_bps"] == EQUITY_COST_BPS)
-    ].copy()
-    diagnostics["rebalance_month"] = pd.to_datetime(diagnostics["rebalance_month"])
-    diagnostics = diagnostics.sort_values("rebalance_month")
+    equity_df = pd.read_csv(SLOT_EQUITY_FILE)
+    equity_df["日期"] = pd.to_datetime(equity_df["日期"])
+    equity_df = equity_df.set_index("日期").sort_index()
 
-    holdings = pd.read_csv(RESULTS / "equity_incentive_optimized_holdings.csv")
-    holdings = holdings[
-        (holdings["strategy"] == EQUITY_STRATEGY) & (holdings["cost_bps"] == EQUITY_COST_BPS)
-    ].copy()
-    weight_table = (
-        holdings.pivot_table(index="rebalance_month", columns="symbol", values="weight", aggfunc="last")
-        .fillna(0.0)
+    monthly_strategy = equity_df[SLOT_STRATEGY]
+    monthly_bench = equity_df["沪深300"]
+    start_dt = _first_on_or_after(monthly_strategy.index, monthly_strategy.index[0].date().isoformat())
+
+    hs300_close = get_hs300_index()
+    end_dt = min(hs300_close.index.max(), monthly_strategy.index.max())
+    calendar = hs300_close.index[(hs300_close.index >= start_dt) & (hs300_close.index <= end_dt)]
+
+    strategy_daily = monthly_strategy.reindex(calendar, method="ffill")
+    bench_daily = monthly_bench.reindex(calendar, method="ffill")
+
+    daily = pd.DataFrame(
+        {
+            "strategy_nav": strategy_daily / float(strategy_daily.iloc[0]),
+            "hs300_nav": bench_daily / float(bench_daily.iloc[0]),
+        }
     )
-    weight_table.index = pd.to_datetime(weight_table.index)
+    nav_start = calendar[0].date().isoformat()
+    return daily_nav_rows(daily, "strategy_nav", "hs300_nav"), nav_start
 
-    symbols = sorted(weight_table.columns.tolist())
-    panels = load_daily_panels(symbols)
-    closes = panels["close"][symbols]
-    returns = closes.pct_change(fill_method=None).fillna(0.0)
 
-    bench = pd.read_csv(RESULTS / "ah_tushare_equity.csv", parse_dates=["date"], index_col="date")[
-        "CSI300_ETF_proxy"
+def load_slot_holdings() -> tuple[str, list[dict], dict]:
+    import pandas as pd
+
+    zh, en = load_symbol_name_maps()
+    holdings_df = pd.read_csv(SLOT_HOLDINGS_FILE)
+    row = holdings_df[holdings_df["strategy"] == SLOT_STRATEGY].iloc[-1]
+    latest_date = str(row["month"])[:10]
+    raw_symbols = row.get("symbols")
+    symbols = (
+        [symbol.strip() for symbol in str(raw_symbols).split(",") if symbol.strip()]
+        if pd.notna(raw_symbols) and str(raw_symbols).strip()
+        else []
+    )
+    positions = int(row["positions"])
+    gross_weight = float(row["gross_weight"])
+    slot_weight = gross_weight / positions if positions > 0 else 0.0
+    holdings = [
+        {
+            "symbol": symbol,
+            "name": zh.get(symbol, symbol),
+            "name_en": en.get(symbol, zh.get(symbol, symbol)),
+            "weight": slot_weight,
+        }
+        for symbol in symbols
     ]
-    end_month = diagnostics["rebalance_month"].max()
-    calendar = closes.index[closes.index <= bench.index.max()]
-    calendar = calendar[calendar <= end_month + pd.offsets.MonthEnd(0)]
+    return latest_date, holdings, {"positions": positions, "gross_weight": gross_weight}
 
-    exec_targets: dict[pd.Timestamp, pd.Series] = {}
-    for _, row in diagnostics.iterrows():
-        signal_date = row["rebalance_month"]
-        future = calendar[calendar > signal_date]
-        if future.empty:
-            continue
-        exec_date = future[0]
-        if row["holding_count"] > 0 and signal_date in weight_table.index:
-            target = weight_table.loc[signal_date].reindex(symbols).fillna(0.0)
-        else:
-            target = pd.Series(0.0, index=symbols)
-        exec_targets[exec_date] = target
 
-    asset_weights = pd.Series(0.0, index=symbols)
-    cash_weight = 1.0
-    strategy_nav = 1.0
-    rows: list[dict] = []
-    bench_aligned = bench.reindex(calendar).ffill().bfill()
-    nav_start = calendar[0]
-    bench_base = float(bench_aligned.loc[nav_start])
+def _mark_strict_core_events(events):
+    import pandas as pd
 
-    for date in calendar:
-        if date in exec_targets:
-            target = exec_targets[date]
-            turnover = float((target - asset_weights).abs().sum() + abs((1.0 - target.sum()) - cash_weight))
-            strategy_nav *= 1.0 - turnover * EQUITY_COST_BPS / 10000.0
-            asset_weights = target.copy()
-            cash_weight = max(0.0, 1.0 - float(target.sum()))
+    out = events.copy()
+    if "title_clean" not in out.columns:
+        out["title_clean"] = out["title"]
+    title = out["title_clean"]
+    has_plan_term = title.str.contains("股权激励|员工持股", regex=True, na=False)
+    has_core = title.str.contains("|".join(EQUITY_CORE_TERMS), regex=True, na=False)
+    has_negative = title.str.contains("|".join(EQUITY_NEGATIVE_TERMS), regex=True, na=False)
+    out["is_core_event"] = has_plan_term & has_core & ~has_negative
+    return out
 
-        day_return = float((asset_weights * returns.loc[date]).sum())
-        strategy_nav *= 1.0 + day_return
 
-        gross = 1.0 + day_return
-        if gross > 0 and (asset_weights.sum() + cash_weight) > 0:
-            asset_values = asset_weights * (1.0 + returns.loc[date])
-            total = float(asset_values.sum() + cash_weight)
-            if total > 0:
-                asset_weights = asset_values / total
-                cash_weight = cash_weight / total
+def _load_hs300_csi500_symbols() -> set[str]:
+    rows = read_csv(INDEX_UNIVERSE_FILE)
+    return {str(row["symbol"]).zfill(6) for row in rows if row.get("symbol")}
 
-        bench_nav = float(bench_aligned.loc[date] / bench_base)
-        rows.append(
+
+def load_recent_core_events(current_symbols: set[str]) -> tuple[str, list[dict]]:
+    import pandas as pd
+
+    events = pd.read_csv(TUSHARE_EVENTS_FILE)
+    events = _mark_strict_core_events(events)
+    core = events[events["is_core_event"]].copy()
+    core["announcement_time"] = pd.to_datetime(core["announcement_time"], errors="coerce")
+    core = core.dropna(subset=["announcement_time"])
+    core["symbol"] = core["symbol"].astype(str).str.zfill(6)
+    core["event_month"] = core["announcement_time"].dt.to_period("M").dt.to_timestamp("M")
+    core = core.sort_values(["announcement_time", "symbol"])
+    core = core.groupby(["symbol", "event_month"], as_index=False).head(1)
+    core = core[core["symbol"].isin(_load_hs300_csi500_symbols())]
+    pending = core[~core["symbol"].isin(current_symbols)].copy()
+    if pending.empty:
+        return "", []
+
+    watchlist_month = pending["event_month"].max().date().isoformat()
+    recent = pending[pending["event_month"] >= pending["event_month"].max() - pd.DateOffset(months=2)]
+    recent = recent.sort_values("announcement_time", ascending=False).head(20)
+
+    zh, en = load_symbol_name_maps()
+    watchlist = []
+    for _, row in recent.iterrows():
+        symbol = str(row["symbol"]).zfill(6)
+        watchlist.append(
             {
-                "date": date.date().isoformat(),
-                "equal_weight_all_20bps": strategy_nav,
-                "沪深300": bench_nav,
+                "symbol": symbol,
+                "name": row.get("name") or zh.get(symbol, symbol),
+                "name_en": en.get(symbol, row.get("name", symbol)),
+                "announcement_time": pd.Timestamp(row["announcement_time"]).date().isoformat(),
+                "title": row.get("title_clean") or row.get("title", ""),
             }
         )
+    return watchlist_month, watchlist
 
-    return rows, nav_start.date().isoformat()
+
+def load_tushare_event_study() -> dict:
+    import pandas as pd
+
+    scope = "tushare_all_a_share_vs_hs300_symbol_month_first"
+    summary_df = pd.read_csv(RESULTS / "equity_incentive_tushare_event_study_summary.csv")
+    strict = summary_df[
+        (summary_df["sample_scope"] == scope) & (summary_df["event_definition"] == "strict_core")
+    ].sort_values("horizon_months")
+
+    best_df = pd.read_csv(RESULTS / "equity_incentive_tushare_best_horizons.csv")
+    best_row = best_df[
+        (best_df["sample_scope"].str.endswith("_symbol_month_first"))
+        & (best_df["event_definition"] == "strict_core")
+    ].iloc[0]
+
+    count_df = pd.read_csv(RESULTS / "equity_incentive_tushare_event_count_compare.csv")
+    tushare_row = count_df[count_df["source"].str.startswith("tushare")].iloc[0]
+
+    horizons = strict.to_dict(orient="records")
+    if not any(int(row["horizon_months"]) == 9 for row in horizons):
+        horizons.append(
+            {
+                "horizon_months": 9,
+                "events": None,
+                "unique_symbols": int(strict["unique_symbols"].max()),
+                "mean_excess_return": float(best_row["best_by_t_stat_excess"]),
+                "excess_t_stat": float(best_row["best_by_t_stat_value"]),
+                "excess_win_rate": None,
+            }
+        )
+    horizons = sorted(horizons, key=lambda row: int(row["horizon_months"]))
+    display = [row for row in horizons if int(row["horizon_months"]) in (1, 3, 6, 9, 12)]
+
+    return {
+        "source": "tushare_anns_d",
+        "universe_zh": "全 A 股（Tushare 逐股遍历 2014–今）",
+        "universe_en": "All A-shares (Tushare per-stock scan, 2014–present)",
+        "benchmark_zh": "沪深300",
+        "benchmark_en": "CSI 300",
+        "event_definition": "strict_core",
+        "core_events": int(tushare_row["strict_core_events"]),
+        "core_symbols": int(tushare_row["unique_core_symbols"]),
+        "best_holding_months": int(best_row["best_by_t_stat_months"]),
+        "alt_holding_months": 6,
+        "horizons": display,
+    }
 
 
 def build_equity() -> dict:
-    summary = json.loads((RESULTS / "equity_incentive_optimized_summary.json").read_text())
-    event_summary = json.loads((RESULTS / "equity_incentive_event_study_summary.json").read_text())
-    holdings_rows = [
-        r
-        for r in read_csv(RESULTS / "equity_incentive_optimized_holdings.csv")
-        if r["strategy"] == EQUITY_STRATEGY and r["cost_bps"] == str(EQUITY_COST_BPS)
-    ]
-    latest_date, holdings = latest_holdings_by_date(holdings_rows, "rebalance_month", ["symbol", "weight"])
-    for h in holdings:
-        h["name"] = STOCK_NAMES.get(h["symbol"], h["symbol"])
-        h["name_en"] = STOCK_NAMES_EN.get(h["symbol"], h["name"])
+    import pandas as pd
 
-    candidates = [r for r in read_csv(RESULTS / "equity_incentive_optimized_candidates.csv") if r["eligible"] == "True"]
-    latest_candidates_date = max(r["rebalance_month"] for r in candidates) if candidates else ""
-    watchlist = [
-        {
-            "symbol": r["symbol"],
-            "name": r["name"],
-            "name_en": STOCK_NAMES_EN.get(r["symbol"], r["name"]),
-            "announcement_time": r["announcement_time"][:10],
-            "title": r["title_clean"],
-        }
-        for r in candidates
-        if r["rebalance_month"] == latest_candidates_date
-    ]
+    recommendation = json.loads(SLOT_RECOMMENDATION_FILE.read_text())
+    metrics_row = pd.read_csv(SLOT_METRICS_FILE)
+    metrics_row = metrics_row[metrics_row["strategy"] == SLOT_STRATEGY].iloc[0]
+    tushare_event_study = load_tushare_event_study()
 
-    nav_rows, nav_start = compute_equity_daily_nav()
-    best = summary["best_primary_cost_strategy"]
+    latest_date, holdings, slot_meta = load_slot_holdings()
+    current_symbols = {h["symbol"] for h in holdings}
+    watchlist_month, watchlist = load_recent_core_events(current_symbols)
+
+    nav_rows, nav_start = compute_slot_equity_nav()
+    rec = recommendation["recommended_strategy"]
+    sizing = recommendation["position_sizing"]
 
     return {
         "id": "equity",
+        "featured_variant": SLOT_STRATEGY,
         "latest_rebalance": latest_date,
+        "holdings_as_of": latest_date,
         "holdings": holdings,
-        "watchlist": watchlist,
-        "watchlist_month": latest_candidates_date,
-        "metrics": {
-            "cagr": best["cagr"],
-            "sharpe": best["sharpe"],
-            "max_drawdown": best["max_drawdown"],
-            "final_nav": best["final_nav"],
-            "turnover_per_year": best["turnover_per_year"],
+        "slot_meta": {
+            "positions": slot_meta["positions"],
+            "max_slots": int(sizing["max_concurrent_slots"]),
+            "slot_weight": float(sizing["initial_weight_per_new_event"]),
+            "gross_weight": slot_meta["gross_weight"],
+            "hold_months": int(rec["hold_months"]),
+            "replacement": rec["replacement"],
+            "universe": rec["universe"],
+            "avg_positions": float(metrics_row["avg_positions"]),
         },
-        "event_study": event_summary["summary"],
-        "core_events": summary["core_event_rows"],
-        "core_symbols": summary["core_symbols"],
+        "rules_zh": recommendation.get("rules_zh", []),
+        "rules_en": [
+            "Events: Tushare strict core (draft/plan/first grant/ESOP); first announcement per symbol-month.",
+            "Entry: buy at month-end close after announcement; 10% weight per new slot.",
+            "Hold: fixed 9 months; exit at month-end.",
+            "Capacity: up to 10 concurrent slots (≤100% gross); when full, skip new signals.",
+            "Costs: 20 bps one-way.",
+        ],
+        "watchlist": watchlist,
+        "watchlist_month": watchlist_month,
+        "metrics": {
+            "cagr": float(metrics_row["cagr"]),
+            "sharpe": float(metrics_row["sharpe"]),
+            "max_drawdown": float(metrics_row["max_drawdown"]),
+            "final_nav": float(metrics_row["final_nav"]),
+            "turnover_per_year": float(metrics_row["turnover_per_year"]),
+            "excess_cagr": float(metrics_row["excess_cagr"]),
+        },
+        "benchmark_metrics": {
+            "cagr": float(metrics_row["benchmark_cagr"]),
+            "sharpe": None,
+            "max_drawdown": None,
+            "final_nav": None,
+        },
+        "event_study": tushare_event_study["horizons"],
+        "event_study_meta": {
+            key: tushare_event_study[key]
+            for key in (
+                "source",
+                "universe_zh",
+                "universe_en",
+                "benchmark_zh",
+                "benchmark_en",
+                "event_definition",
+                "core_events",
+                "core_symbols",
+                "best_holding_months",
+                "alt_holding_months",
+            )
+        },
+        "core_events": tushare_event_study["core_events"],
+        "core_symbols": tushare_event_study["core_symbols"],
         "nav": nav_rows,
         "nav_start": nav_start,
+        "backtest_start": str(metrics_row["start_date"])[:10],
+        "backtest_end": str(metrics_row["end_date"])[:10],
         "cost_bps": EQUITY_COST_BPS,
-        "filters": summary["filters"],
     }
 
 

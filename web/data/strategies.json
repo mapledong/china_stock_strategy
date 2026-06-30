@@ -1,6 +1,6 @@
 {
-  "data_version": 5,
-  "generated_at": "2026-06-30 00:03",
+  "data_version": 8,
+  "generated_at": "2026-06-30 19:53",
   "strategy_order": [
     "etf",
     "ah",
@@ -314,116 +314,338 @@
     },
     "equity": {
       "id": "equity",
-      "latest_rebalance": "2023-11-30",
+      "featured_variant": "queue_9m_skip_hs300_csi500",
+      "latest_rebalance": "2026-05-31",
+      "holdings_as_of": "2026-05-31",
       "holdings": [
         {
-          "symbol": "300124",
-          "weight": 0.3333333333333333,
-          "name": "汇川技术",
-          "name_en": "Inovance Technology"
+          "symbol": "002241",
+          "name": "歌尔股份",
+          "name_en": "Goertek",
+          "weight": 0.1
         },
         {
-          "symbol": "600153",
-          "weight": 0.3333333333333333,
-          "name": "建发股份",
-          "name_en": "C&D Inc."
+          "symbol": "002371",
+          "name": "北方华创",
+          "name_en": "NAURA Technology",
+          "weight": 0.1
         },
         {
-          "symbol": "600196",
-          "weight": 0.3333333333333333,
-          "name": "复星医药",
-          "name_en": "Fosun Pharma"
-        }
-      ],
-      "watchlist": [
+          "symbol": "002558",
+          "name": "巨人网络",
+          "name_en": "Giant Network",
+          "weight": 0.1
+        },
+        {
+          "symbol": "002624",
+          "name": "完美环球",
+          "name_en": "Perfect World",
+          "weight": 0.1
+        },
         {
           "symbol": "300124",
           "name": "汇川技术",
           "name_en": "Inovance Technology",
-          "announcement_time": "2024-09-06",
-          "title": "关于第六期股权激励计划首次授予部分股票期权注销完成的公告"
+          "weight": 0.1
+        },
+        {
+          "symbol": "300274",
+          "name": "阳光电源",
+          "name_en": "Sungrow Power",
+          "weight": 0.1
+        },
+        {
+          "symbol": "300750",
+          "name": "宁德时代",
+          "name_en": "CATL",
+          "weight": 0.1
+        },
+        {
+          "symbol": "600438",
+          "name": "通威股份",
+          "name_en": "Tongwei",
+          "weight": 0.1
+        },
+        {
+          "symbol": "600873",
+          "name": "梅花生物",
+          "name_en": "Meihua Bio",
+          "weight": 0.1
+        },
+        {
+          "symbol": "603501",
+          "name": "韦尔股份",
+          "name_en": "Will Semiconductor",
+          "weight": 0.1
         }
       ],
-      "watchlist_month": "2024-11-30",
+      "slot_meta": {
+        "positions": 10,
+        "max_slots": 10,
+        "slot_weight": 0.1,
+        "gross_weight": 1.0,
+        "hold_months": 9,
+        "replacement": "skip",
+        "universe": "hs300_csi500",
+        "avg_positions": 8.275167785234899
+      },
+      "rules_zh": [
+        "事件：Tushare strict core（草案/预案/首次授予/员工持股计划），同股同月只取首次公告。",
+        "入场：公告月月末收盘价买入，单票起始仓位 10%。",
+        "持有：固定 9 个月，到期月末卖出。",
+        "仓位上限：最多 10 个槽位（总仓位 ≤100%）；满员时换仓规则：skip。",
+        "交易成本：单边 20 bps。"
+      ],
+      "rules_en": [
+        "Events: Tushare strict core (draft/plan/first grant/ESOP); first announcement per symbol-month.",
+        "Entry: buy at month-end close after announcement; 10% weight per new slot.",
+        "Hold: fixed 9 months; exit at month-end.",
+        "Capacity: up to 10 concurrent slots (≤100% gross); when full, skip new signals.",
+        "Costs: 20 bps one-way."
+      ],
+      "watchlist": [
+        {
+          "symbol": "002841",
+          "name": "视源股份",
+          "name_en": "CVTE",
+          "announcement_time": "2026-06-26",
+          "title": "关于2026年员工持股计划非交易过户完成暨回购股份处理完成的公告"
+        },
+        {
+          "symbol": "600031",
+          "name": "三一重工",
+          "name_en": "Sany Heavy Industry",
+          "announcement_time": "2026-06-25",
+          "title": "上海嘉坦律师事务所关于三一重工股份有限公司2026年A股员工持股计划（草案）之法律意见书"
+        },
+        {
+          "symbol": "601012",
+          "name": "隆基绿能",
+          "name_en": "LONGi Green Energy",
+          "announcement_time": "2026-06-24",
+          "title": "关于员工持股计划完成非交易过户的公告"
+        },
+        {
+          "symbol": "002001",
+          "name": "新 和 成",
+          "name_en": "Zhejiang NHU",
+          "announcement_time": "2026-06-24",
+          "title": "关于调整第五期员工持股计划管理委员会委员的公告"
+        },
+        {
+          "symbol": "688676",
+          "name": "金盘科技",
+          "name_en": "金盘科技",
+          "announcement_time": "2026-06-18",
+          "title": "2025年员工持股计划第一次持有人会议决议公告"
+        },
+        {
+          "symbol": "002625",
+          "name": "光启技术",
+          "name_en": "光启技术",
+          "announcement_time": "2026-06-18",
+          "title": "2025年员工持股计划管理办法（修订稿）"
+        },
+        {
+          "symbol": "002236",
+          "name": "大华股份",
+          "name_en": "大华股份",
+          "announcement_time": "2026-06-18",
+          "title": "2026年员工持股计划第一次持有人会议决议公告"
+        },
+        {
+          "symbol": "000739",
+          "name": "普洛药业",
+          "name_en": "普洛药业",
+          "announcement_time": "2026-06-18",
+          "title": "关于第二期员工持股计划首次授予非交易过户完成的公告"
+        },
+        {
+          "symbol": "000651",
+          "name": "格力电器",
+          "name_en": "格力电器",
+          "announcement_time": "2026-06-18",
+          "title": "第四期员工持股计划（草案）摘要"
+        },
+        {
+          "symbol": "603993",
+          "name": "洛阳钼业",
+          "name_en": "洛阳钼业",
+          "announcement_time": "2026-06-17",
+          "title": "洛阳钼业2021年第一期员工持股计划第三次持有人会议决议公告"
+        },
+        {
+          "symbol": "002920",
+          "name": "德赛西威",
+          "name_en": "德赛西威",
+          "announcement_time": "2026-06-17",
+          "title": "关于2025年员工持股计划第一期部分股份非交易过户完成的公告"
+        },
+        {
+          "symbol": "000703",
+          "name": "恒逸石化",
+          "name_en": "恒逸石化",
+          "announcement_time": "2026-06-13",
+          "title": "恒逸石化股份有限公司第七期员工持股计划摘要（修订稿）"
+        },
+        {
+          "symbol": "300498",
+          "name": "温氏股份",
+          "name_en": "温氏股份",
+          "announcement_time": "2026-06-10",
+          "title": "关于公司2023年员工持股计划实施完毕的公告"
+        },
+        {
+          "symbol": "002493",
+          "name": "荣盛石化",
+          "name_en": "荣盛石化",
+          "announcement_time": "2026-06-10",
+          "title": "董事会关于公司2026年员工持股计划（草案）合规性说明"
+        },
+        {
+          "symbol": "605589",
+          "name": "圣泉集团",
+          "name_en": "圣泉集团",
+          "announcement_time": "2026-06-09",
+          "title": "圣泉集团2025年员工持股计划第二次持有人会议决议公告"
+        },
+        {
+          "symbol": "601799",
+          "name": "星宇股份",
+          "name_en": "星宇股份",
+          "announcement_time": "2026-06-09",
+          "title": "北京市君合律师事务所关于常州星宇车灯股份有限公司2026年员工持股计划的法律意见书"
+        },
+        {
+          "symbol": "603129",
+          "name": "春风动力",
+          "name_en": "春风动力",
+          "announcement_time": "2026-06-08",
+          "title": "春风动力2025年员工持股计划第二次持有人会议决议公告"
+        },
+        {
+          "symbol": "300458",
+          "name": "全志科技",
+          "name_en": "全志科技",
+          "announcement_time": "2026-06-08",
+          "title": "2026年员工持股计划第一次持有人会议公告"
+        },
+        {
+          "symbol": "603260",
+          "name": "合盛硅业",
+          "name_en": "合盛硅业",
+          "announcement_time": "2026-06-06",
+          "title": "合盛硅业2026年员工持股计划（草案）摘要"
+        },
+        {
+          "symbol": "300012",
+          "name": "华测检测",
+          "name_en": "华测检测",
+          "announcement_time": "2026-06-06",
+          "title": "关于公司第五期员工持股计划完成非交易过户的公告"
+        }
+      ],
+      "watchlist_month": "2026-06-30",
       "metrics": {
-        "cagr": 0.00717096407673945,
-        "sharpe": 0.08190708780166857,
-        "max_drawdown": -0.19262359863601153,
-        "final_nav": 1.0804857129506753,
-        "turnover_per_year": 1.3138046499873641
+        "cagr": 0.1477130644005333,
+        "sharpe": 0.4809185787287842,
+        "max_drawdown": -0.5267703354162487,
+        "final_nav": 5.465849492910849,
+        "turnover_per_year": 2.206262491672218,
+        "excess_cagr": 0.0808396382948701
+      },
+      "benchmark_metrics": {
+        "cagr": 0.0668734261056631,
+        "sharpe": null,
+        "max_drawdown": null,
+        "final_nav": null
       },
       "event_study": [
         {
+          "sample_scope": "tushare_all_a_share_vs_hs300_symbol_month_first",
+          "event_definition": "strict_core",
           "horizon_months": 1,
-          "events": 65,
-          "unique_symbols": 31,
-          "mean_stock_return": 0.060636407230034495,
-          "median_stock_return": 0.037735849056603765,
-          "stock_win_rate": 0.6153846153846154,
-          "mean_index_return": 0.006622784028892699,
-          "mean_excess_return": 0.05401362320114181,
-          "median_excess_return": 0.04727935203058342,
-          "excess_win_rate": 0.6307692307692307,
-          "excess_t_stat": 2.9506143449603854
+          "events": 10289,
+          "unique_symbols": 899,
+          "mean_stock_return": 0.0140823667804956,
+          "median_stock_return": -0.0033305578684429,
+          "mean_hs300_return": 0.0004591250736913,
+          "mean_excess_return": 0.0136232417068043,
+          "median_excess_return": -0.0034709974271551,
+          "excess_win_rate": 0.4846923899309943,
+          "excess_t_stat": 8.159182336717686
         },
         {
+          "sample_scope": "tushare_all_a_share_vs_hs300_symbol_month_first",
+          "event_definition": "strict_core",
           "horizon_months": 3,
-          "events": 64,
-          "unique_symbols": 30,
-          "mean_stock_return": 0.11213604742836811,
-          "median_stock_return": 0.0966672501516661,
-          "stock_win_rate": 0.65625,
-          "mean_index_return": 0.021506165943430106,
-          "mean_excess_return": 0.090629881484938,
-          "median_excess_return": 0.047377299855885735,
-          "excess_win_rate": 0.65625,
-          "excess_t_stat": 2.6878136875534007
+          "events": 10113,
+          "unique_symbols": 882,
+          "mean_stock_return": 0.0342837422132895,
+          "median_stock_return": -0.0129198966408269,
+          "mean_hs300_return": 0.0037654613352306,
+          "mean_excess_return": 0.0305182808780589,
+          "median_excess_return": -0.0127852838642126,
+          "excess_win_rate": 0.4667259962424602,
+          "excess_t_stat": 9.204159662190309
         },
         {
+          "sample_scope": "tushare_all_a_share_vs_hs300_symbol_month_first",
+          "event_definition": "strict_core",
           "horizon_months": 6,
-          "events": 63,
-          "unique_symbols": 29,
-          "mean_stock_return": 0.22898109254509874,
-          "median_stock_return": 0.18979933110367897,
-          "stock_win_rate": 0.6666666666666666,
-          "mean_index_return": 0.030396632719246426,
-          "mean_excess_return": 0.1985844598258523,
-          "median_excess_return": 0.16458839835859917,
-          "excess_win_rate": 0.6825396825396826,
-          "excess_t_stat": 4.728505037458122
+          "events": 9922,
+          "unique_symbols": 869,
+          "mean_stock_return": 0.0593288728029276,
+          "median_stock_return": -0.0223695582950461,
+          "mean_hs300_return": 0.0059383313923786,
+          "mean_excess_return": 0.0533905414105489,
+          "median_excess_return": -0.0199026866847294,
+          "excess_win_rate": 0.4634146341463415,
+          "excess_t_stat": 11.990387385856982
         },
         {
+          "horizon_months": 9,
+          "events": null,
+          "unique_symbols": 899,
+          "mean_excess_return": 0.0823004092520583,
+          "excess_t_stat": 14.915766573183271,
+          "excess_win_rate": null
+        },
+        {
+          "sample_scope": "tushare_all_a_share_vs_hs300_symbol_month_first",
+          "event_definition": "strict_core",
           "horizon_months": 12,
-          "events": 61,
-          "unique_symbols": 29,
-          "mean_stock_return": 0.43064691628496876,
-          "median_stock_return": 0.3253551274567037,
-          "stock_win_rate": 0.6557377049180327,
-          "mean_index_return": 0.09797479802644922,
-          "mean_excess_return": 0.3326721182585196,
-          "median_excess_return": 0.24989640094179943,
-          "excess_win_rate": 0.7049180327868853,
-          "excess_t_stat": 4.544127052257036
+          "events": 9411,
+          "unique_symbols": 845,
+          "mean_stock_return": 0.1123371291114152,
+          "median_stock_return": -0.0254668930390491,
+          "mean_hs300_return": 0.0123627767523495,
+          "mean_excess_return": 0.0999743523590657,
+          "median_excess_return": -0.0098825802527877,
+          "excess_win_rate": 0.4847518860907449,
+          "excess_t_stat": 14.313115469015926
         }
       ],
-      "core_events": 66,
-      "core_symbols": 31,
-      "nav_start": "2014-01-02",
-      "cost_bps": 20.0,
-      "filters": {
-        "lookback_months": 3,
-        "min_listing_days": 180,
-        "min_avg_amount_20d": 50000000.0,
-        "min_holdings": 3,
-        "top_n": 5,
-        "cost_bps_list": [
-          5.0,
-          20.0,
-          50.0
-        ]
+      "event_study_meta": {
+        "source": "tushare_anns_d",
+        "universe_zh": "全 A 股（Tushare 逐股遍历 2014–今）",
+        "universe_en": "All A-shares (Tushare per-stock scan, 2014–present)",
+        "benchmark_zh": "沪深300",
+        "benchmark_en": "CSI 300",
+        "event_definition": "strict_core",
+        "core_events": 15984,
+        "core_symbols": 1397,
+        "best_holding_months": 9,
+        "alt_holding_months": 6
       },
+      "core_events": 15984,
+      "core_symbols": 1397,
+      "nav_start": "2015-01-05",
+      "backtest_start": "2014-01-31",
+      "backtest_end": "2026-05-31",
+      "cost_bps": 20.0,
       "nav_src": "nav/equity.json",
-      "nav_points": 3014
+      "nav_points": 2769
     }
   }
 }

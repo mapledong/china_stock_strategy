@@ -68,15 +68,17 @@ const I18N = {
     "dividend.guide3.title": "何时可能换仓",
     "dividend.guide3.desc": "仅当动量领先者从红利切到创业板（或反向）时换仓；历史约各持有约一半月份。",
     "dividend.holdingStats": "历史持仓占比",
-    "equity.actionTitle": "持有近期股权激励/员工持股核心事件股票，等权",
-    "equity.actionDesc": "在沪深300+中证500成分股中，筛选 3 个月内公告的股权激励或员工持股计划（草案/预案/首次授予），满足流动性与上市天数要求后等权持有。",
-    "equity.guide1.title": "每月扫描公告",
-    "equity.guide1.desc": "从 CNINFO 抓取「股权激励」「员工持股」关键词公告，过滤终止/解锁/回购注销等非核心事件。",
-    "equity.guide2.title": "等权配置 eligible 股票",
-    "equity.guide2.desc": "满足 20 日均成交额 ≥ 5000 万、上市 ≥ 180 天的股票进入组合，等权分配；不足 3 只时留现金。",
-    "equity.guide3.title": "事件研究 vs 实盘",
-    "equity.guide3.desc": "历史事件研究显示 6 个月平均超额收益约 +20%（t=4.7）；可交易组合回测 alpha 较 modest，需关注新公告驱动的动态换仓。",
-    "equity.eventStudy": "事件研究 Alpha",
+    "equity.actionTitle": "槽位队列：10 槽 × 10%，持有 9 个月，满员 skip",
+    "equity.actionDesc": "HS300+CSI500 可交易回测（2014–今）：公告月月末买入 strict core 事件，单票 10%，最多 10 槽；满员时跳过新信号。CAGR ~14.8%，相对沪深300 超额 ~8.1%。",
+    "equity.guide1.title": "Tushare 逐股扫描公告",
+    "equity.guide1.desc": "anns_d 遍历 5,288 只股票，匹配「股权激励/员工持股」，剔除解锁/注销/终止等程序性公告，保留 strict core。",
+    "equity.guide2.title": "最优持有 9 个月",
+    "equity.guide2.desc": "全样本 1,397 只 strict core 股票、10,000+ 事件：9M 统计显著性最高（t≈15）；6M 为更短备选（t≈12）。中位数超额仍为负，需分散持仓。",
+    "equity.guide3.title": "槽位队列 vs 事件研究",
+    "equity.guide3.desc": "可交易回测 CAGR ~14.8%、Sharpe ~0.48；全 A 事件研究 9M 平均超额 ~+8%（t≈15）。满员 skip 显著优于强制换仓。",
+    "equity.eventStudy": "全 A 股事件研究（vs 沪深300）",
+    "equity.eventStudyMeta": "Strict core · 同股同月首次 · {symbols} 只股票 · {events} 条事件",
+    "equity.recommendedHold": "推荐",
     "equity.months": "个月",
     "equity.excessReturn": "平均超额",
     "equity.watchlist": "最新 eligible 候选（待纳入）",
@@ -151,15 +153,17 @@ const I18N = {
     "dividend.guide3.title": "When holdings may change",
     "dividend.guide3.desc": "Switch only when momentum leadership flips between dividend and ChiNext; historically each is held roughly half the time.",
     "dividend.holdingStats": "Historical holding mix",
-    "equity.actionTitle": "Equal-weight recent equity incentive / ESOP event stocks",
-    "equity.actionDesc": "Within CSI300+CSI500, screen core 股权激励/员工持股 announcements (drafts, plans, first grants) within 3 months. Equal weight if liquid and listed ≥180 days.",
-    "equity.guide1.title": "Scan announcements monthly",
-    "equity.guide1.desc": "Pull CNINFO titles matching incentive/ESOP keywords. Exclude termination, unlock, buyback cancellation, etc.",
-    "equity.guide2.title": "Equal-weight eligible names",
-    "equity.guide2.desc": "Require 20D avg amount ≥ ¥50M and listing ≥ 180 days. Equal weight; hold cash if fewer than 3 names.",
-    "equity.guide3.title": "Event study vs tradable portfolio",
-    "equity.guide3.desc": "Event study shows ~+20% mean 6M excess return (t=4.7). Tradable backtest alpha is modest — rebalance driven by new announcements.",
-    "equity.eventStudy": "Event Study Alpha",
+    "equity.actionTitle": "Slot queue: 10 slots × 10%, hold 9M, skip when full",
+    "equity.actionDesc": "Tradable HS300+CSI500 backtest (2014–present): enter strict-core events at month-end, 10% per slot, max 10 slots; skip when full. ~14.8% CAGR, ~8.1% excess vs CSI 300.",
+    "equity.guide1.title": "Per-stock Tushare scan",
+    "equity.guide1.desc": "anns_d across 5,288 listings; match incentive/ESOP titles; drop unlock/cancel/procedural noise; keep strict core.",
+    "equity.guide2.title": "Optimal hold: 9 months",
+    "equity.guide2.desc": "1,397 strict-core symbols, 10k+ events: 9M has peak significance (t≈15); 6M is a shorter alternative (t≈12). Median excess stays negative — diversify.",
+    "equity.guide3.title": "Slot queue vs event study",
+    "equity.guide3.desc": "Tradable backtest ~14.8% CAGR, Sharpe ~0.48; all-A 9M event study mean excess ~+8% (t≈15). Skip-when-full beats forced replacement.",
+    "equity.eventStudy": "All-A event study (vs CSI 300)",
+    "equity.eventStudyMeta": "Strict core · first event per symbol-month · {symbols} stocks · {events} events",
+    "equity.recommendedHold": "Best",
     "equity.months": "mo",
     "equity.excessReturn": "Mean excess",
     "equity.watchlist": "Latest eligible candidates",
@@ -185,7 +189,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 5;
+const APP_VERSION = 8;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -201,6 +205,18 @@ const STOCK_NAMES_EN = {
   "688248": "CSG Tech",
   "300666": "Konfoong Materials",
   "600655": "Yuyuan Inc.",
+  "002241": "Goertek",
+  "002371": "NAURA Technology",
+  "002558": "Giant Network",
+  "002624": "Perfect World",
+  "300274": "Sungrow Power",
+  "300750": "CATL",
+  "600438": "Tongwei",
+  "603501": "Will Semiconductor",
+  "002841": "CVTE",
+  "600031": "Sany Heavy Industry",
+  "601012": "LONGi Green Energy",
+  "002001": "Zhejiang NHU",
 };
 
 let lang = localStorage.getItem("lang") || "zh";
@@ -214,7 +230,7 @@ const CHART_CONFIG = {
   etf: { canvasId: "chart-etf", strategyField: "strategy_nav", benchField: "hs300_nav" },
   ah: { canvasId: "chart-ah", strategyField: "AH_low_premium_top10_tushare", benchField: "CSI300_ETF_proxy" },
   dividend: { canvasId: "chart-dividend", strategyField: "strategy_nav", benchField: "hs300_nav" },
-  equity: { canvasId: "chart-equity", strategyField: "equal_weight_all_20bps", benchField: "沪深300" },
+  equity: { canvasId: "chart-equity", strategyField: "strategy_nav", benchField: "hs300_nav" },
 };
 
 function t(key) {
@@ -462,7 +478,9 @@ function renderMetrics(metrics, benchmarkMetrics, navKey, benchKey) {
 
   const benchNote =
     benchmarkMetrics &&
-    `<p class="card-subtitle" style="margin-top:12px">${t("common.benchmark")}: CAGR ${pct(benchmarkMetrics.cagr)}, Sharpe ${benchmarkMetrics.sharpe.toFixed(2)}</p>`;
+    `<p class="card-subtitle" style="margin-top:12px">${t("common.benchmark")}: CAGR ${pct(benchmarkMetrics.cagr)}${
+      benchmarkMetrics.sharpe != null ? `, Sharpe ${benchmarkMetrics.sharpe.toFixed(2)}` : ""
+    }${benchmarkMetrics.excess_cagr != null ? ` · ${lang === "zh" ? "超额" : "Excess"} ${pct(benchmarkMetrics.excess_cagr ?? metrics.excess_cagr)}` : metrics.excess_cagr != null ? ` · ${lang === "zh" ? "超额" : "Excess"} ${pct(metrics.excess_cagr)}` : ""}</p>`;
 
   return `<div class="metrics-grid">${grid}</div>${benchNote || ""}`;
 }
@@ -471,6 +489,27 @@ function navPeriodLabel(s) {
   if (!s.nav_start || !s.nav?.length) return "";
   const end = s.nav[s.nav.length - 1].date;
   return `${t("common.navPeriod")}: ${fmtDate(s.nav_start)} – ${fmtDate(end)} · ${lang === "zh" ? "日度" : "daily"}`;
+}
+
+function renderSlotRules(s) {
+  const rules = lang === "zh" ? s.rules_zh || [] : s.rules_en || s.rules_zh || [];
+  if (!rules.length) return renderGuide("equity");
+  return `<ol class="guide-steps">${rules.map((rule) => `<li><span>${rule}</span></li>`).join("")}</ol>`;
+}
+
+function slotMetaLabel(s) {
+  const meta = s.slot_meta;
+  if (!meta) return "";
+  const replacement = meta.replacement === "skip" ? (lang === "zh" ? "满员跳过" : "skip when full") : meta.replacement;
+  const universe =
+    meta.universe === "hs300_csi500"
+      ? lang === "zh"
+        ? "HS300+CSI500"
+        : "HS300 + CSI 500"
+      : meta.universe;
+  return lang === "zh"
+    ? `${meta.max_slots} 槽 · 单槽 ${pct(meta.slot_weight, 0)} · 持有 ${meta.hold_months} 个月 · ${replacement} · ${universe} · 平均 ${meta.avg_positions?.toFixed(1) ?? "—"} 仓`
+    : `${meta.max_slots} slots · ${pct(meta.slot_weight, 0)} each · ${meta.hold_months}M hold · ${replacement} · ${universe} · avg ${meta.avg_positions?.toFixed(1) ?? "—"} positions`;
 }
 
 function renderGuide(prefix) {
@@ -720,15 +759,23 @@ function renderDividendPanel(s) {
 }
 
 function renderEquityPanel(s) {
-  const horizons = s.event_study
-    .map(
-      (h) => `
-    <div class="horizon-card">
-      <div class="period">${h.horizon_months}${t("equity.months")}</div>
+  const meta = s.event_study_meta || {};
+  const bestMonths = meta.best_holding_months || 9;
+  const metaLabel = t("equity.eventStudyMeta")
+    .replace("{symbols}", meta.core_symbols ?? s.core_symbols ?? "—")
+    .replace("{events}", meta.core_events ?? s.core_events ?? "—");
+
+  const horizons = (s.event_study || [])
+    .map((h) => {
+      const months = h.horizon_months;
+      const recommended = months === bestMonths;
+      return `
+    <div class="horizon-card${recommended ? " recommended" : ""}">
+      <div class="period">${months}${t("equity.months")}${recommended ? ` · ${t("equity.recommendedHold")}` : ""}</div>
       <div class="alpha">+${pct(h.mean_excess_return, 1)}</div>
-      <div class="tstat">t = ${h.excess_t_stat.toFixed(2)}</div>
-    </div>`
-    )
+      <div class="tstat">t = ${h.excess_t_stat.toFixed(1)}</div>
+    </div>`;
+    })
     .join("");
 
   const watchlistRows =
@@ -748,22 +795,25 @@ function renderEquityPanel(s) {
   const el = document.getElementById("panel-equity");
   el.innerHTML = `
     ${renderActionCard("equity", s.holdings, s.latest_rebalance, "equity.actionTitle", "equity.actionDesc")}
+    ${s.slot_meta ? `<p class="note-text">${slotMetaLabel(s)}</p>` : ""}
     <p class="note-text">${t("equity.staleNote")}</p>
     <div class="grid-2">
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("common.performance")}</h3></div>
-        ${renderMetrics(s.metrics, null)}
+        ${renderMetrics(s.metrics, s.benchmark_metrics)}
         <p class="card-subtitle">${t("equity.coreEvents")}: ${s.core_events} · ${t("equity.symbols")}: ${s.core_symbols}</p>
       </div>
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("equity.eventStudy")}</h3></div>
+        <p class="card-subtitle">${metaLabel}</p>
         <div class="horizon-grid">${horizons}</div>
       </div>
     </div>
     <div class="grid-2">
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("common.rebalanceGuide")}</h3></div>
-        ${renderGuide("equity")}
+        ${renderSlotRules(s)}
+        <div style="margin-top:16px">${renderGuide("equity")}</div>
       </div>
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("common.holdings")}</h3></div>
