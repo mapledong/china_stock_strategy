@@ -243,7 +243,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 15;
+const APP_VERSION = 16;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -658,9 +658,10 @@ function slotMetaLabel(s) {
         ? "HS300+CSI500"
         : "HS300 + CSI 500"
       : meta.universe;
+  const gross = lang === "zh" ? `gross ${pct(meta.gross_weight, 1)} · 权重随价格漂移` : `gross ${pct(meta.gross_weight, 1)} · weights drift with prices`;
   return lang === "zh"
-    ? `${meta.max_slots} 槽 · 单槽 ${pct(meta.slot_weight, 0)} · 持有 ${meta.hold_months} 个月 · ${replacement} · ${universe} · 平均 ${meta.avg_positions?.toFixed(1) ?? "—"} 仓`
-    : `${meta.max_slots} slots · ${pct(meta.slot_weight, 0)} each · ${meta.hold_months}M hold · ${replacement} · ${universe} · avg ${meta.avg_positions?.toFixed(1) ?? "—"} positions`;
+    ? `${meta.max_slots} 槽 · 单槽目标 ${pct(meta.slot_weight, 0)} · ${gross} · 持有 ${meta.hold_months} 个月 · ${replacement} · ${universe}`
+    : `${meta.max_slots} slots · target ${pct(meta.slot_weight, 0)} each · ${gross} · ${meta.hold_months}M hold · ${replacement} · ${universe}`;
 }
 
 function renderGuide(prefix) {

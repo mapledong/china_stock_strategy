@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 15
+DATA_VERSION = 16
 SRC = ROOT / "src"
 WEB_DIR = Path(__file__).resolve().parents[1]
 INDEX_HTML = WEB_DIR / "index.html"
@@ -160,6 +160,8 @@ DAILY_HOLDINGS_FILE = RESULTS / "equity_incentive_daily_canonical_holdings.csv"
 DAILY_TRADES_FILE = RESULTS / "equity_incentive_daily_canonical_trades.csv"
 DAILY_SIGNALS_FILE = RESULTS / "equity_incentive_daily_canonical_signals.csv"
 DAILY_RECOMMENDATION_FILE = RESULTS / "equity_incentive_daily_canonical_recommendation.json"
+DAILY_PRICE_DIR = ROOT / "data" / "raw" / "equity_incentive_events"
+DAILY_PRICE_FALLBACK_DIR = ROOT / "data" / "raw" / "equity_incentive_optimized"
 NAV_PLOT_START = "2017-09-01"
 TUSHARE_EVENTS_FILE = ROOT / "data" / "raw" / "equity_incentive_tushare" / "tushare_equity_incentive_events.csv"
 EQUITY_COST_BPS = 20.0
@@ -711,10 +713,83 @@ def compute_slot_equity_nav() -> tuple[list[dict], str]:
     return daily_nav_rows(daily, "strategy_nav", "hs300_nav"), nav_start
 
 
-def load_slot_holdings() -> tuple[str, list[dict], dict]:
+def _load_symbol_daily_close(symbol: str) -> "pd.Series":
     import pandas as pd
 
+    for directory in (DAILY_PRICE_DIR, DAILY_PRICE_FALLBACK_DIR):
+        path = directory / f"stock_{symbol}_daily_qfq.csv"
+        if not path.exists():
+            continue
+        frame = pd.read_csv(path, parse_dates=["日期"])
+        if frame.empty:
+            continue
+        return frame.sort_values("日期").drop_duplicates("日期").set_index("日期")["收盘"].astype(float)
+    raise FileNotFoundError(f"Missing daily qfq prices for {symbol}")
+
+
+def compute_drifted_slot_weights(open_positions: list[dict], as_of: "pd.Timestamp") -> dict[str, float]:
+    """Mark-to-market slot weights, normalized to book gross while preserving relative drift."""
+    import pandas as pd
+
+    close_cache: dict[str, pd.Series] = {}
+    raw_values: dict[str, float] = {}
+    as_of = pd.Timestamp(as_of)
+    book_gross = float(sum(float(pos["weight"]) for pos in open_positions))
+
+    for pos in open_positions:
+        symbol = str(pos["symbol"]).zfill(6)
+        entry_date = pd.Timestamp(pos["entry_date"])
+        entry_weight = float(pos["weight"])
+        if symbol not in close_cache:
+            close_cache[symbol] = _load_symbol_daily_close(symbol)
+        window = close_cache[symbol].loc[entry_date:as_of]
+        if window.empty:
+            raw_values[symbol] = entry_weight
+            continue
+        entry_px = float(window.iloc[0])
+        mark_px = float(window.iloc[-1])
+        if entry_px <= 0:
+            raw_values[symbol] = entry_weight
+        else:
+            raw_values[symbol] = entry_weight * (mark_px / entry_px)
+
+    total_raw = sum(raw_values.values())
+    if total_raw <= 0 or book_gross <= 0:
+        return raw_values
+    scale = book_gross / total_raw
+    return {symbol: value * scale for symbol, value in raw_values.items()}
+
+
+def load_slot_holdings(recommendation: dict | None = None) -> tuple[str, list[dict], dict]:
+    import pandas as pd
+
+    recommendation = recommendation or json.loads(DAILY_RECOMMENDATION_FILE.read_text())
     zh, en = load_symbol_name_maps()
+    as_of = pd.Timestamp(recommendation.get("as_of") or recommendation["full_sample_metrics"]["end_date"])
+    open_positions = recommendation.get("open_positions") or []
+
+    if open_positions:
+        drifted = compute_drifted_slot_weights(open_positions, as_of)
+        holdings = [
+            {
+                "symbol": symbol,
+                "name": zh.get(symbol, symbol),
+                "name_en": en.get(symbol, zh.get(symbol, symbol)),
+                "weight": float(weight),
+                "entry_weight": float(next(
+                    pos["weight"] for pos in open_positions if str(pos["symbol"]).zfill(6) == symbol
+                )),
+            }
+            for symbol, weight in drifted.items()
+        ]
+        holdings.sort(key=lambda item: item["weight"], reverse=True)
+        gross_weight = float(sum(item["weight"] for item in holdings))
+        return as_of.date().isoformat(), holdings, {
+            "positions": len(holdings),
+            "gross_weight": gross_weight,
+            "book_gross_weight": float(sum(float(pos["weight"]) for pos in open_positions)),
+        }
+
     holdings_df = pd.read_csv(DAILY_HOLDINGS_FILE)
     row = holdings_df.iloc[-1]
     latest_date = str(row["date"])[:10]
@@ -806,15 +881,18 @@ def compute_equity_month_end_projection(recommendation: dict) -> dict:
     as_of = pd.Timestamp(recommendation.get("as_of") or recommendation["full_sample_metrics"]["end_date"])
     slot_weight = float(recommendation["position_sizing"]["initial_weight_per_new_event"])
     zh, en = load_symbol_name_maps()
+    open_positions = recommendation.get("open_positions", [])
+    drifted_weights = compute_drifted_slot_weights(open_positions, as_of) if open_positions else {}
     return _build_equity_month_end_projection(
         as_of,
         calendar,
         trade_log,
-        recommendation.get("open_positions", []),
+        open_positions,
         signals,
         slot_weight,
         zh,
         en,
+        drifted_weights=drifted_weights,
     )
 
 
@@ -848,6 +926,8 @@ def _build_equity_month_end_projection(
     slot_weight: float,
     zh: dict[str, str],
     en: dict[str, str],
+    *,
+    drifted_weights: dict[str, float] | None = None,
 ) -> dict:
     import pandas as pd
 
@@ -934,6 +1014,8 @@ def _build_equity_month_end_projection(
                 )
             )
 
+    drifted_weights = drifted_weights or {}
+
     for pos in open_positions:
         exit_day = pd.Timestamp(pos["exit_date"])
         if exit_day <= as_of or exit_day > signal_date:
@@ -945,7 +1027,7 @@ def _build_equity_month_end_projection(
         exit_rows.append(
             _equity_change_row(
                 symbol,
-                float(pos["weight"]),
+                float(drifted_weights.get(symbol, pos["weight"])),
                 zh,
                 en,
                 reason="expiry",
@@ -966,7 +1048,11 @@ def _build_equity_month_end_projection(
     projected_holdings = [
         _equity_change_row(
             symbol,
-            float(open_by_symbol.get(symbol, {}).get("weight", slot_weight)),
+            float(
+                drifted_weights.get(symbol, open_by_symbol.get(symbol, {}).get("weight", slot_weight))
+                if symbol in current_symbols
+                else slot_weight
+            ),
             zh,
             en,
         )
@@ -1040,7 +1126,7 @@ def build_equity() -> dict:
     display_metrics = recommendation.get("display_metrics", recommendation["recommended_strategy"])
     tushare_event_study = load_tushare_event_study()
 
-    latest_date, holdings, slot_meta = load_slot_holdings()
+    latest_date, holdings, slot_meta = load_slot_holdings(recommendation)
     current_symbols = {h["symbol"] for h in holdings}
     watchlist_month, watchlist = load_recent_core_events(current_symbols)
 
@@ -1052,6 +1138,7 @@ def build_equity() -> dict:
     return {
         "id": "equity",
         "featured_variant": SLOT_STRATEGY,
+        "execution_note": "Daily event-driven entries at 7% per slot; displayed weights drift with prices since entry (no intra-hold rebalance).",
         "latest_rebalance": latest_date,
         "holdings_as_of": latest_date,
         "holdings": holdings,
@@ -1060,6 +1147,7 @@ def build_equity() -> dict:
             "max_slots": int(sizing["max_concurrent_slots"]),
             "slot_weight": float(sizing["initial_weight_per_new_event"]),
             "gross_weight": slot_meta["gross_weight"],
+            "book_gross_weight": slot_meta.get("book_gross_weight"),
             "hold_months": int(rec["hold_months"]),
             "replacement": "ma200_swap",
             "universe": rec["universe"],
