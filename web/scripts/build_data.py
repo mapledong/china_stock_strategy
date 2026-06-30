@@ -13,8 +13,11 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 13
+DATA_VERSION = 14
 SRC = ROOT / "src"
+WEB_DIR = Path(__file__).resolve().parents[1]
+INDEX_HTML = WEB_DIR / "index.html"
+APP_JS = WEB_DIR / "js" / "app.js"
 
 sys.path.insert(0, str(SRC))
 
@@ -1112,6 +1115,23 @@ def build_equity() -> dict:
     }
 
 
+def sync_web_asset_version(version: int) -> None:
+    """Keep index.html query strings and app.js APP_VERSION aligned with data_version."""
+    import re
+
+    index = INDEX_HTML.read_text(encoding="utf-8")
+    index = re.sub(r"(css/styles\.css\?v=)\d+", rf"\g<1>{version}", index)
+    index = re.sub(r"(js/app\.js\?v=)\d+", rf"\g<1>{version}", index)
+    INDEX_HTML.write_text(index, encoding="utf-8")
+
+    app_js = APP_JS.read_text(encoding="utf-8")
+    app_js, count = re.subn(r"const APP_VERSION = \d+;", f"const APP_VERSION = {version};", app_js, count=1)
+    if count != 1:
+        raise RuntimeError("Could not update APP_VERSION in web/js/app.js")
+    APP_JS.write_text(app_js, encoding="utf-8")
+    print(f"  synced web asset cache bust -> v{version}")
+
+
 def main() -> None:
     import math
 
@@ -1145,6 +1165,7 @@ def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Wrote {OUT} (v{DATA_VERSION})")
+    sync_web_asset_version(DATA_VERSION)
     for key in builders:
         print(f"  nav/{key}.json -> {strategies[key]['nav_points']} points")
 
