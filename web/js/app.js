@@ -189,7 +189,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 10;
+const APP_VERSION = 11;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -252,6 +252,26 @@ function fmtDate(d) {
 
 function cssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function isMobileLayout() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function decimateNav(nav, maxPoints = 520) {
+  if (!nav?.length || nav.length <= maxPoints) return nav;
+  const step = Math.ceil(nav.length / maxPoints);
+  const out = [nav[0]];
+  for (let i = step; i < nav.length; i += step) out.push(nav[i]);
+  const last = nav[nav.length - 1];
+  if (out[out.length - 1] !== last) out.push(last);
+  return out;
+}
+
+function tableWrap(tableHtml) {
+  const hint =
+    lang === "zh" ? "表格较宽时可左右滑动" : "Swipe horizontally if the table is wider than the screen";
+  return `<p class="table-scroll-hint">${hint}</p><div class="table-wrap">${tableHtml}</div>`;
 }
 
 /** Base path for static hosting (GitHub Pages project sites, subfolders). */
@@ -337,6 +357,14 @@ function applyTheme() {
   document.documentElement.setAttribute("data-theme", theme);
   const btn = document.getElementById("theme-toggle");
   if (btn) btn.textContent = theme === "dark" ? "☾" : "☀";
+  let meta = document.querySelector('meta[name="theme-color"][data-dynamic="true"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "theme-color";
+    meta.setAttribute("data-dynamic", "true");
+    document.head.appendChild(meta);
+  }
+  meta.content = theme === "dark" ? "#000000" : "#f5f5f7";
 }
 
 function applyI18n() {
@@ -351,13 +379,18 @@ function applyI18n() {
 }
 
 function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKey, holdingsAsOf) {
+  const compact = holdings.length >= 8;
+  const holdingsClass = compact ? "action-holdings compact" : "action-holdings";
+  const chipClass = compact ? "action-chip compact" : "action-chip";
   const chips = holdings
     .map((h) => {
       const label =
         strategyKey === "ah"
           ? displayPairLabel(h)
-          : displaySymbolLabel(strategyKey, h);
-      return `<div class="action-chip"><span>${label}</span><span class="weight">${pct(h.weight, 1)}</span></div>`;
+          : compact
+            ? displayNameOnly(strategyKey, h)
+            : displaySymbolLabel(strategyKey, h);
+      return `<div class="${chipClass}"><span>${label}</span><span class="weight">${pct(h.weight, 1)}</span></div>`;
     })
     .join("");
 
@@ -370,7 +403,7 @@ function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKe
       <div class="action-card-label">${t("common.holdNow")}</div>
       <h2>${t(titleKey)}</h2>
       <p>${t(descKey)}</p>
-      <div class="action-holdings">${chips}</div>
+      <div class="${holdingsClass}">${chips}</div>
       <div class="action-meta">
         ${asOfLine}
         <span>${t("common.rebalance")}: <strong>${fmtDate(rebalanceDate)}</strong></span>
@@ -442,12 +475,10 @@ function renderProjectionSection(strategyKey, projection) {
       </div>
       <p class="note-text">${desc}</p>
       ${changeTags}
-      <div class="table-wrap">
-        <table>
+      ${tableWrap(`<table>
           <thead><tr><th>${t("common.asset")}</th><th>${t("common.targetWeight")}</th>${headExtra}</tr></thead>
           <tbody>${rows}</tbody>
-        </table>
-      </div>
+        </table>`)}
     </div>`;
 }
 
@@ -522,14 +553,19 @@ function renderGuide(prefix) {
 }
 
 function renderChart(canvasId, nav, strategyKey, navField, benchField) {
-  const labels = nav.map((d) => d.date);
-  const stratData = nav.map((d) => d[navField]);
-  const benchData = nav.map((d) => d[benchField]);
+  const mobile = isMobileLayout();
+  const plotNav = decimateNav(nav, mobile ? 360 : 720);
+  const labels = plotNav.map((d) => d.date);
+  const stratData = plotNav.map((d) => d[navField]);
+  const benchData = plotNav.map((d) => d[benchField]);
 
   const ctx = document.getElementById(canvasId);
   if (!ctx) return;
 
   if (charts[canvasId]) charts[canvasId].destroy();
+
+  const wrap = ctx.parentElement;
+  wrap?.querySelector(".chart-legend")?.remove();
 
   const accent = cssVar("--accent") || "#0071e3";
   const accentSoft = cssVar("--accent-soft") || "rgba(0, 113, 227, 0.08)";
@@ -539,6 +575,9 @@ function renderChart(canvasId, nav, strategyKey, navField, benchField) {
   const tooltipBg = cssVar("--tooltip-bg") || "rgba(255,255,255,0.96)";
   const tooltipText = cssVar("--tooltip-text") || "#1d1d1f";
   const tooltipBorder = cssVar("--tooltip-border") || "rgba(0,0,0,0.08)";
+  const tickSize = mobile ? 10 : 11;
+  const stratLabel = t("common.strategyNav");
+  const benchLabel = t("common.benchmark");
 
   charts[canvasId] = new Chart(ctx, {
     type: "line",
@@ -546,21 +585,23 @@ function renderChart(canvasId, nav, strategyKey, navField, benchField) {
       labels,
       datasets: [
         {
-          label: t("common.strategyNav"),
+          label: stratLabel,
           data: stratData,
           borderColor: accent,
           backgroundColor: accentSoft,
-          borderWidth: 2,
+          borderWidth: mobile ? 2.5 : 2,
           pointRadius: 0,
+          pointHitRadius: mobile ? 12 : 8,
           tension: 0.2,
           fill: true,
         },
         {
-          label: t("common.benchmark"),
+          label: benchLabel,
           data: benchData,
           borderColor: benchColor,
-          borderWidth: 1.5,
+          borderWidth: mobile ? 2 : 1.5,
           pointRadius: 0,
+          pointHitRadius: mobile ? 12 : 8,
           tension: 0.2,
           borderDash: [4, 4],
         },
@@ -578,25 +619,47 @@ function renderChart(canvasId, nav, strategyKey, navField, benchField) {
           bodyColor: tooltipText,
           borderColor: tooltipBorder,
           borderWidth: 1,
-          padding: 12,
+          padding: mobile ? 10 : 12,
           cornerRadius: 10,
+          displayColors: true,
+          boxWidth: 8,
+          boxHeight: 8,
           callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}`,
+            title: (items) => (items[0]?.label ? fmtDate(items[0].label) : ""),
+            label: (item) => `${item.dataset.label}: ${item.parsed.y.toFixed(2)}`,
           },
         },
       },
       scales: {
         x: {
           grid: { display: false },
-          ticks: { maxTicksLimit: 6, color: tickColor, font: { size: 11 } },
+          ticks: {
+            maxTicksLimit: mobile ? 4 : 6,
+            maxRotation: 0,
+            autoSkipPadding: mobile ? 12 : 8,
+            color: tickColor,
+            font: { size: tickSize },
+          },
         },
         y: {
           grid: { color: gridColor },
-          ticks: { color: tickColor, font: { size: 11 } },
+          ticks: {
+            color: tickColor,
+            font: { size: tickSize },
+            maxTicksLimit: mobile ? 5 : 7,
+          },
         },
       },
     },
   });
+
+  wrap?.insertAdjacentHTML(
+    "beforeend",
+    `<div class="chart-legend" aria-hidden="true">
+      <span class="legend-item"><span class="legend-dot" style="background:${accent}"></span>${stratLabel}</span>
+      <span class="legend-item"><span class="legend-dot" style="background:${benchColor}"></span>${benchLabel}</span>
+    </div>`
+  );
 }
 
 function renderEtfPanel(s) {
@@ -629,8 +692,7 @@ function renderEtfPanel(s) {
         <h3 class="card-title">${t("common.holdings")}</h3>
         <span class="card-subtitle">${t("common.holdingsAsOf")} ${fmtDate(s.holdings_as_of)} · ${lang === "zh" ? "月内漂移权重" : "drifted weights"}</span>
       </div>
-      <div class="table-wrap">
-        <table>
+      ${tableWrap(`<table>
           <thead><tr><th>${t("common.asset")}</th><th>${t("common.weight")}</th><th></th></tr></thead>
           <tbody>
             ${s.holdings
@@ -644,8 +706,7 @@ function renderEtfPanel(s) {
               )
               .join("")}
           </tbody>
-        </table>
-      </div>
+        </table>`)}
     </div>
     ${renderProjectionSection("etf", s.projected_month_end)}`;
 }
@@ -677,8 +738,7 @@ function renderAhPanel(s) {
         <h3 class="card-title">${t("common.holdings")}</h3>
         <span class="card-subtitle">${t("common.holdingsAsOf")} ${fmtDate(s.holdings_as_of)} · ${lang === "zh" ? "月内漂移权重" : "drifted weights"}</span>
       </div>
-      <div class="table-wrap">
-        <table>
+      ${tableWrap(`<table>
           <thead><tr><th>${t("common.asset")}</th><th>${t("common.weight")}</th><th>${t("common.premium")}</th></tr></thead>
           <tbody>
             ${s.holdings
@@ -695,8 +755,7 @@ function renderAhPanel(s) {
               })
               .join("")}
           </tbody>
-        </table>
-      </div>
+        </table>`)}
     </div>
     ${renderProjectionSection("ah", s.projected_month_end)}`;
 }
@@ -737,8 +796,7 @@ function renderDividendPanel(s) {
         <h3 class="card-title">${t("common.holdings")}</h3>
         <span class="card-subtitle">${t("common.holdingsAsOf")} ${fmtDate(s.holdings_as_of)}</span>
       </div>
-      <div class="table-wrap">
-        <table>
+      ${tableWrap(`<table>
           <thead><tr><th>${t("common.asset")}</th><th>${t("common.weight")}</th><th></th></tr></thead>
           <tbody>
             ${s.holdings
@@ -752,8 +810,7 @@ function renderDividendPanel(s) {
               )
               .join("")}
           </tbody>
-        </table>
-      </div>
+        </table>`)}
     </div>
     ${renderProjectionSection("dividend", s.projected_month_end)}`;
 }
@@ -786,7 +843,7 @@ function renderEquityPanel(s) {
         <tr>
           <td><span class="symbol-badge">${w.symbol}</span>${lang === "zh" ? w.name : w.name_en || STOCK_NAMES_EN[w.symbol] || w.name}</td>
           <td>${w.announcement_time}</td>
-          <td style="max-width:280px;font-size:13px;color:var(--text-secondary)">${w.title}</td>
+          <td class="cell-title">${w.title}</td>
         </tr>`
           )
           .join("")
@@ -817,8 +874,7 @@ function renderEquityPanel(s) {
       </div>
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("common.holdings")}</h3></div>
-        <div class="table-wrap">
-          <table>
+        ${tableWrap(`<table>
             <thead><tr><th>${t("common.asset")}</th><th>${t("common.weight")}</th></tr></thead>
             <tbody>
               ${s.holdings
@@ -831,8 +887,7 @@ function renderEquityPanel(s) {
                 )
                 .join("")}
             </tbody>
-          </table>
-        </div>
+          </table>`)}
       </div>
     </div>
     ${
@@ -843,12 +898,10 @@ function renderEquityPanel(s) {
         <h3 class="card-title">${t("equity.watchlist")}</h3>
         <span class="card-subtitle">${s.watchlist_month}</span>
       </div>
-      <div class="table-wrap">
-        <table>
+      ${tableWrap(`<table>
           <thead><tr><th>${t("common.asset")}</th><th>${lang === "zh" ? "公告日" : "Announced"}</th><th>${lang === "zh" ? "公告标题" : "Title"}</th></tr></thead>
           <tbody>${watchlistRows}</tbody>
-        </table>
-      </div>
+        </table>`)}
     </div>`
         : ""
     }
@@ -925,3 +978,14 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!data) return;
+    destroyAllCharts();
+    chartsReady = {};
+    initChartFor(activeStrategy);
+  }, 180);
+});

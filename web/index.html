@@ -2,11 +2,16 @@
 <html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
   <title>China Stock Strategies · 中国股票策略</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=11">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
-  <script src="js/app.js?v=10" defer></script>
+  <script src="js/app.js?v=11" defer></script>
 </head>
 <body>
   <nav class="nav">
@@ -33,7 +38,7 @@
   </header>
 
   <div class="strategy-switcher">
-    <div class="segmented" role="tablist">
+    <div class="segmented" role="tablist" aria-label="Strategy tabs">
       <button class="segment-btn active" data-strategy="etf" role="tab" aria-selected="true">
         <span data-i18n="strategies.etf.short">ETF 轮动</span>
       </button>
