@@ -1,13 +1,690 @@
 {
-  "data_version": 14,
-  "generated_at": "2026-06-30 22:36",
+  "data_version": 15,
+  "generated_at": "2026-06-30 22:49",
   "strategy_order": [
+    "composite",
     "etf",
     "ah",
     "dividend",
     "equity"
   ],
   "strategies": {
+    "composite": {
+      "id": "composite",
+      "featured_variant": "low_turnover_AH50_DivChi30_Inc2pct",
+      "latest_rebalance": "2026-03-31",
+      "holdings_as_of": "2026-06-26",
+      "holdings": [
+        {
+          "sleeve": "industry",
+          "sleeve_zh": "红利/创业板",
+          "sleeve_en": "Div/ChiNext",
+          "symbol": "159915",
+          "name": "创业板ETF",
+          "name_en": "ChiNext ETF",
+          "weight": 0.3,
+          "sleeve_weight": 1.0
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "603986",
+          "name": "兆易创新",
+          "name_en": "兆易创新",
+          "weight": 0.11194002831189886,
+          "sleeve_weight": 0.22388005662379773,
+          "pair": "兆易创新(603986/03986)",
+          "pair_en": "GigaDevice (603986/03986)",
+          "ah_premium": -0.2707742306723198
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "688008",
+          "name": "澜起科技",
+          "name_en": "澜起科技",
+          "weight": 0.07456976180821635,
+          "sleeve_weight": 0.1491395236164327,
+          "pair": "澜起科技(688008/06809)",
+          "pair_en": "Montage Technology (688008/06809)",
+          "ah_premium": -0.2691502937114394
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "002768",
+          "name": "国恩股份",
+          "name_en": "国恩股份",
+          "weight": 0.05959409242448566,
+          "sleeve_weight": 0.11918818484897133,
+          "pair": "国恩股份(002768/02768)",
+          "pair_en": "Guoen Co. (002768/02768)",
+          "ah_premium": 0.2635527323236621
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "603259",
+          "name": "药明康德",
+          "name_en": "药明康德",
+          "weight": 0.04281229854783252,
+          "sleeve_weight": 0.08562459709566504,
+          "pair": "药明康德(603259/02359)",
+          "pair_en": "WuXi AppTec (603259/02359)",
+          "ah_premium": -0.0990164969387428
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "000338",
+          "name": "潍柴动力",
+          "name_en": "潍柴动力",
+          "weight": 0.04089437378109818,
+          "sleeve_weight": 0.08178874756219635,
+          "pair": "潍柴动力(000338/02338)",
+          "pair_en": "Weichai Power (000338/02338)",
+          "ah_premium": -0.0193289129774983
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "000333",
+          "name": "美的集团",
+          "name_en": "美的集团",
+          "weight": 0.03784103379227849,
+          "sleeve_weight": 0.07568206758455698,
+          "pair": "美的集团(000333/00300)",
+          "pair_en": "Midea Group (000333/00300)",
+          "ah_premium": 0.0894654006785995
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "300750",
+          "name": "宁德时代",
+          "name_en": "CATL",
+          "weight": 0.035307800015697076,
+          "sleeve_weight": 0.07061560003139415,
+          "pair": "宁德时代(300750/03750)",
+          "pair_en": "CATL (300750/03750)",
+          "ah_premium": -0.3419351386502872
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "600036",
+          "name": "招商银行",
+          "name_en": "招商银行",
+          "weight": 0.03346594604471506,
+          "sleeve_weight": 0.06693189208943012,
+          "pair": "招商银行(600036/03968)",
+          "pair_en": "China Merchants Bank (600036/03968)",
+          "ah_premium": -0.0675092994963811
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "600031",
+          "name": "三一重工",
+          "name_en": "Sany Heavy Industry",
+          "weight": 0.032239508205229174,
+          "sleeve_weight": 0.06447901641045835,
+          "pair": "三一重工(600031/06031)",
+          "pair_en": "Sany Heavy Industry (600031/06031)",
+          "ah_premium": 0.0685337786411945
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "600276",
+          "name": "恒瑞医药",
+          "name_en": "恒瑞医药",
+          "weight": 0.03133515706854854,
+          "sleeve_weight": 0.06267031413709707,
+          "pair": "恒瑞医药(600276/01276)",
+          "pair_en": "Hengrui Medicine (600276/01276)",
+          "ah_premium": -0.0366407952773271
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "600690",
+          "name": "青岛海尔",
+          "name_en": "青岛海尔",
+          "weight": 0.016661462366444592,
+          "sleeve_weight": 0.016661462366444592,
+          "exit_month": "2027-02-28"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "002648",
+          "name": "卫星石化",
+          "name_en": "卫星石化",
+          "weight": 0.016661462366444592,
+          "sleeve_weight": 0.016661462366444592,
+          "exit_month": "2027-02-28"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "300274",
+          "name": "阳光电源",
+          "name_en": "Sungrow Power",
+          "weight": 0.012081617400632605,
+          "sleeve_weight": 0.012081617400632605,
+          "exit_month": "2027-01-31"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "300012",
+          "name": "华测检测",
+          "name_en": "华测检测",
+          "weight": 0.012081617400632605,
+          "sleeve_weight": 0.012081617400632605,
+          "exit_month": "2027-01-31"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "002252",
+          "name": "上海莱士",
+          "name_en": "上海莱士",
+          "weight": 0.012081617400632605,
+          "sleeve_weight": 0.012081617400632605,
+          "exit_month": "2027-01-31"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "000739",
+          "name": "普洛药业",
+          "name_en": "普洛药业",
+          "weight": 0.0097519552739928,
+          "sleeve_weight": 0.0097519552739928,
+          "exit_month": "2026-12-31"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "300458",
+          "name": "全志科技",
+          "name_en": "全志科技",
+          "weight": 0.0097519552739928,
+          "sleeve_weight": 0.0097519552739928,
+          "exit_month": "2026-12-31"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "300750",
+          "name": "宁德时代",
+          "name_en": "CATL",
+          "weight": 0.00786506205678621,
+          "sleeve_weight": 0.00786506205678621,
+          "exit_month": "2026-11-30"
+        },
+        {
+          "sleeve": "incentive",
+          "sleeve_zh": "股权激励",
+          "sleeve_en": "Equity incentive",
+          "symbol": "002558",
+          "name": "巨人网络",
+          "name_en": "Giant Network",
+          "weight": 0.00786506205678621,
+          "sleeve_weight": 0.00786506205678621,
+          "exit_month": "2026-11-30"
+        }
+      ],
+      "holdings_all_count": 32,
+      "cash_weight": 0.04999999999999982,
+      "sleeve_weights": {
+        "ah": 0.5,
+        "industry": 0.3,
+        "incentive_cap": 0.15
+      },
+      "sleeves": {
+        "ah": {
+          "weight": 0.5,
+          "holdings": [
+            {
+              "pair": "兆易创新(603986/03986)",
+              "symbol": "603986",
+              "weight": 0.22388005662379773,
+              "ah_premium": -0.2707742306723198,
+              "pair_en": "GigaDevice (603986/03986)"
+            },
+            {
+              "pair": "澜起科技(688008/06809)",
+              "symbol": "688008",
+              "weight": 0.1491395236164327,
+              "ah_premium": -0.2691502937114394,
+              "pair_en": "Montage Technology (688008/06809)"
+            },
+            {
+              "pair": "国恩股份(002768/02768)",
+              "symbol": "002768",
+              "weight": 0.11918818484897133,
+              "ah_premium": 0.2635527323236621,
+              "pair_en": "Guoen Co. (002768/02768)"
+            },
+            {
+              "pair": "药明康德(603259/02359)",
+              "symbol": "603259",
+              "weight": 0.08562459709566504,
+              "ah_premium": -0.0990164969387428,
+              "pair_en": "WuXi AppTec (603259/02359)"
+            },
+            {
+              "pair": "潍柴动力(000338/02338)",
+              "symbol": "000338",
+              "weight": 0.08178874756219635,
+              "ah_premium": -0.0193289129774983,
+              "pair_en": "Weichai Power (000338/02338)"
+            },
+            {
+              "pair": "美的集团(000333/00300)",
+              "symbol": "000333",
+              "weight": 0.07568206758455698,
+              "ah_premium": 0.0894654006785995,
+              "pair_en": "Midea Group (000333/00300)"
+            },
+            {
+              "pair": "宁德时代(300750/03750)",
+              "symbol": "300750",
+              "weight": 0.07061560003139415,
+              "ah_premium": -0.3419351386502872,
+              "pair_en": "CATL (300750/03750)"
+            },
+            {
+              "pair": "招商银行(600036/03968)",
+              "symbol": "600036",
+              "weight": 0.06693189208943012,
+              "ah_premium": -0.0675092994963811,
+              "pair_en": "China Merchants Bank (600036/03968)"
+            },
+            {
+              "pair": "三一重工(600031/06031)",
+              "symbol": "600031",
+              "weight": 0.06447901641045835,
+              "ah_premium": 0.0685337786411945,
+              "pair_en": "Sany Heavy Industry (600031/06031)"
+            },
+            {
+              "pair": "恒瑞医药(600276/01276)",
+              "symbol": "600276",
+              "weight": 0.06267031413709707,
+              "ah_premium": -0.0366407952773271,
+              "pair_en": "Hengrui Medicine (600276/01276)"
+            }
+          ],
+          "holdings_as_of": "2026-06-26",
+          "latest_rebalance": "2026-03-31",
+          "weight_note_zh": "层内权重随价格漂移（季内不调仓）",
+          "weight_note_en": "Intra-sleeve weights drift with prices (no rebalance intra-quarter)"
+        },
+        "industry": {
+          "weight": 0.3,
+          "holdings": [
+            {
+              "symbol": "159915",
+              "name": "创业板ETF",
+              "weight": 1.0,
+              "name_en": "ChiNext ETF"
+            }
+          ],
+          "latest_rebalance": "2026-06-29"
+        },
+        "incentive": {
+          "weight_cap": 0.15,
+          "slot_weight": 0.02,
+          "hold_months": 9,
+          "positions": [
+            {
+              "symbol": "000967",
+              "weight": 0.0022879322090998506,
+              "entry_month": "2025-10-31",
+              "exit_month": "2026-07-31"
+            },
+            {
+              "symbol": "002371",
+              "weight": 0.0022879322090998506,
+              "entry_month": "2025-10-31",
+              "exit_month": "2026-07-31"
+            },
+            {
+              "symbol": "000034",
+              "weight": 0.0028374140513131607,
+              "entry_month": "2025-11-30",
+              "exit_month": "2026-08-31"
+            },
+            {
+              "symbol": "002318",
+              "weight": 0.0028374140513131607,
+              "entry_month": "2025-11-30",
+              "exit_month": "2026-08-31"
+            },
+            {
+              "symbol": "002625",
+              "weight": 0.0028374140513131607,
+              "entry_month": "2025-11-30",
+              "exit_month": "2026-08-31"
+            },
+            {
+              "symbol": "600873",
+              "weight": 0.003878158740411278,
+              "entry_month": "2025-12-31",
+              "exit_month": "2026-09-30"
+            },
+            {
+              "symbol": "300115",
+              "weight": 0.003878158740411278,
+              "entry_month": "2025-12-31",
+              "exit_month": "2026-09-30"
+            },
+            {
+              "symbol": "002230",
+              "weight": 0.003878158740411278,
+              "entry_month": "2025-12-31",
+              "exit_month": "2026-09-30"
+            },
+            {
+              "symbol": "603766",
+              "weight": 0.003878158740411278,
+              "entry_month": "2025-12-31",
+              "exit_month": "2026-09-30"
+            },
+            {
+              "symbol": "002273",
+              "weight": 0.003878158740411278,
+              "entry_month": "2025-12-31",
+              "exit_month": "2026-09-30"
+            },
+            {
+              "symbol": "002203",
+              "weight": 0.006359644064729723,
+              "entry_month": "2026-01-31",
+              "exit_month": "2026-10-31"
+            },
+            {
+              "symbol": "002384",
+              "weight": 0.006359644064729723,
+              "entry_month": "2026-01-31",
+              "exit_month": "2026-10-31"
+            },
+            {
+              "symbol": "300750",
+              "weight": 0.00786506205678621,
+              "entry_month": "2026-02-28",
+              "exit_month": "2026-11-30"
+            },
+            {
+              "symbol": "002558",
+              "weight": 0.00786506205678621,
+              "entry_month": "2026-02-28",
+              "exit_month": "2026-11-30"
+            },
+            {
+              "symbol": "000739",
+              "weight": 0.0097519552739928,
+              "entry_month": "2026-03-31",
+              "exit_month": "2026-12-31"
+            },
+            {
+              "symbol": "300458",
+              "weight": 0.0097519552739928,
+              "entry_month": "2026-03-31",
+              "exit_month": "2026-12-31"
+            },
+            {
+              "symbol": "300274",
+              "weight": 0.012081617400632605,
+              "entry_month": "2026-04-30",
+              "exit_month": "2027-01-31"
+            },
+            {
+              "symbol": "300012",
+              "weight": 0.012081617400632605,
+              "entry_month": "2026-04-30",
+              "exit_month": "2027-01-31"
+            },
+            {
+              "symbol": "002252",
+              "weight": 0.012081617400632605,
+              "entry_month": "2026-04-30",
+              "exit_month": "2027-01-31"
+            },
+            {
+              "symbol": "600690",
+              "weight": 0.016661462366444592,
+              "entry_month": "2026-05-31",
+              "exit_month": "2027-02-28"
+            },
+            {
+              "symbol": "002648",
+              "weight": 0.016661462366444592,
+              "entry_month": "2026-05-31",
+              "exit_month": "2027-02-28"
+            }
+          ],
+          "position_count": 21,
+          "gross_weight": 0.15
+        }
+      },
+      "projected_month_end": {
+        "signal_date": "2026-06-30",
+        "month": "2026-06",
+        "unchanged": false,
+        "ah": {
+          "unchanged": false,
+          "signal_date": "2026-06-30",
+          "holdings": [
+            {
+              "pair": "宁德时代(300750/03750)",
+              "symbol": "300750",
+              "weight": 0.1,
+              "ah_premium": -0.3532604421985559
+            },
+            {
+              "pair": "澜起科技(688008/06809)",
+              "symbol": "688008",
+              "weight": 0.1,
+              "ah_premium": -0.2795680522061988
+            },
+            {
+              "pair": "兆易创新(603986/03986)",
+              "symbol": "603986",
+              "weight": 0.1,
+              "ah_premium": -0.1787131905041897
+            },
+            {
+              "pair": "潍柴动力(000338/02338)",
+              "symbol": "000338",
+              "weight": 0.1,
+              "ah_premium": -0.1021687686745463
+            },
+            {
+              "pair": "招商银行(600036/03968)",
+              "symbol": "600036",
+              "weight": 0.1,
+              "ah_premium": -0.0696902836043276
+            },
+            {
+              "pair": "药明康德(603259/02359)",
+              "symbol": "603259",
+              "weight": 0.1,
+              "ah_premium": -0.0611155238272326
+            },
+            {
+              "pair": "XD紫金矿(601899/02899)",
+              "symbol": "601899",
+              "weight": 0.1,
+              "ah_premium": 0.0558586150607476
+            },
+            {
+              "pair": "恒瑞医药(600276/01276)",
+              "symbol": "600276",
+              "weight": 0.1,
+              "ah_premium": 0.0617639141721166
+            },
+            {
+              "pair": "胜宏科技(300476/02476)",
+              "symbol": "300476",
+              "weight": 0.1,
+              "ah_premium": 0.0780468752740786
+            },
+            {
+              "pair": "交通银行(601328/03328)",
+              "symbol": "601328",
+              "weight": 0.1,
+              "ah_premium": 0.0788989978558563
+            }
+          ],
+          "entries": [
+            {
+              "pair": "XD紫金矿(601899/02899)",
+              "symbol": "601899",
+              "weight": 0.1,
+              "ah_premium": 0.0558586150607476
+            },
+            {
+              "pair": "胜宏科技(300476/02476)",
+              "symbol": "300476",
+              "weight": 0.1,
+              "ah_premium": 0.0780468752740786
+            },
+            {
+              "pair": "交通银行(601328/03328)",
+              "symbol": "601328",
+              "weight": 0.1,
+              "ah_premium": 0.0788989978558563
+            }
+          ],
+          "exits": [
+            {
+              "pair": "国恩股份(002768/02768)",
+              "symbol": "002768",
+              "weight": 0.11918818484897133,
+              "ah_premium": 0.2635527323236621,
+              "pair_en": "Guoen Co. (002768/02768)"
+            },
+            {
+              "pair": "美的集团(000333/00300)",
+              "symbol": "000333",
+              "weight": 0.07568206758455698,
+              "ah_premium": 0.0894654006785995,
+              "pair_en": "Midea Group (000333/00300)"
+            },
+            {
+              "pair": "三一重工(600031/06031)",
+              "symbol": "600031",
+              "weight": 0.06447901641045835,
+              "ah_premium": 0.0685337786411945,
+              "pair_en": "Sany Heavy Industry (600031/06031)"
+            }
+          ],
+          "note_zh": "季末信号月：对比 Top10 折价池，次月首个交易日执行调入/调出（非季内仅漂移权重）。",
+          "note_en": "Quarter-end signal month: Top-10 discount pool; trades next month's first session (intra-quarter weights drift)."
+        },
+        "industry": {
+          "signal_date": "2026-06-29",
+          "holdings": [
+            {
+              "symbol": "159915",
+              "name": "创业板ETF",
+              "weight": 1.0,
+              "name_en": "ChiNext ETF"
+            }
+          ],
+          "entries": [],
+          "exits": [],
+          "unchanged": true
+        },
+        "incentive": {
+          "unchanged": false,
+          "signal_date": "2026-06-30",
+          "entries": [
+            {
+              "symbol": "000100",
+              "weight": 0.02,
+              "trade_date": "2026-06-30",
+              "reason": "monthly_incremental",
+              "status": "pending"
+            },
+            {
+              "symbol": "002493",
+              "weight": 0.02,
+              "trade_date": "2026-06-30",
+              "reason": "monthly_incremental",
+              "status": "pending"
+            },
+            {
+              "symbol": "000651",
+              "weight": 0.02,
+              "trade_date": "2026-06-30",
+              "reason": "monthly_incremental",
+              "status": "pending"
+            },
+            {
+              "symbol": "600031",
+              "weight": 0.02,
+              "trade_date": "2026-06-30",
+              "reason": "monthly_incremental",
+              "status": "pending"
+            }
+          ],
+          "exits": [],
+          "note_zh": "月频增量：公告后首个可交易月纳入，持有 9 个月；总敞口超 15% 时等比压缩。",
+          "note_en": "Monthly incremental: first tradable month after announcement, 9M hold; scale to 15% cap."
+        }
+      },
+      "rules_zh": [
+        "复合策略：AH折价 50%（季频 3/6/9/12 月末 + Top10 持有缓冲，层内权重漂移）+ 红利/创业板 30% + 股权激励月频增量 2%/笔（公告后首个可交易月纳入，9 个月，15% cap）。",
+        "Top20 为组合穿透权重（AH/行业层内已含价格漂移）；月底分三层展示调入/调出或「无需调整」。"
+      ],
+      "rules_en": [
+        "Composite: AH 50% (quarterly Mar/Jun/Sep/Dec + hold buffer, intra-sleeve drift) + Div/ChiNext 30% + monthly incremental incentive 2% (first tradable month, 9M, 15% cap).",
+        "Top 20 = look-through weights (AH/industry sleeves include price drift); month-end panel shows per-sleeve entries/exits or hold-buffer notes."
+      ],
+      "metrics": {
+        "cagr": 0.1851283033775628,
+        "sharpe": 1.038368965799248,
+        "max_drawdown": -0.18931202498871935,
+        "final_nav": 4.048456152888855,
+        "turnover_per_year": 2.018161327143172
+      },
+      "benchmark_metrics": {
+        "cagr": 0.02772081124893977,
+        "sharpe": 0.14334855529364426,
+        "max_drawdown": -0.4560262048486471,
+        "final_nav": 1.2524625867547687
+      },
+      "nav_start": "2018-04-02",
+      "backtest_start": "2018-04-02",
+      "backtest_end": "2026-06-26",
+      "cost_bps": 20.0,
+      "nav_src": "nav/composite.json",
+      "nav_points": 1994
+    },
     "etf": {
       "id": "etf",
       "featured_variant": "6M skip 1M",

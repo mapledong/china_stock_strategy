@@ -13,13 +13,14 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 14
+DATA_VERSION = 15
 SRC = ROOT / "src"
 WEB_DIR = Path(__file__).resolve().parents[1]
 INDEX_HTML = WEB_DIR / "index.html"
 APP_JS = WEB_DIR / "js" / "app.js"
 
 sys.path.insert(0, str(SRC))
+sys.path.insert(0, str(ROOT))
 
 STOCK_NAMES = {
     "300124": "汇川技术",
@@ -1115,6 +1116,16 @@ def build_equity() -> dict:
     }
 
 
+def build_composite() -> dict:
+    from qtlight.china_composite_dashboard import compute_composite_state
+    from qtlight.china_layered_composite_low_turnover import _load_monthly_premium_cache
+
+    zh, en = load_symbol_name_maps()
+    premium = _load_monthly_premium_cache()
+    div_state = compute_dividend_chinext_state()
+    return compute_composite_state(zh, en, AH_PAIR_EN, div_state, premium)
+
+
 def sync_web_asset_version(version: int) -> None:
     """Keep index.html query strings and app.js APP_VERSION aligned with data_version."""
     import re
@@ -1145,6 +1156,7 @@ def main() -> None:
         return obj
 
     builders = {
+        "composite": build_composite,
         "etf": compute_etf_state,
         "ah": build_ah,
         "dividend": compute_dividend_chinext_state,

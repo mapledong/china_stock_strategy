@@ -11,9 +11,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>China Stock Strategies · 中国股票策略</title>
-  <link rel="stylesheet" href="css/styles.css?v=14">
+  <link rel="stylesheet" href="css/styles.css?v=15">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
-  <script src="js/app.js?v=14" defer></script>
+  <script src="js/app.js?v=15" defer></script>
 </head>
 <body>
   <nav class="nav">
@@ -34,14 +34,17 @@
       <div class="hero-eyebrow" data-i18n="hero.eyebrow">Quantitative Research</div>
       <h1 data-i18n="hero.title">中国股票策略仪表盘</h1>
       <p class="hero-sub" data-i18n="hero.subtitle">
-        四套可执行的 A 股策略：当前持仓、历史净值与调仓规则，一目了然。
+        复合策略 + 四套单策略：当前 Top20 持仓、月底调仓提示与历史净值。
       </p>
     </div>
   </header>
 
   <div class="strategy-switcher">
     <div class="segmented" role="tablist" aria-label="Strategy tabs">
-      <button class="segment-btn active" data-strategy="etf" role="tab" aria-selected="true">
+      <button class="segment-btn active" data-strategy="composite" role="tab" aria-selected="true">
+        <span data-i18n="strategies.composite.short">复合策略</span>
+      </button>
+      <button class="segment-btn" data-strategy="etf" role="tab" aria-selected="false">
         <span data-i18n="strategies.etf.short">ETF 轮动</span>
       </button>
       <button class="segment-btn" data-strategy="ah" role="tab" aria-selected="false">
@@ -59,7 +62,8 @@
   <main class="main">
     <div id="loading" class="loading" data-i18n="loading">Loading strategy data…</div>
     <div id="panels" class="hidden">
-      <section id="panel-etf" class="strategy-panel active" role="tabpanel"></section>
+      <section id="panel-composite" class="strategy-panel active" role="tabpanel"></section>
+      <section id="panel-etf" class="strategy-panel" role="tabpanel"></section>
       <section id="panel-ah" class="strategy-panel" role="tabpanel"></section>
       <section id="panel-dividend" class="strategy-panel" role="tabpanel"></section>
       <section id="panel-equity" class="strategy-panel" role="tabpanel"></section>
