@@ -5,8 +5,9 @@ const I18N = {
     brand: "中国股票策略",
     "hero.eyebrow": "量化研究",
     "hero.title": "中国股票策略仪表盘",
-    "hero.subtitle": "四套可执行的 A 股策略：当前持仓、历史净值与调仓规则，一目了然。",
+    "hero.subtitle": "复合策略 + 四套单策略：当前 Top20 持仓、月底调仓提示与历史净值。",
     loading: "正在加载策略数据…",
+    "strategies.composite.short": "复合策略",
     "strategies.etf.short": "ETF 轮动",
     "strategies.ah.short": "AH 折价",
     "strategies.dividend.short": "红利创业板",
@@ -99,13 +100,26 @@ const I18N = {
     "equity.reason.equity_incentive": "股权激励",
     "equity.reason.expiry": "9M到期",
     "equity.reason.ma200_swap": "MA200换仓",
+    "composite.actionTitle": "低换手复合：AH 50% + 红利/创业板 30% + 月频增量激励",
+    "composite.actionDesc": "穿透 Top20；AH 季频持有缓冲且层内权重漂移，行业月频二选一，激励公告后首个可交易月纳入（9 个月，15% cap）。",
+    "composite.top20": "组合 Top20 持仓（穿透权重）",
+    "composite.sleeve": "层级",
+    "composite.monthEndTitle": "月底调仓指引（分三层）",
+    "composite.monthEndUnchanged": "三层均无强制调仓；重要持仓按规则继续持有。",
+    "composite.monthEndDesc": "截至 {date} 的月末信号模拟；AH 仅 3/6/9/12 月调仓，其余月份持有缓冲。",
+    "composite.sleeve.ah": "AH 折价层（50%）",
+    "composite.sleeve.industry": "红利/创业板层（30%）",
+    "composite.sleeve.incentive": "股权激励层（≤15%）",
+    "composite.noChange": "本月无需调整",
+    "composite.cash": "现金",
   },
   en: {
     brand: "China Stock Strategies",
     "hero.eyebrow": "Quantitative Research",
     "hero.title": "China Stock Strategy Dashboard",
-    "hero.subtitle": "Four actionable A-share strategies — current holdings, NAV history, and rebalancing rules at a glance.",
+    "hero.subtitle": "Composite plus four sleeves — Top 20 holdings, month-end rebalance notes, and NAV history.",
     loading: "Loading strategy data…",
+    "strategies.composite.short": "Composite",
     "strategies.etf.short": "ETF Rotation",
     "strategies.ah.short": "AH Discount",
     "strategies.dividend.short": "Div / ChiNext",
@@ -198,6 +212,18 @@ const I18N = {
     "equity.reason.equity_incentive": "Equity incentive",
     "equity.reason.expiry": "9M expiry",
     "equity.reason.ma200_swap": "MA200 swap",
+    "composite.actionTitle": "Low-turnover composite: AH 50% + Div/ChiNext 30% + monthly incremental incentive",
+    "composite.actionDesc": "Top 20 look-through; quarterly AH buffer with intra-sleeve drift, monthly industry rotation, incentive enters first tradable month (9M, 15% cap).",
+    "composite.top20": "Top 20 holdings (look-through)",
+    "composite.sleeve": "Sleeve",
+    "composite.monthEndTitle": "Month-end rebalance guide (by sleeve)",
+    "composite.monthEndUnchanged": "No required trades across sleeves; key holdings stay per rules.",
+    "composite.monthEndDesc": "Month-end simulation as of {date}; AH trades only in Mar/Jun/Sep/Dec — hold buffer otherwise.",
+    "composite.sleeve.ah": "AH discount (50%)",
+    "composite.sleeve.industry": "Div/ChiNext (30%)",
+    "composite.sleeve.incentive": "Equity incentive (≤15%)",
+    "composite.noChange": "No change this month",
+    "composite.cash": "Cash",
   },
 };
 
@@ -217,7 +243,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 14;
+const APP_VERSION = 16;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -252,9 +278,10 @@ let theme = localStorage.getItem("theme") || "light";
 let data = null;
 let charts = {};
 let chartsReady = {};
-let activeStrategy = "etf";
+let activeStrategy = "composite";
 
 const CHART_CONFIG = {
+  composite: { canvasId: "chart-composite", strategyField: "strategy_nav", benchField: "hs300_nav" },
   etf: { canvasId: "chart-etf", strategyField: "strategy_nav", benchField: "hs300_nav" },
   ah: { canvasId: "chart-ah", strategyField: "AH_low_premium_top10_tushare", benchField: "CSI300_ETF_proxy" },
   dividend: { canvasId: "chart-dividend", strategyField: "strategy_nav", benchField: "hs300_nav" },
@@ -449,6 +476,10 @@ function equityReasonLabel(reason, status) {
   else if (reason === "esop" || reason === "pending_esop") reasonText = t("equity.reason.esop");
   else if (reason === "equity_incentive" || reason === "pending_equity_incentive")
     reasonText = t("equity.reason.equity_incentive");
+  else if (reason === "month_end_ma200" || reason === "pending_month_end_ma200")
+    reasonText = lang === "zh" ? "月末MA200纳入" : "Month-end MA200 entry";
+  else if (reason === "monthly_incremental" || reason === "pending_monthly_incremental")
+    reasonText = lang === "zh" ? "月频增量纳入" : "Monthly incremental entry";
   if (statusText && reasonText && statusText !== reasonText) return `${reasonText} · ${statusText}`;
   return reasonText || statusText || "—";
 }
@@ -627,9 +658,10 @@ function slotMetaLabel(s) {
         ? "HS300+CSI500"
         : "HS300 + CSI 500"
       : meta.universe;
+  const gross = lang === "zh" ? `gross ${pct(meta.gross_weight, 1)} · 权重随价格漂移` : `gross ${pct(meta.gross_weight, 1)} · weights drift with prices`;
   return lang === "zh"
-    ? `${meta.max_slots} 槽 · 单槽 ${pct(meta.slot_weight, 0)} · 持有 ${meta.hold_months} 个月 · ${replacement} · ${universe} · 平均 ${meta.avg_positions?.toFixed(1) ?? "—"} 仓`
-    : `${meta.max_slots} slots · ${pct(meta.slot_weight, 0)} each · ${meta.hold_months}M hold · ${replacement} · ${universe} · avg ${meta.avg_positions?.toFixed(1) ?? "—"} positions`;
+    ? `${meta.max_slots} 槽 · 单槽目标 ${pct(meta.slot_weight, 0)} · ${gross} · 持有 ${meta.hold_months} 个月 · ${replacement} · ${universe}`
+    : `${meta.max_slots} slots · target ${pct(meta.slot_weight, 0)} each · ${gross} · ${meta.hold_months}M hold · ${replacement} · ${universe}`;
 }
 
 function renderGuide(prefix) {
@@ -749,6 +781,173 @@ function renderChart(canvasId, nav, strategyKey, navField, benchField) {
       <span class="legend-item"><span class="legend-dot" style="background:${benchColor}"></span>${benchLabel}</span>
     </div>`
   );
+}
+
+function renderCompositeSleeveRebalance(sleeveKey, projection) {
+  if (!projection) return "";
+  const titleKey = `composite.sleeve.${sleeveKey}`;
+  const note = lang === "zh" ? projection.note_zh : projection.note_en;
+
+  if (projection.unchanged) {
+    return `
+      <div class="sleeve-rebalance">
+        <h4 class="card-subtitle">${t(titleKey)}</h4>
+        <p class="note-text">${note || t("composite.noChange")}</p>
+      </div>`;
+  }
+
+  if (sleeveKey === "incentive") {
+    return `
+      <div class="sleeve-rebalance">
+        <h4 class="card-subtitle">${t(titleKey)}</h4>
+        <p class="note-text">${note || ""}</p>
+        <div class="grid-2" style="margin-top:8px">
+          <div>
+            <h5 class="card-subtitle">${t("equity.toAdd")}</h5>
+            ${renderEquityChangeRows(projection.entries)}
+          </div>
+          <div>
+            <h5 class="card-subtitle">${t("equity.toRemove")}</h5>
+            ${renderEquityChangeRows(projection.exits)}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const entries = projection.entries || [];
+  const exits = projection.exits || [];
+  const entryTags = entries
+    .map((h) => {
+      const label =
+        sleeveKey === "ah"
+          ? displayPairLabel(h)
+          : displaySymbolLabel("dividend", h);
+      return `<span class="change-tag entry">${t("common.newEntry")}: ${label}</span>`;
+    })
+    .join("");
+  const exitTags = exits
+    .map((h) => {
+      const label =
+        sleeveKey === "ah"
+          ? displayPairLabel(h)
+          : displaySymbolLabel("dividend", h);
+      return `<span class="change-tag exit">${t("common.possibleExit")}: ${label}</span>`;
+    })
+    .join("");
+
+  return `
+    <div class="sleeve-rebalance">
+      <h4 class="card-subtitle">${t(titleKey)}</h4>
+      <p class="note-text">${note || ""}</p>
+      <div class="projection-changes">${entryTags}${exitTags}</div>
+    </div>`;
+}
+
+function renderCompositeMonthEndSection(projection) {
+  if (!projection) return "";
+  const desc = projection.unchanged
+    ? t("composite.monthEndUnchanged")
+    : t("composite.monthEndDesc").replace("{date}", fmtDate(projection.signal_date));
+  const monthLabel = projection.month || fmtDate(projection.signal_date).slice(0, 7);
+  return `
+    <div class="card projection-card">
+      <div class="card-header">
+        <h3 class="card-title">${t("composite.monthEndTitle")}</h3>
+        <span class="card-subtitle">${monthLabel}</span>
+      </div>
+      <p class="note-text">${desc}</p>
+      <div class="sleeve-rebalance-grid">
+        ${renderCompositeSleeveRebalance("ah", projection.ah)}
+        ${renderCompositeSleeveRebalance("industry", projection.industry)}
+        ${renderCompositeSleeveRebalance("incentive", projection.incentive)}
+      </div>
+    </div>`;
+}
+
+function renderCompositePanel(s) {
+  const el = document.getElementById("panel-composite");
+  const sw = s.sleeve_weights || {};
+  const sleeveMeta =
+    lang === "zh"
+      ? `AH ${pct(sw.ah || 0.5, 0)} · 行业 ${pct(sw.industry || 0.3, 0)} · 激励 cap ${pct(sw.incentive_cap || 0.15, 0)} · 激励 gross ${pct(s.sleeves?.incentive?.gross_weight || 0, 0)}`
+      : `AH ${pct(sw.ah || 0.5, 0)} · Industry ${pct(sw.industry || 0.3, 0)} · Incentive cap ${pct(sw.incentive_cap || 0.15, 0)} · gross ${pct(s.sleeves?.incentive?.gross_weight || 0, 0)}`;
+  const ahDriftNote =
+    lang === "zh"
+      ? s.sleeves?.ah?.weight_note_zh || "AH 层内权重随价格漂移"
+      : s.sleeves?.ah?.weight_note_en || "AH sleeve weights drift with prices";
+
+  const top20Rows = (s.holdings || [])
+    .map((h) => {
+      const sleeve = lang === "zh" ? h.sleeve_zh : h.sleeve_en;
+      const asset =
+        h.sleeve === "ah"
+          ? `${displayPairLabel(h)} <span class="symbol-badge">${h.symbol}</span>`
+          : `<span class="symbol-badge">${h.symbol}</span>${lang === "zh" ? h.name : h.name_en || STOCK_NAMES_EN[h.symbol] || h.name}`;
+      const premCell =
+        h.ah_premium != null
+          ? `<span class="premium-tag ${h.ah_premium < 0 ? "discount" : "premium"}">${
+              h.ah_premium < 0 ? t("common.discount") : t("common.premiumLabel")
+            } ${pct(Math.abs(h.ah_premium), 1)}</span>`
+          : "—";
+      return `
+        <tr>
+          <td><span class="sleeve-tag">${sleeve}</span></td>
+          <td>${asset}</td>
+          <td>${pct(h.weight, 1)}</td>
+          <td>${premCell}</td>
+        </tr>`;
+    })
+    .join("");
+
+  const cashRow =
+    s.cash_weight > 0.001
+      ? `<tr><td>—</td><td>${t("composite.cash")}</td><td>${pct(s.cash_weight, 1)}</td><td>—</td></tr>`
+      : "";
+
+  el.innerHTML = `
+    <div class="action-card">
+      <div class="action-card-label">${t("common.holdNow")}</div>
+      <h2>${t("composite.actionTitle")}</h2>
+      <p>${t("composite.actionDesc")}</p>
+      <p class="note-text">${sleeveMeta}</p>
+      <p class="note-text">${ahDriftNote}</p>
+      <div class="action-meta">
+        <span>${t("common.holdingsAsOf")}: <strong>${fmtDate(s.holdings_as_of)}</strong></span>
+        <span>${t("common.rebalance")}: <strong>${fmtDate(s.latest_rebalance)}</strong></span>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">${t("common.performance")}</h3>
+          <span class="card-subtitle">${s.featured_variant || "low_turnover"}</span>
+        </div>
+        ${renderMetrics(s.metrics, s.benchmark_metrics)}
+        <p class="card-subtitle">${t("common.cost")}: ${s.cost_bps} ${t("common.bps")}</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3 class="card-title">${t("common.rebalanceGuide")}</h3></div>
+        ${renderSlotRules(s)}
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        <h3 class="card-title">${t("common.performance")} · NAV</h3>
+        <span class="card-subtitle">${navPeriodLabel(s)}</span>
+      </div>
+      <div class="chart-wrap"><canvas id="chart-composite"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        <h3 class="card-title">${t("composite.top20")}</h3>
+        <span class="card-subtitle">${t("common.holdingsAsOf")} ${fmtDate(s.holdings_as_of)} · ${s.holdings_all_count || s.holdings?.length || 0} ${lang === "zh" ? "只穿透持仓" : "look-through names"} · ${lang === "zh" ? "含漂移" : "drifted"}</span>
+      </div>
+      ${tableWrap(`<table>
+          <thead><tr><th>${t("composite.sleeve")}</th><th>${t("common.asset")}</th><th>${t("common.weight")}</th><th>${t("common.premium")}</th></tr></thead>
+          <tbody>${top20Rows}${cashRow}</tbody>
+        </table>`)}
+    </div>
+    ${renderCompositeMonthEndSection(s.projected_month_end)}`;
 }
 
 function renderEtfPanel(s) {
@@ -1007,6 +1206,7 @@ function renderEquityPanel(s) {
 function renderAll() {
   if (!data) return;
   destroyAllCharts();
+  renderPanelSafe("composite", renderCompositePanel);
   renderPanelSafe("etf", renderEtfPanel);
   renderPanelSafe("ah", renderAhPanel);
   renderPanelSafe("dividend", renderDividendPanel);
