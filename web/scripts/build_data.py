@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 18
+DATA_VERSION = 19
 SRC = ROOT / "src"
 WEB_DIR = Path(__file__).resolve().parents[1]
 INDEX_HTML = WEB_DIR / "index.html"
@@ -213,6 +213,33 @@ def _first_on_or_after(index, start: str):
     return eligible[0]
 
 
+def _completed_month_end_signals(rebalance_dates, as_of):
+    """Month-end signal dates that are fully complete (exclude incomplete current month)."""
+    import pandas as pd
+
+    as_of = pd.Timestamp(as_of)
+    dates = pd.DatetimeIndex(rebalance_dates[rebalance_dates <= as_of])
+    calendar_me = as_of + pd.offsets.MonthEnd(0)
+    if as_of.normalize() < calendar_me.normalize():
+        dates = dates[dates.to_period("M") < as_of.to_period("M")]
+    return dates
+
+
+def _last_executed_rebalance_date(prices_index, completed_signals, as_of):
+    """Last next-session execution date for completed month-end signals."""
+    import pandas as pd
+
+    from qtlight.etf_momentum_rotation import _execution_date_after_signal
+
+    as_of = pd.Timestamp(as_of)
+    last_exec = None
+    for signal_date in completed_signals:
+        exec_date = _execution_date_after_signal(prices_index, signal_date)
+        if exec_date is not None and exec_date <= as_of:
+            last_exec = exec_date
+    return last_exec
+
+
 def _attach_symbol_names(items: list[dict], name_map: dict[str, str], en_map: dict[str, str]) -> list[dict]:
     for item in items:
         symbol = item.get("symbol")
@@ -349,9 +376,11 @@ def compute_etf_state() -> dict:
         )
     drift_holdings.sort(key=lambda x: x["weight"], reverse=True)
 
-    last_rebalance_dates = rebalance_dates[rebalance_dates <= latest_date]
-    last_signal_date = last_rebalance_dates.max() if len(last_rebalance_dates) else latest_date
-    prev_selected = selections.get(last_signal_date, [])
+    completed_signals = _completed_month_end_signals(rebalance_dates, latest_date)
+    last_signal_date = completed_signals.max() if len(completed_signals) else latest_date
+    last_exec_date = _last_executed_rebalance_date(prices.index, completed_signals, latest_date)
+    latest_rebalance = last_exec_date if last_exec_date is not None else last_signal_date
+    prev_selected = selections.get(last_signal_date, []) if len(completed_signals) else []
 
     projected_symbols = _select_etf_at_date(
         prices, score, spec, latest_date, prev_selected, top_n
@@ -406,12 +435,13 @@ def compute_etf_state() -> dict:
         "id": "etf",
         "featured_variant": ETF_STRATEGY,
         "execution_note": summary.get("execution_note", ""),
-        "latest_rebalance": last_signal_date.date().isoformat(),
+        "latest_rebalance": latest_rebalance.date().isoformat(),
         "holdings_as_of": latest_date.date().isoformat(),
         "holdings": drift_holdings,
         "cash_weight": cash_weight,
         "projected_month_end": {
             "signal_date": latest_date.date().isoformat(),
+            "month": latest_date.strftime("%Y-%m"),
             "holdings": projected_holdings,
             "entries": comparison["entries"],
             "exits": comparison["exits"],
@@ -509,17 +539,43 @@ def build_ah() -> dict:
         ]
     )
 
-    # Monthly holdings are labeled by calendar month-end; clip to last NAV day
-    # so an incomplete month does not show a future date (e.g. 2026-07-31).
+    # Holdings may still carry calendar ME labels from older exports; clip to NAV.
     nav_end = nav_df.index.max().date().isoformat()
     holdings_as_of = min(str(latest_date), nav_end)
 
+    # Last completed month-end signal (exclude incomplete current month), then
+    # approximate execution as the next NAV session after that signal.
+    import pandas as pd
+
+    holding_dates = sorted({str(r["date"]) for r in holdings_rows})
+    as_of_ts = pd.Timestamp(nav_end)
+    completed = [
+        d
+        for d in holding_dates
+        if pd.Timestamp(d) <= as_of_ts
+        and (
+            pd.Timestamp(d).to_period("M") < as_of_ts.to_period("M")
+            or as_of_ts.normalize() >= (as_of_ts + pd.offsets.MonthEnd(0)).normalize()
+        )
+    ]
+    last_signal = completed[-1] if completed else holdings_as_of
+    future_nav = nav_df.index[nav_df.index > pd.Timestamp(last_signal)]
+    latest_rebalance = (
+        future_nav[0].date().isoformat() if len(future_nav) else last_signal
+    )
+
+    projection = compute_ah_projection(current, holdings_as_of)
+    # Provisional projection should cite data-as-of, not a future ME label.
+    if projection.get("signal_date") and str(projection["signal_date"]) > holdings_as_of:
+        projection["signal_date"] = holdings_as_of
+    projection["month"] = pd.Timestamp(holdings_as_of).strftime("%Y-%m")
+
     return {
         "id": "ah",
-        "latest_rebalance": latest_date,
+        "latest_rebalance": latest_rebalance,
         "holdings_as_of": holdings_as_of,
         "holdings": current,
-        "projected_month_end": compute_ah_projection(current, holdings_as_of),
+        "projected_month_end": projection,
         "metrics": {
             "cagr": float(metrics["cagr"]),
             "sharpe": float(metrics["sharpe"]),
@@ -584,13 +640,14 @@ def compute_dividend_chinext_state() -> dict:
             }
         )
 
-    last_rebalance_dates = rebalance_dates[rebalance_dates <= latest_date]
-    last_signal_date = last_rebalance_dates.max() if len(last_rebalance_dates) else latest_date
+    completed_signals = _completed_month_end_signals(rebalance_dates, latest_date)
+    last_signal_date = completed_signals.max() if len(completed_signals) else latest_date
+    last_exec_date = _last_executed_rebalance_date(prices.index, completed_signals, latest_date)
+    latest_rebalance = last_exec_date if last_exec_date is not None else last_signal_date
 
     month_score = score.loc[latest_date].dropna()
-    projected_symbols = selections.get(latest_date, [])
-    if not projected_symbols and not month_score.empty:
-        projected_symbols = [month_score.sort_values(ascending=False).index[0]]
+    # Provisional month-end ranking from latest available day (not treated as completed).
+    projected_symbols = list(month_score.sort_values(ascending=False).head(1).index) if not month_score.empty else []
     projected_holdings = [
         {"symbol": symbol, "name": PAIR_NAMES.get(symbol, symbol), "weight": 1.0}
         for symbol in projected_symbols
@@ -634,11 +691,12 @@ def compute_dividend_chinext_state() -> dict:
         "id": "dividend",
         "featured_variant": DIVIDEND_CHINEXT_STRATEGY,
         "execution_note": summary.get("execution", ""),
-        "latest_rebalance": last_signal_date.date().isoformat(),
+        "latest_rebalance": latest_rebalance.date().isoformat(),
         "holdings_as_of": latest_date.date().isoformat(),
         "holdings": drift_holdings,
         "projected_month_end": {
             "signal_date": latest_date.date().isoformat(),
+            "month": latest_date.strftime("%Y-%m"),
             "holdings": projected_holdings,
             "entries": comparison["entries"],
             "exits": comparison["exits"],

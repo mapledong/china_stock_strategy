@@ -85,7 +85,8 @@ const I18N = {
     "equity.watchlist": "最新 eligible 候选（待纳入）",
     "equity.coreEvents": "核心事件",
     "equity.symbols": "涉及股票",
-    "equity.staleNote": "组合持仓数据截至上述日期；候选池已更新至更近日期，下次调仓时将刷新。",
+    "equity.staleNote": "",
+    "equity.nextRebalance": "有合格事件信号的交易日",
     "equity.monthEndChanges": "本月调仓变动（月底信号）",
     "equity.monthEndDesc": "按截至 {date} 的持仓与信号，汇总本月已执行及剩余交易日待执行的纳入/剔除（日频策略，有信号即日执行）。",
     "equity.monthEndUnchanged": "本月暂无新增纳入或到期/换仓剔除。",
@@ -197,7 +198,8 @@ const I18N = {
     "equity.watchlist": "Latest eligible candidates",
     "equity.coreEvents": "Core events",
     "equity.symbols": "Symbols",
-    "equity.staleNote": "Portfolio holdings as of date above; candidate pool is more recent and will refresh on next rebalance.",
+    "equity.staleNote": "",
+    "equity.nextRebalance": "Trading days with eligible event signals",
     "equity.monthEndChanges": "This month's changes (month-end signal)",
     "equity.monthEndDesc": "Entries and exits executed or still scheduled this month through {date} (daily strategy — trades on signal days).",
     "equity.monthEndUnchanged": "No new entries or expiry/swap exits this month.",
@@ -243,7 +245,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 18;
+const APP_VERSION = 19;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -433,7 +435,7 @@ function applyI18n() {
   });
 }
 
-function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKey, holdingsAsOf) {
+function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKey, holdingsAsOf, nextRebalanceHtml) {
   const compact = holdings.length >= 8;
   const holdingsClass = compact ? "action-holdings compact" : "action-holdings";
   const chipClass = compact ? "action-chip compact" : "action-chip";
@@ -452,6 +454,9 @@ function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKe
   const asOfLine = holdingsAsOf
     ? `<span>${t("common.holdingsAsOf")}: <strong>${fmtDate(holdingsAsOf)}</strong></span>`
     : "";
+  const nextLine =
+    nextRebalanceHtml ||
+    `<span>${t("common.nextRebalance")}: <strong>${t("common.monthEnd")}</strong> → ${t("common.monthEndNextDay")}</span>`;
 
   return `
     <div class="action-card">
@@ -462,7 +467,7 @@ function renderActionCard(strategyKey, holdings, rebalanceDate, titleKey, descKe
       <div class="action-meta">
         ${asOfLine}
         <span>${t("common.rebalance")}: <strong>${fmtDate(rebalanceDate)}</strong></span>
-        <span>${t("common.nextRebalance")}: <strong>${t("common.monthEnd")}</strong> → ${t("common.monthEndNextDay")}</span>
+        ${nextLine}
       </div>
     </div>`;
 }
@@ -484,6 +489,11 @@ function equityReasonLabel(reason, status) {
   return reasonText || statusText || "—";
 }
 
+function equityDisplayName(h) {
+  if (lang === "zh") return h.name || h.symbol || "—";
+  return h.name_en || STOCK_NAMES_EN[h.symbol] || h.name || h.symbol || "—";
+}
+
 function renderEquityChangeRows(rows) {
   if (!rows?.length) {
     return `<p class="note-text">—</p>`;
@@ -495,7 +505,7 @@ function renderEquityChangeRows(rows) {
           .map(
             (h) => `
           <tr class="row-highlight">
-            <td><span class="symbol-badge">${h.symbol}</span>${lang === "zh" ? h.name : h.name_en || STOCK_NAMES_EN[h.symbol] || h.name}</td>
+            <td><span class="symbol-badge">${h.symbol}</span>${equityDisplayName(h)}</td>
             <td>${pct(h.weight, 0)}</td>
             <td>${h.trade_date || "—"}</td>
             <td>${equityReasonLabel(h.reason, h.status)}</td>
@@ -564,12 +574,12 @@ function renderProjectionSection(strategyKey, projection) {
   const rows = projection.holdings
     .map((h) => {
       const isEntry = (projection.entries || []).some((e) =>
-        strategyKey === "etf" ? e.symbol === h.symbol : e.pair === h.pair
+        strategyKey === "ah" ? e.pair === h.pair : e.symbol === h.symbol
       );
       const assetCell =
         strategyKey === "ah"
           ? displayPairLabel(h)
-          : `<span class="symbol-badge">${h.symbol}</span>${lang === "zh" ? h.name : h.name_en || h.name}`;
+          : `<span class="symbol-badge">${h.symbol}</span>${lang === "zh" ? h.name || h.symbol : h.name_en || h.name || h.symbol}`;
       const premiumCell =
         strategyKey === "ah" && h.ah_premium != null
           ? `<span class="premium-tag ${h.ah_premium < 0 ? "discount" : "premium"}">${
@@ -1139,9 +1149,16 @@ function renderEquityPanel(s) {
 
   const el = document.getElementById("panel-equity");
   el.innerHTML = `
-    ${renderActionCard("equity", s.holdings, s.latest_rebalance, "equity.actionTitle", "equity.actionDesc")}
+    ${renderActionCard(
+      "equity",
+      s.holdings,
+      s.latest_rebalance,
+      "equity.actionTitle",
+      "equity.actionDesc",
+      s.holdings_as_of,
+      `<span>${t("common.nextRebalance")}: <strong>${t("equity.nextRebalance")}</strong></span>`
+    )}
     ${s.slot_meta ? `<p class="note-text">${slotMetaLabel(s)}</p>` : ""}
-    <p class="note-text">${t("equity.staleNote")}</p>
     <div class="grid-2">
       <div class="card">
         <div class="card-header"><h3 class="card-title">${t("common.performance")}</h3></div>
