@@ -1,6 +1,6 @@
 {
   "data_version": 16,
-  "generated_at": "2026-06-30 22:53",
+  "generated_at": "2026-07-16 21:09",
   "strategy_order": [
     "composite",
     "etf",
@@ -352,7 +352,7 @@
               "name_en": "ChiNext ETF"
             }
           ],
-          "latest_rebalance": "2026-06-29"
+          "latest_rebalance": "2026-07-16"
         },
         "incentive": {
           "weight_cap": 0.15,
@@ -606,7 +606,7 @@
           "note_en": "Quarter-end signal month: Top-10 discount pool; trades next month's first session (intra-quarter weights drift)."
         },
         "industry": {
-          "signal_date": "2026-06-29",
+          "signal_date": "2026-07-16",
           "holdings": [
             {
               "symbol": "159915",
@@ -666,11 +666,11 @@
         "Top 20 = look-through weights (AH/industry sleeves include price drift); month-end panel shows per-sleeve entries/exits or hold-buffer notes."
       ],
       "metrics": {
-        "cagr": 0.1851283033775628,
-        "sharpe": 1.038368965799248,
-        "max_drawdown": -0.18931202498871935,
-        "final_nav": 4.048456152888855,
-        "turnover_per_year": 2.018161327143172
+        "cagr": 0.1985607837943486,
+        "sharpe": 1.2006367736301633,
+        "max_drawdown": -0.19005893309215494,
+        "final_nav": 4.442076860875645,
+        "turnover_per_year": 2.0181613271431726
       },
       "benchmark_metrics": {
         "cagr": 0.02772081124893977,
@@ -689,25 +689,25 @@
       "id": "etf",
       "featured_variant": "6M skip 1M",
       "execution_note": "Month-end momentum ranking; trades execute on the next month's first trading day at 50/50 when the selected ETF set changes; weights drift naturally otherwise with no monthly rebalance.",
-      "latest_rebalance": "2026-06-29",
-      "holdings_as_of": "2026-06-29",
+      "latest_rebalance": "2026-07-16",
+      "holdings_as_of": "2026-07-16",
       "holdings": [
+        {
+          "symbol": "HYDRO_EQ",
+          "name": "水电等权",
+          "weight": 0.5734985423050235,
+          "name_en": "Hydro Equal-Weight"
+        },
         {
           "symbol": "512220",
           "name": "TMT",
-          "weight": 0.5605649194430522,
+          "weight": 0.4265014576949765,
           "name_en": "TMT ETF"
-        },
-        {
-          "symbol": "562910",
-          "name": "高端制造",
-          "weight": 0.4394350805569478,
-          "name_en": "Advanced Manufacturing ETF"
         }
       ],
       "cash_weight": 0.0,
       "projected_month_end": {
-        "signal_date": "2026-06-29",
+        "signal_date": "2026-07-16",
         "holdings": [
           {
             "symbol": "512220",
@@ -722,27 +722,41 @@
             "name_en": "Advanced Manufacturing ETF"
           }
         ],
-        "entries": [],
-        "exits": [],
-        "unchanged": true
+        "entries": [
+          {
+            "symbol": "562910",
+            "name": "高端制造",
+            "weight": 0.5,
+            "name_en": "Advanced Manufacturing ETF"
+          }
+        ],
+        "exits": [
+          {
+            "symbol": "HYDRO_EQ",
+            "name": "水电等权",
+            "weight": 0.5734985423050235,
+            "name_en": "Hydro Equal-Weight"
+          }
+        ],
+        "unchanged": false
       },
       "metrics": {
-        "cagr": 0.1101599264429387,
-        "sharpe": 0.4983738726073429,
+        "cagr": 0.10548022888665809,
+        "sharpe": 0.47499346401462794,
         "max_drawdown": -0.34132564384795694,
-        "final_nav": 2.5125430436357927,
-        "turnover_per_year": 5.853086604486239
+        "final_nav": 2.432020351343701,
+        "turnover_per_year": 5.935183461985077
       },
       "benchmark_metrics": {
-        "cagr": 0.02850484748238946,
-        "sharpe": 0.1493977869518378,
+        "cagr": 0.022857858489519822,
+        "sharpe": 0.11951210505842952,
         "max_drawdown": -0.456026204848647,
-        "final_nav": 1.2811785200723225
+        "final_nav": 1.2217637001382586
       },
       "nav_start": "2017-09-01",
       "cost_bps": 30.0,
       "backtest_start": "2017-09-01",
-      "backtest_end": "2026-06-29",
+      "backtest_end": "2026-07-16",
       "universe": {
         "513050": "中概互联",
         "159928": "消费",
@@ -754,7 +768,7 @@
         "HYDRO_EQ": "水电等权"
       },
       "nav_src": "nav/etf.json",
-      "nav_points": 2138
+      "nav_points": 2151
     },
     "ah": {
       "id": "ah",
@@ -927,8 +941,8 @@
       "id": "dividend",
       "featured_variant": "12M momentum",
       "execution_note": "月末信号，次月首个交易日调仓；仅当持仓变化时交易；成本30bps",
-      "latest_rebalance": "2026-06-29",
-      "holdings_as_of": "2026-06-29",
+      "latest_rebalance": "2026-07-16",
+      "holdings_as_of": "2026-07-16",
       "holdings": [
         {
           "symbol": "159915",
@@ -938,7 +952,7 @@
         }
       ],
       "projected_month_end": {
-        "signal_date": "2026-06-29",
+        "signal_date": "2026-07-16",
         "holdings": [
           {
             "symbol": "159915",
@@ -952,22 +966,22 @@
         "unchanged": true
       },
       "metrics": {
-        "cagr": 0.24511562687644362,
-        "sharpe": 1.0081124881959536,
+        "cagr": 0.22123359231589745,
+        "sharpe": 0.9002006685991748,
         "max_drawdown": -0.22775584573337393,
-        "final_nav": 4.790142785004686,
-        "turnover_per_year": 1.399425287356322
+        "final_nav": 4.210033425064317,
+        "turnover_per_year": 1.3903692424819185
       },
       "benchmark_metrics": {
-        "cagr": 0.04007974719565799,
-        "sharpe": 0.215467361219237,
+        "cagr": 0.03297287548232286,
+        "sharpe": 0.1766722312354354,
         "max_drawdown": -0.4560262048486472,
-        "final_nav": 1.3242031996186492
+        "final_nav": 1.2627931045937875
       },
       "nav_start": "2019-05-06",
       "cost_bps": 30.0,
       "backtest_start": "2019-05-06",
-      "backtest_end": "2026-06-29",
+      "backtest_end": "2026-07-16",
       "universe": {
         "510880": "红利ETF",
         "159915": "创业板ETF"
@@ -977,17 +991,17 @@
           "symbol": "510880",
           "name": "红利ETF",
           "name_en": "Dividend ETF",
-          "pct_months": 44.827586206896555
+          "pct_months": 44.31818181818182
         },
         {
           "symbol": "159915",
           "name": "创业板ETF",
           "name_en": "ChiNext ETF",
-          "pct_months": 55.172413793103445
+          "pct_months": 55.68181818181818
         }
       ],
       "nav_src": "nav/dividend.json",
-      "nav_points": 1735
+      "nav_points": 1748
     },
     "equity": {
       "id": "equity",

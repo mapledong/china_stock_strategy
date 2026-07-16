@@ -27,7 +27,7 @@ ARGS=()
 [[ "$SKIP_RESEARCH" -eq 1 ]] && ARGS+=(--skip-research)
 
 echo "==> Local strategy update (research + web/data)..."
-"$PYTHON" web/scripts/daily_update.py "${ARGS[@]}"
+"$PYTHON" web/scripts/daily_update.py ${ARGS[@]+"${ARGS[@]}"}
 
 echo ""
 echo "Local dashboard refreshed: web/data/"

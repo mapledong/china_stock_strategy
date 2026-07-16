@@ -22,6 +22,7 @@ RESEARCH_STEPS: tuple[tuple[str, Path], ...] = (
     ("AH discount (Tushare)", SRC / "qtlight" / "ah_tushare_backtest.py"),
     ("Dividend / ChiNext rotation", SRC / "qtlight" / "dividend_chinext_momentum_research.py"),
     ("Equity incentive daily slots", SRC / "qtlight" / "equity_incentive_daily_slot_backtest.py"),
+    ("Low-turnover composite", SRC / "qtlight" / "china_layered_composite_low_turnover.py"),
 )
 
 EVENT_STUDY_STEP = ("Tushare equity incentive event study", SRC / "qtlight" / "equity_incentive_tushare_event_study.py")
