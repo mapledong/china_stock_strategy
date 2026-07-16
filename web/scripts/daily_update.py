@@ -18,7 +18,7 @@ SRC = ROOT / "src"
 BUILD = ROOT / "web" / "scripts" / "build_data.py"
 
 RESEARCH_STEPS: tuple[tuple[str, Path], ...] = (
-    ("ETF momentum (Tushare)", SRC / "qtlight" / "etf_momentum_rotation.py"),
+    ("ETF momentum (Tushare)", SRC / "qtlight" / "etf_momentum_tushare_backtest.py"),
     ("AH discount (Tushare)", SRC / "qtlight" / "ah_tushare_backtest.py"),
     ("Dividend / ChiNext rotation", SRC / "qtlight" / "dividend_chinext_momentum_research.py"),
     ("Equity incentive daily slots", SRC / "qtlight" / "equity_incentive_daily_slot_backtest.py"),

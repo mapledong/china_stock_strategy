@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 16
+DATA_VERSION = 18
 SRC = ROOT / "src"
 WEB_DIR = Path(__file__).resolve().parents[1]
 INDEX_HTML = WEB_DIR / "index.html"
@@ -509,12 +509,17 @@ def build_ah() -> dict:
         ]
     )
 
+    # Monthly holdings are labeled by calendar month-end; clip to last NAV day
+    # so an incomplete month does not show a future date (e.g. 2026-07-31).
+    nav_end = nav_df.index.max().date().isoformat()
+    holdings_as_of = min(str(latest_date), nav_end)
+
     return {
         "id": "ah",
         "latest_rebalance": latest_date,
-        "holdings_as_of": latest_date,
+        "holdings_as_of": holdings_as_of,
         "holdings": current,
-        "projected_month_end": compute_ah_projection(current, latest_date),
+        "projected_month_end": compute_ah_projection(current, holdings_as_of),
         "metrics": {
             "cagr": float(metrics["cagr"]),
             "sharpe": float(metrics["sharpe"]),

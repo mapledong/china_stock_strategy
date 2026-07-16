@@ -1,6 +1,6 @@
 {
-  "data_version": 16,
-  "generated_at": "2026-07-16 21:09",
+  "data_version": 18,
+  "generated_at": "2026-07-16 22:07",
   "strategy_order": [
     "composite",
     "etf",
@@ -12,8 +12,8 @@
     "composite": {
       "id": "composite",
       "featured_variant": "low_turnover_AH50_DivChi30_Inc2pct",
-      "latest_rebalance": "2026-03-31",
-      "holdings_as_of": "2026-06-26",
+      "latest_rebalance": "2026-06-30",
+      "holdings_as_of": "2026-07-16",
       "holdings": [
         {
           "sleeve": "industry",
@@ -29,105 +29,14 @@
           "sleeve": "ah",
           "sleeve_zh": "AH折价",
           "sleeve_en": "AH discount",
-          "symbol": "603986",
-          "name": "兆易创新",
-          "name_en": "兆易创新",
-          "weight": 0.11194002831189885,
-          "sleeve_weight": 0.2238800566237977,
-          "pair": "兆易创新(603986/03986)",
-          "pair_en": "GigaDevice (603986/03986)",
-          "ah_premium": -0.2707742306723198
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "688008",
-          "name": "澜起科技",
-          "name_en": "澜起科技",
-          "weight": 0.07456976180821635,
-          "sleeve_weight": 0.1491395236164327,
-          "pair": "澜起科技(688008/06809)",
-          "pair_en": "Montage Technology (688008/06809)",
-          "ah_premium": -0.2691502937114394
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "002768",
-          "name": "国恩股份",
-          "name_en": "国恩股份",
-          "weight": 0.05959409242448565,
-          "sleeve_weight": 0.1191881848489713,
-          "pair": "国恩股份(002768/02768)",
-          "pair_en": "Guoen Co. (002768/02768)",
-          "ah_premium": 0.2635527323236621
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "603259",
-          "name": "药明康德",
-          "name_en": "药明康德",
-          "weight": 0.0428122985478325,
-          "sleeve_weight": 0.085624597095665,
-          "pair": "药明康德(603259/02359)",
-          "pair_en": "WuXi AppTec (603259/02359)",
-          "ah_premium": -0.0990164969387428
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "000338",
-          "name": "潍柴动力",
-          "name_en": "潍柴动力",
-          "weight": 0.04089437378109815,
-          "sleeve_weight": 0.0817887475621963,
-          "pair": "潍柴动力(000338/02338)",
-          "pair_en": "Weichai Power (000338/02338)",
-          "ah_premium": -0.0193289129774983
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "000333",
-          "name": "美的集团",
-          "name_en": "美的集团",
-          "weight": 0.03784103379227845,
-          "sleeve_weight": 0.0756820675845569,
-          "pair": "美的集团(000333/00300)",
-          "pair_en": "Midea Group (000333/00300)",
-          "ah_premium": 0.0894654006785995
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "300750",
-          "name": "宁德时代",
-          "name_en": "CATL",
-          "weight": 0.03530780001569705,
-          "sleeve_weight": 0.0706156000313941,
-          "pair": "宁德时代(300750/03750)",
-          "pair_en": "CATL (300750/03750)",
-          "ah_premium": -0.3419351386502872
-        },
-        {
-          "sleeve": "ah",
-          "sleeve_zh": "AH折价",
-          "sleeve_en": "AH discount",
-          "symbol": "600036",
-          "name": "招商银行",
-          "name_en": "招商银行",
-          "weight": 0.03346594604471505,
-          "sleeve_weight": 0.0669318920894301,
-          "pair": "招商银行(600036/03968)",
-          "pair_en": "China Merchants Bank (600036/03968)",
-          "ah_premium": -0.0675092994963811
+          "symbol": "601899",
+          "name": "紫金矿业",
+          "name_en": "紫金矿业",
+          "weight": 0.06033046563158585,
+          "sleeve_weight": 0.1206609312631717,
+          "pair": "XD紫金矿(601899/02899)",
+          "pair_en": "Zijin Mining (601899/02899)",
+          "ah_premium": 0.0588919829445757
         },
         {
           "sleeve": "ah",
@@ -136,11 +45,37 @@
           "symbol": "600031",
           "name": "三一重工",
           "name_en": "Sany Heavy Industry",
-          "weight": 0.03223950820522915,
-          "sleeve_weight": 0.0644790164104583,
+          "weight": 0.056307923166827,
+          "sleeve_weight": 0.112615846333654,
           "pair": "三一重工(600031/06031)",
           "pair_en": "Sany Heavy Industry (600031/06031)",
-          "ah_premium": 0.0685337786411945
+          "ah_premium": 0.0756499416616123
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "600036",
+          "name": "招商银行",
+          "name_en": "招商银行",
+          "weight": 0.05581626649505625,
+          "sleeve_weight": 0.1116325329901125,
+          "pair": "招商银行(600036/03968)",
+          "pair_en": "China Merchants Bank (600036/03968)",
+          "ah_premium": -0.0879354937282749
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "000333",
+          "name": "美的集团",
+          "name_en": "美的集团",
+          "weight": 0.0547354391514824,
+          "sleeve_weight": 0.1094708783029648,
+          "pair": "美的集团(000333/00300)",
+          "pair_en": "Midea Group (000333/00300)",
+          "ah_premium": 0.0553010908054962
         },
         {
           "sleeve": "ah",
@@ -149,11 +84,76 @@
           "symbol": "600276",
           "name": "恒瑞医药",
           "name_en": "恒瑞医药",
-          "weight": 0.0313351570685485,
-          "sleeve_weight": 0.062670314137097,
+          "weight": 0.05391959075016,
+          "sleeve_weight": 0.10783918150032,
           "pair": "恒瑞医药(600276/01276)",
           "pair_en": "Hengrui Medicine (600276/01276)",
-          "ah_premium": -0.0366407952773271
+          "ah_premium": 0.0381757356127989
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "603259",
+          "name": "药明康德",
+          "name_en": "药明康德",
+          "weight": 0.0525358511464537,
+          "sleeve_weight": 0.1050717022929074,
+          "pair": "药明康德(603259/02359)",
+          "pair_en": "WuXi AppTec (603259/02359)",
+          "ah_premium": -0.0650953598502495
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "300750",
+          "name": "宁德时代",
+          "name_en": "CATL",
+          "weight": 0.04941114387078395,
+          "sleeve_weight": 0.0988222877415679,
+          "pair": "宁德时代(300750/03750)",
+          "pair_en": "CATL (300750/03750)",
+          "ah_premium": -0.3538944992289839
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "000338",
+          "name": "潍柴动力",
+          "name_en": "潍柴动力",
+          "weight": 0.04780449017196475,
+          "sleeve_weight": 0.0956089803439295,
+          "pair": "潍柴动力(000338/02338)",
+          "pair_en": "Weichai Power (000338/02338)",
+          "ah_premium": -0.0777491221411502
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "688008",
+          "name": "澜起科技",
+          "name_en": "澜起科技",
+          "weight": 0.03461555933562005,
+          "sleeve_weight": 0.0692311186712401,
+          "pair": "澜起科技(688008/06809)",
+          "pair_en": "Montage Technology (688008/06809)",
+          "ah_premium": -0.2301974941962583
+        },
+        {
+          "sleeve": "ah",
+          "sleeve_zh": "AH折价",
+          "sleeve_en": "AH discount",
+          "symbol": "603986",
+          "name": "兆易创新",
+          "name_en": "兆易创新",
+          "weight": 0.03452327028006595,
+          "sleeve_weight": 0.0690465405601319,
+          "pair": "兆易创新(603986/03986)",
+          "pair_en": "GigaDevice (603986/03986)",
+          "ah_premium": -0.2082681471592308
         },
         {
           "sleeve": "incentive",
@@ -256,7 +256,7 @@
         }
       ],
       "holdings_all_count": 32,
-      "cash_weight": 0.050000000000000044,
+      "cash_weight": 0.04999999999999982,
       "sleeve_weights": {
         "ah": 0.5,
         "industry": 0.3,
@@ -267,78 +267,78 @@
           "weight": 0.5,
           "holdings": [
             {
-              "pair": "兆易创新(603986/03986)",
-              "symbol": "603986",
-              "weight": 0.2238800566237977,
-              "ah_premium": -0.2707742306723198,
-              "pair_en": "GigaDevice (603986/03986)"
-            },
-            {
-              "pair": "澜起科技(688008/06809)",
-              "symbol": "688008",
-              "weight": 0.1491395236164327,
-              "ah_premium": -0.2691502937114394,
-              "pair_en": "Montage Technology (688008/06809)"
-            },
-            {
-              "pair": "国恩股份(002768/02768)",
-              "symbol": "002768",
-              "weight": 0.1191881848489713,
-              "ah_premium": 0.2635527323236621,
-              "pair_en": "Guoen Co. (002768/02768)"
-            },
-            {
-              "pair": "药明康德(603259/02359)",
-              "symbol": "603259",
-              "weight": 0.085624597095665,
-              "ah_premium": -0.0990164969387428,
-              "pair_en": "WuXi AppTec (603259/02359)"
-            },
-            {
-              "pair": "潍柴动力(000338/02338)",
-              "symbol": "000338",
-              "weight": 0.0817887475621963,
-              "ah_premium": -0.0193289129774983,
-              "pair_en": "Weichai Power (000338/02338)"
-            },
-            {
-              "pair": "美的集团(000333/00300)",
-              "symbol": "000333",
-              "weight": 0.0756820675845569,
-              "ah_premium": 0.0894654006785995,
-              "pair_en": "Midea Group (000333/00300)"
-            },
-            {
-              "pair": "宁德时代(300750/03750)",
-              "symbol": "300750",
-              "weight": 0.0706156000313941,
-              "ah_premium": -0.3419351386502872,
-              "pair_en": "CATL (300750/03750)"
-            },
-            {
-              "pair": "招商银行(600036/03968)",
-              "symbol": "600036",
-              "weight": 0.0669318920894301,
-              "ah_premium": -0.0675092994963811,
-              "pair_en": "China Merchants Bank (600036/03968)"
+              "pair": "XD紫金矿(601899/02899)",
+              "symbol": "601899",
+              "weight": 0.1206609312631717,
+              "ah_premium": 0.0588919829445757,
+              "pair_en": "Zijin Mining (601899/02899)"
             },
             {
               "pair": "三一重工(600031/06031)",
               "symbol": "600031",
-              "weight": 0.0644790164104583,
-              "ah_premium": 0.0685337786411945,
+              "weight": 0.112615846333654,
+              "ah_premium": 0.0756499416616123,
               "pair_en": "Sany Heavy Industry (600031/06031)"
+            },
+            {
+              "pair": "招商银行(600036/03968)",
+              "symbol": "600036",
+              "weight": 0.1116325329901125,
+              "ah_premium": -0.0879354937282749,
+              "pair_en": "China Merchants Bank (600036/03968)"
+            },
+            {
+              "pair": "美的集团(000333/00300)",
+              "symbol": "000333",
+              "weight": 0.1094708783029648,
+              "ah_premium": 0.0553010908054962,
+              "pair_en": "Midea Group (000333/00300)"
             },
             {
               "pair": "恒瑞医药(600276/01276)",
               "symbol": "600276",
-              "weight": 0.062670314137097,
-              "ah_premium": -0.0366407952773271,
+              "weight": 0.10783918150032,
+              "ah_premium": 0.0381757356127989,
               "pair_en": "Hengrui Medicine (600276/01276)"
+            },
+            {
+              "pair": "药明康德(603259/02359)",
+              "symbol": "603259",
+              "weight": 0.1050717022929074,
+              "ah_premium": -0.0650953598502495,
+              "pair_en": "WuXi AppTec (603259/02359)"
+            },
+            {
+              "pair": "宁德时代(300750/03750)",
+              "symbol": "300750",
+              "weight": 0.0988222877415679,
+              "ah_premium": -0.3538944992289839,
+              "pair_en": "CATL (300750/03750)"
+            },
+            {
+              "pair": "潍柴动力(000338/02338)",
+              "symbol": "000338",
+              "weight": 0.0956089803439295,
+              "ah_premium": -0.0777491221411502,
+              "pair_en": "Weichai Power (000338/02338)"
+            },
+            {
+              "pair": "澜起科技(688008/06809)",
+              "symbol": "688008",
+              "weight": 0.0692311186712401,
+              "ah_premium": -0.2301974941962583,
+              "pair_en": "Montage Technology (688008/06809)"
+            },
+            {
+              "pair": "兆易创新(603986/03986)",
+              "symbol": "603986",
+              "weight": 0.0690465405601319,
+              "ah_premium": -0.2082681471592308,
+              "pair_en": "GigaDevice (603986/03986)"
             }
           ],
-          "holdings_as_of": "2026-06-26",
-          "latest_rebalance": "2026-03-31",
+          "holdings_as_of": "2026-07-16",
+          "latest_rebalance": "2026-06-30",
           "weight_note_zh": "层内权重随价格漂移（季内不调仓）",
           "weight_note_en": "Intra-sleeve weights drift with prices (no rebalance intra-quarter)"
         },
@@ -491,119 +491,88 @@
         }
       },
       "projected_month_end": {
-        "signal_date": "2026-06-30",
-        "month": "2026-06",
+        "signal_date": "2026-07-31",
+        "month": "2026-07",
         "unchanged": false,
         "ah": {
-          "unchanged": false,
-          "signal_date": "2026-06-30",
+          "unchanged": true,
+          "signal_date": "2026-07-31",
           "holdings": [
             {
-              "pair": "宁德时代(300750/03750)",
-              "symbol": "300750",
-              "weight": 0.1,
-              "ah_premium": -0.3532604421985559
-            },
-            {
-              "pair": "澜起科技(688008/06809)",
-              "symbol": "688008",
-              "weight": 0.1,
-              "ah_premium": -0.2795680522061988
-            },
-            {
-              "pair": "兆易创新(603986/03986)",
-              "symbol": "603986",
-              "weight": 0.1,
-              "ah_premium": -0.1787131905041897
-            },
-            {
-              "pair": "潍柴动力(000338/02338)",
-              "symbol": "000338",
-              "weight": 0.1,
-              "ah_premium": -0.1021687686745463
-            },
-            {
-              "pair": "招商银行(600036/03968)",
-              "symbol": "600036",
-              "weight": 0.1,
-              "ah_premium": -0.0696902836043276
-            },
-            {
-              "pair": "药明康德(603259/02359)",
-              "symbol": "603259",
-              "weight": 0.1,
-              "ah_premium": -0.0611155238272326
-            },
-            {
               "pair": "XD紫金矿(601899/02899)",
               "symbol": "601899",
-              "weight": 0.1,
-              "ah_premium": 0.0558586150607476
-            },
-            {
-              "pair": "恒瑞医药(600276/01276)",
-              "symbol": "600276",
-              "weight": 0.1,
-              "ah_premium": 0.0617639141721166
-            },
-            {
-              "pair": "胜宏科技(300476/02476)",
-              "symbol": "300476",
-              "weight": 0.1,
-              "ah_premium": 0.0780468752740786
-            },
-            {
-              "pair": "交通银行(601328/03328)",
-              "symbol": "601328",
-              "weight": 0.1,
-              "ah_premium": 0.0788989978558563
-            }
-          ],
-          "entries": [
-            {
-              "pair": "XD紫金矿(601899/02899)",
-              "symbol": "601899",
-              "weight": 0.1,
-              "ah_premium": 0.0558586150607476
-            },
-            {
-              "pair": "胜宏科技(300476/02476)",
-              "symbol": "300476",
-              "weight": 0.1,
-              "ah_premium": 0.0780468752740786
-            },
-            {
-              "pair": "交通银行(601328/03328)",
-              "symbol": "601328",
-              "weight": 0.1,
-              "ah_premium": 0.0788989978558563
-            }
-          ],
-          "exits": [
-            {
-              "pair": "国恩股份(002768/02768)",
-              "symbol": "002768",
-              "weight": 0.1191881848489713,
-              "ah_premium": 0.2635527323236621,
-              "pair_en": "Guoen Co. (002768/02768)"
-            },
-            {
-              "pair": "美的集团(000333/00300)",
-              "symbol": "000333",
-              "weight": 0.0756820675845569,
-              "ah_premium": 0.0894654006785995,
-              "pair_en": "Midea Group (000333/00300)"
+              "weight": 0.1206609312631717,
+              "ah_premium": 0.0588919829445757,
+              "pair_en": "Zijin Mining (601899/02899)"
             },
             {
               "pair": "三一重工(600031/06031)",
               "symbol": "600031",
-              "weight": 0.0644790164104583,
-              "ah_premium": 0.0685337786411945,
+              "weight": 0.112615846333654,
+              "ah_premium": 0.0756499416616123,
               "pair_en": "Sany Heavy Industry (600031/06031)"
+            },
+            {
+              "pair": "招商银行(600036/03968)",
+              "symbol": "600036",
+              "weight": 0.1116325329901125,
+              "ah_premium": -0.0879354937282749,
+              "pair_en": "China Merchants Bank (600036/03968)"
+            },
+            {
+              "pair": "美的集团(000333/00300)",
+              "symbol": "000333",
+              "weight": 0.1094708783029648,
+              "ah_premium": 0.0553010908054962,
+              "pair_en": "Midea Group (000333/00300)"
+            },
+            {
+              "pair": "恒瑞医药(600276/01276)",
+              "symbol": "600276",
+              "weight": 0.10783918150032,
+              "ah_premium": 0.0381757356127989,
+              "pair_en": "Hengrui Medicine (600276/01276)"
+            },
+            {
+              "pair": "药明康德(603259/02359)",
+              "symbol": "603259",
+              "weight": 0.1050717022929074,
+              "ah_premium": -0.0650953598502495,
+              "pair_en": "WuXi AppTec (603259/02359)"
+            },
+            {
+              "pair": "宁德时代(300750/03750)",
+              "symbol": "300750",
+              "weight": 0.0988222877415679,
+              "ah_premium": -0.3538944992289839,
+              "pair_en": "CATL (300750/03750)"
+            },
+            {
+              "pair": "潍柴动力(000338/02338)",
+              "symbol": "000338",
+              "weight": 0.0956089803439295,
+              "ah_premium": -0.0777491221411502,
+              "pair_en": "Weichai Power (000338/02338)"
+            },
+            {
+              "pair": "澜起科技(688008/06809)",
+              "symbol": "688008",
+              "weight": 0.0692311186712401,
+              "ah_premium": -0.2301974941962583,
+              "pair_en": "Montage Technology (688008/06809)"
+            },
+            {
+              "pair": "兆易创新(603986/03986)",
+              "symbol": "603986",
+              "weight": 0.0690465405601319,
+              "ah_premium": -0.2082681471592308,
+              "pair_en": "GigaDevice (603986/03986)"
             }
           ],
-          "note_zh": "季末信号月：对比 Top10 折价池，次月首个交易日执行调入/调出（非季内仅漂移权重）。",
-          "note_en": "Quarter-end signal month: Top-10 discount pool; trades next month's first session (intra-quarter weights drift)."
+          "entries": [],
+          "exits": [],
+          "note_zh": "AH 季频调仓（3/6/9/12 月末信号，次月首个交易日执行）；本月持有缓冲，无需调整。",
+          "note_en": "AH rebalances quarterly (Mar/Jun/Sep/Dec); hold buffer this month — no change."
         },
         "industry": {
           "signal_date": "2026-07-16",
@@ -621,38 +590,24 @@
         },
         "incentive": {
           "unchanged": false,
-          "signal_date": "2026-06-30",
-          "entries": [
+          "signal_date": "2026-07-31",
+          "entries": [],
+          "exits": [
             {
-              "symbol": "000100",
-              "weight": 0.02,
-              "trade_date": "2026-06-30",
-              "reason": "monthly_incremental",
-              "status": "pending"
+              "symbol": "000967",
+              "weight": 0.0022879322090998506,
+              "trade_date": "2026-07-31",
+              "reason": "expiry",
+              "status": "scheduled"
             },
             {
-              "symbol": "002493",
-              "weight": 0.02,
-              "trade_date": "2026-06-30",
-              "reason": "monthly_incremental",
-              "status": "pending"
-            },
-            {
-              "symbol": "000651",
-              "weight": 0.02,
-              "trade_date": "2026-06-30",
-              "reason": "monthly_incremental",
-              "status": "pending"
-            },
-            {
-              "symbol": "600031",
-              "weight": 0.02,
-              "trade_date": "2026-06-30",
-              "reason": "monthly_incremental",
-              "status": "pending"
+              "symbol": "002371",
+              "weight": 0.0022879322090998506,
+              "trade_date": "2026-07-31",
+              "reason": "expiry",
+              "status": "scheduled"
             }
           ],
-          "exits": [],
           "note_zh": "月频增量：公告后首个可交易月纳入，持有 9 个月；总敞口超 15% 时等比压缩。",
           "note_en": "Monthly incremental: first tradable month after announcement, 9M hold; scale to 15% cap."
         }
@@ -666,24 +621,24 @@
         "Top 20 = look-through weights (AH/industry sleeves include price drift); month-end panel shows per-sleeve entries/exits or hold-buffer notes."
       ],
       "metrics": {
-        "cagr": 0.1985607837943486,
-        "sharpe": 1.2006367736301633,
-        "max_drawdown": -0.19005893309215494,
-        "final_nav": 4.442076860875645,
-        "turnover_per_year": 2.0181613271431726
+        "cagr": 0.19250826304023705,
+        "sharpe": 1.1548831228737435,
+        "max_drawdown": -0.1900589330921566,
+        "final_nav": 4.302014453030062,
+        "turnover_per_year": 2.0119093581656236
       },
       "benchmark_metrics": {
-        "cagr": 0.02772081124893977,
-        "sharpe": 0.14334855529364426,
+        "cagr": 0.023143155779627334,
+        "sharpe": 0.11938754321466442,
         "max_drawdown": -0.4560262048486471,
-        "final_nav": 1.2524625867547687
+        "final_nav": 1.2087811762679173
       },
       "nav_start": "2018-04-02",
       "backtest_start": "2018-04-02",
-      "backtest_end": "2026-06-26",
+      "backtest_end": "2026-07-16",
       "cost_bps": 20.0,
       "nav_src": "nav/composite.json",
-      "nav_points": 1994
+      "nav_points": 2008
     },
     "etf": {
       "id": "etf",
@@ -772,170 +727,170 @@
     },
     "ah": {
       "id": "ah",
-      "latest_rebalance": "2026-06-30",
-      "holdings_as_of": "2026-06-30",
+      "latest_rebalance": "2026-07-31",
+      "holdings_as_of": "2026-07-16",
       "holdings": [
         {
-          "pair": "兆易创新(603986/03986)",
-          "weight": 0.15787576466471534,
-          "ah_premium": -0.17871319050418977,
-          "pair_en": "GigaDevice (603986/03986)"
+          "pair": "XD紫金矿(601899/02899)",
+          "weight": 0.12066093126317179,
+          "ah_premium": 0.09778656937059438,
+          "pair_en": "Zijin Mining (601899/02899)"
         },
         {
-          "pair": "药明康德(603259/02359)",
-          "weight": 0.11341167889251386,
-          "ah_premium": -0.06111552382723262,
-          "pair_en": "WuXi AppTec (603259/02359)"
-        },
-        {
-          "pair": "澜起科技(688008/06809)",
-          "weight": 0.10814943588902808,
-          "ah_premium": -0.27956805220619885,
-          "pair_en": "Montage Technology (688008/06809)"
-        },
-        {
-          "pair": "恒瑞医药(600276/01276)",
-          "weight": 0.09497988812754851,
-          "ah_premium": 0.061763914172116685,
-          "pair_en": "Hengrui Medicine (600276/01276)"
-        },
-        {
-          "pair": "交通银行(601328/03328)",
-          "weight": 0.09199871169164751,
-          "ah_premium": 0.0788989978558563,
-          "pair_en": "Bank of Communications (601328/03328)"
+          "pair": "三一重工(600031/06031)",
+          "weight": 0.11261584633365397,
+          "ah_premium": 0.14671434487798485,
+          "pair_en": "Sany Heavy Industry (600031/06031)"
         },
         {
           "pair": "招商银行(600036/03968)",
-          "weight": 0.0904293384185437,
-          "ah_premium": -0.06969028360432761,
+          "weight": 0.11163253299011247,
+          "ah_premium": -0.05767091964013771,
           "pair_en": "China Merchants Bank (600036/03968)"
         },
         {
-          "pair": "胜宏科技(300476/02476)",
-          "weight": 0.08956509903446205,
-          "ah_premium": 0.07804687527407861,
-          "pair_en": "Shengyi Technology (300476/02476)"
+          "pair": "美的集团(000333/00300)",
+          "weight": 0.10947087830296476,
+          "ah_premium": 0.032607310209374685,
+          "pair_en": "Midea Group (000333/00300)"
+        },
+        {
+          "pair": "恒瑞医药(600276/01276)",
+          "weight": 0.10783918150032004,
+          "ah_premium": 0.11903840522004883,
+          "pair_en": "Hengrui Medicine (600276/01276)"
+        },
+        {
+          "pair": "药明康德(603259/02359)",
+          "weight": 0.10507170229290748,
+          "ah_premium": -0.09201918784243523,
+          "pair_en": "WuXi AppTec (603259/02359)"
         },
         {
           "pair": "宁德时代(300750/03750)",
-          "weight": 0.08702491430879895,
-          "ah_premium": -0.3532604421985559,
+          "weight": 0.098822287741568,
+          "ah_premium": -0.3170094349631628,
           "pair_en": "CATL (300750/03750)"
         },
         {
-          "pair": "中国平安(601318/02318)",
-          "weight": 0.08698188188155352,
-          "ah_premium": 0.07926815989115954,
-          "pair_en": "Ping An Insurance (601318/02318)"
+          "pair": "潍柴动力(000338/02338)",
+          "weight": 0.09560898034392952,
+          "ah_premium": -0.07241843422247185,
+          "pair_en": "Weichai Power (000338/02338)"
         },
         {
-          "pair": "潍柴动力(000338/02338)",
-          "weight": 0.07958328709118832,
-          "ah_premium": -0.10216876867454638,
-          "pair_en": "Weichai Power (000338/02338)"
+          "pair": "澜起科技(688008/06809)",
+          "weight": 0.06923111867124014,
+          "ah_premium": -0.12227837169328315,
+          "pair_en": "Montage Technology (688008/06809)"
+        },
+        {
+          "pair": "兆易创新(603986/03986)",
+          "weight": 0.06904654056013196,
+          "ah_premium": -0.0066210901496913666,
+          "pair_en": "GigaDevice (603986/03986)"
         }
       ],
       "projected_month_end": {
-        "signal_date": "2026-06-30",
+        "signal_date": "2026-07-31",
         "holdings": [
           {
             "pair": "宁德时代(300750/03750)",
             "weight": 0.1,
-            "ah_premium": -0.3532604421985559,
+            "ah_premium": -0.3170094349631628,
             "pair_en": "CATL (300750/03750)"
           },
           {
             "pair": "澜起科技(688008/06809)",
             "weight": 0.1,
-            "ah_premium": -0.2795680522061988,
+            "ah_premium": -0.1222783716932831,
             "pair_en": "Montage Technology (688008/06809)"
           },
           {
-            "pair": "兆易创新(603986/03986)",
+            "pair": "药明康德(603259/02359)",
             "weight": 0.1,
-            "ah_premium": -0.1787131905041897,
-            "pair_en": "GigaDevice (603986/03986)"
+            "ah_premium": -0.0920191878424352,
+            "pair_en": "WuXi AppTec (603259/02359)"
           },
           {
             "pair": "潍柴动力(000338/02338)",
             "weight": 0.1,
-            "ah_premium": -0.1021687686745463,
+            "ah_premium": -0.0724184342224718,
             "pair_en": "Weichai Power (000338/02338)"
           },
           {
             "pair": "招商银行(600036/03968)",
             "weight": 0.1,
-            "ah_premium": -0.0696902836043276,
+            "ah_premium": -0.0576709196401377,
             "pair_en": "China Merchants Bank (600036/03968)"
           },
           {
-            "pair": "药明康德(603259/02359)",
+            "pair": "兆易创新(603986/03986)",
             "weight": 0.1,
-            "ah_premium": -0.0611155238272326,
-            "pair_en": "WuXi AppTec (603259/02359)"
+            "ah_premium": -0.0066210901496913,
+            "pair_en": "GigaDevice (603986/03986)"
+          },
+          {
+            "pair": "美的集团(000333/00300)",
+            "weight": 0.1,
+            "ah_premium": 0.0326073102093746,
+            "pair_en": "Midea Group (000333/00300)"
+          },
+          {
+            "pair": "中国平安(601318/02318)",
+            "weight": 0.1,
+            "ah_premium": 0.0709231587774954,
+            "pair_en": "Ping An Insurance (601318/02318)"
           },
           {
             "pair": "XD紫金矿(601899/02899)",
             "weight": 0.1,
-            "ah_premium": 0.0558586150607476,
+            "ah_premium": 0.0977865693705943,
             "pair_en": "Zijin Mining (601899/02899)"
           },
           {
             "pair": "恒瑞医药(600276/01276)",
             "weight": 0.1,
-            "ah_premium": 0.0617639141721166,
+            "ah_premium": 0.1190384052200488,
             "pair_en": "Hengrui Medicine (600276/01276)"
-          },
-          {
-            "pair": "胜宏科技(300476/02476)",
-            "weight": 0.1,
-            "ah_premium": 0.0780468752740786,
-            "pair_en": "Shengyi Technology (300476/02476)"
-          },
-          {
-            "pair": "交通银行(601328/03328)",
-            "weight": 0.1,
-            "ah_premium": 0.0788989978558563,
-            "pair_en": "Bank of Communications (601328/03328)"
           }
         ],
         "entries": [
           {
-            "pair": "XD紫金矿(601899/02899)",
+            "pair": "中国平安(601318/02318)",
             "weight": 0.1,
-            "ah_premium": 0.0558586150607476,
-            "pair_en": "Zijin Mining (601899/02899)"
+            "ah_premium": 0.0709231587774954,
+            "pair_en": "Ping An Insurance (601318/02318)"
           }
         ],
         "exits": [
           {
-            "pair": "中国平安(601318/02318)",
-            "weight": 0.08698188188155352,
-            "ah_premium": 0.07926815989115954,
-            "pair_en": "Ping An Insurance (601318/02318)"
+            "pair": "三一重工(600031/06031)",
+            "weight": 0.11261584633365397,
+            "ah_premium": 0.14671434487798485,
+            "pair_en": "Sany Heavy Industry (600031/06031)"
           }
         ],
         "unchanged": false
       },
       "metrics": {
-        "cagr": 0.20332614991069353,
-        "sharpe": 1.0091566610284528,
+        "cagr": 0.20290405093945107,
+        "sharpe": 1.0009610665059534,
         "max_drawdown": -0.3215855112125964,
-        "final_equity": 6.9505154820382975,
-        "turnover_per_year": 4.511356146799472,
-        "average_names": 9.841794569067297
+        "final_equity": 6.995426142260544,
+        "turnover_per_year": 4.5551294767929535,
+        "average_names": 9.8426614481409
       },
       "benchmark_metrics": {
-        "cagr": 0.050719076828748655,
-        "sharpe": 0.2673565615425724,
-        "max_drawdown": -0.421570282605196
+        "cagr": 0.04727257067503632,
+        "sharpe": 0.24875840993727777,
+        "max_drawdown": -0.421570282605194
       },
       "nav_start": "2016-01-04",
       "cost_bps": 30.0,
       "universe_pairs": 194,
       "nav_src": "nav/ah.json",
-      "nav_points": 2541
+      "nav_points": 2555
     },
     "dividend": {
       "id": "dividend",
@@ -1007,105 +962,105 @@
       "id": "equity",
       "featured_variant": "daily_7x14_ma200_swap_esop_filter",
       "execution_note": "Daily event-driven entries at 7% per slot; displayed weights drift with prices since entry (no intra-hold rebalance).",
-      "latest_rebalance": "2026-06-30",
-      "holdings_as_of": "2026-06-30",
+      "latest_rebalance": "2026-07-16",
+      "holdings_as_of": "2026-07-16",
       "holdings": [
         {
           "symbol": "002203",
           "name": "海亮股份",
           "name_en": "海亮股份",
-          "weight": 0.09523795276718047,
+          "weight": 0.08952743593501522,
           "entry_weight": 0.07
         },
         {
           "symbol": "000967",
           "name": "盈峰环境",
           "name_en": "盈峰环境",
-          "weight": 0.09192375585478788,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "688301",
-          "name": "奕瑞科技",
-          "name_en": "奕瑞科技",
-          "weight": 0.09084464682196432,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "600141",
-          "name": "兴发集团",
-          "name_en": "兴发集团",
-          "weight": 0.08694841547946994,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "002273",
-          "name": "水晶光电",
-          "name_en": "水晶光电",
-          "weight": 0.08528815682904839,
+          "weight": 0.08214522793307935,
           "entry_weight": 0.07
         },
         {
           "symbol": "688002",
           "name": "睿创微纳",
           "name_en": "睿创微纳",
-          "weight": 0.07942156673972944,
+          "weight": 0.08063167182302906,
           "entry_weight": 0.07
         },
         {
-          "symbol": "000100",
-          "name": "TCL 科技",
-          "name_en": "TCL 科技",
-          "weight": 0.0723708513472318,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "000301",
-          "name": "东方盛虹",
-          "name_en": "东方盛虹",
-          "weight": 0.0645113469352887,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "002318",
-          "name": "久立特材",
-          "name_en": "久立特材",
-          "weight": 0.059245258648013506,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "300012",
-          "name": "华测检测",
-          "name_en": "华测检测",
-          "weight": 0.059111869584694915,
+          "symbol": "002273",
+          "name": "水晶光电",
+          "name_en": "水晶光电",
+          "weight": 0.0803647668270415,
           "entry_weight": 0.07
         },
         {
           "symbol": "000739",
           "name": "普洛药业",
           "name_en": "普洛药业",
-          "weight": 0.05523390405416501,
+          "weight": 0.08031787856283545,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "688301",
+          "name": "奕瑞科技",
+          "name_en": "奕瑞科技",
+          "weight": 0.07986778759096695,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "000301",
+          "name": "东方盛虹",
+          "name_en": "东方盛虹",
+          "weight": 0.07377151027292002,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "000100",
+          "name": "TCL 科技",
+          "name_en": "TCL 科技",
+          "weight": 0.07150980781882504,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "300012",
+          "name": "华测检测",
+          "name_en": "华测检测",
+          "weight": 0.06858615063009617,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "600141",
+          "name": "兴发集团",
+          "name_en": "兴发集团",
+          "weight": 0.06423639112151625,
           "entry_weight": 0.07
         },
         {
           "symbol": "002648",
           "name": "卫星石化",
           "name_en": "卫星石化",
-          "weight": 0.05133212246561043,
+          "weight": 0.05773030837308394,
           "entry_weight": 0.07
         },
         {
           "symbol": "603077",
           "name": "和邦生物",
           "name_en": "和邦生物",
-          "weight": 0.04958718933708408,
+          "weight": 0.05523212036624685,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "002318",
+          "name": "久立特材",
+          "name_en": "久立特材",
+          "weight": 0.05118832514754342,
           "entry_weight": 0.07
         },
         {
           "symbol": "601799",
           "name": "星宇股份",
           "name_en": "星宇股份",
-          "weight": 0.03894296313573156,
+          "weight": 0.04489061759780114,
           "entry_weight": 0.07
         }
       ],
@@ -1113,12 +1068,12 @@
         "positions": 14,
         "max_slots": 14,
         "slot_weight": 0.07,
-        "gross_weight": 0.9800000000000005,
+        "gross_weight": 0.9800000000000004,
         "book_gross_weight": 0.9800000000000004,
         "hold_months": 9,
         "replacement": "ma200_swap",
         "universe": "hs300_csi500",
-        "avg_positions": 9.832285938727416
+        "avg_positions": 9.851837372947616
       },
       "rules_zh": [
         "事件：股权激励 strict core；员工持股仅限「X年/第N期员工持股计划（草案）」。",
@@ -1208,15 +1163,15 @@
       ],
       "watchlist_month": "2026-06-30",
       "projected_month_end": {
-        "signal_date": "2026-06-30",
-        "month": "2026-06",
-        "as_of": "2026-06-30",
+        "signal_date": "2026-07-16",
+        "month": "2026-07",
+        "as_of": "2026-07-16",
         "holdings": [
           {
             "symbol": "000100",
             "name": "TCL 科技",
             "name_en": "TCL 科技",
-            "weight": 0.0723708513472318,
+            "weight": 0.07150980781882504,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1225,7 +1180,7 @@
             "symbol": "000301",
             "name": "东方盛虹",
             "name_en": "东方盛虹",
-            "weight": 0.0645113469352887,
+            "weight": 0.07377151027292002,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1234,7 +1189,7 @@
             "symbol": "000739",
             "name": "普洛药业",
             "name_en": "普洛药业",
-            "weight": 0.05523390405416501,
+            "weight": 0.08031787856283545,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1243,7 +1198,7 @@
             "symbol": "000967",
             "name": "盈峰环境",
             "name_en": "盈峰环境",
-            "weight": 0.09192375585478788,
+            "weight": 0.08214522793307935,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1252,7 +1207,7 @@
             "symbol": "002203",
             "name": "海亮股份",
             "name_en": "海亮股份",
-            "weight": 0.09523795276718047,
+            "weight": 0.08952743593501522,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1261,7 +1216,7 @@
             "symbol": "002273",
             "name": "水晶光电",
             "name_en": "水晶光电",
-            "weight": 0.08528815682904839,
+            "weight": 0.0803647668270415,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1270,7 +1225,7 @@
             "symbol": "002318",
             "name": "久立特材",
             "name_en": "久立特材",
-            "weight": 0.059245258648013506,
+            "weight": 0.05118832514754342,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1279,7 +1234,7 @@
             "symbol": "002648",
             "name": "卫星石化",
             "name_en": "卫星石化",
-            "weight": 0.05133212246561043,
+            "weight": 0.05773030837308394,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1288,7 +1243,7 @@
             "symbol": "300012",
             "name": "华测检测",
             "name_en": "华测检测",
-            "weight": 0.059111869584694915,
+            "weight": 0.06858615063009617,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1297,7 +1252,7 @@
             "symbol": "600141",
             "name": "兴发集团",
             "name_en": "兴发集团",
-            "weight": 0.08694841547946994,
+            "weight": 0.06423639112151625,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1306,7 +1261,7 @@
             "symbol": "601799",
             "name": "星宇股份",
             "name_en": "星宇股份",
-            "weight": 0.03894296313573156,
+            "weight": 0.04489061759780114,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1315,7 +1270,7 @@
             "symbol": "603077",
             "name": "和邦生物",
             "name_en": "和邦生物",
-            "weight": 0.04958718933708408,
+            "weight": 0.05523212036624685,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1324,7 +1279,7 @@
             "symbol": "688002",
             "name": "睿创微纳",
             "name_en": "睿创微纳",
-            "weight": 0.07942156673972944,
+            "weight": 0.08063167182302906,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1333,64 +1288,26 @@
             "symbol": "688301",
             "name": "奕瑞科技",
             "name_en": "奕瑞科技",
-            "weight": 0.09084464682196432,
+            "weight": 0.07986778759096695,
             "reason": "",
             "trade_date": "",
             "status": "held"
           }
         ],
-        "entries": [
-          {
-            "symbol": "000100",
-            "name": "TCL 科技",
-            "name_en": "TCL 科技",
-            "weight": 0.07,
-            "reason": "esop",
-            "trade_date": "2026-06-04",
-            "status": "executed"
-          },
-          {
-            "symbol": "688002",
-            "name": "睿创微纳",
-            "name_en": "睿创微纳",
-            "weight": 0.07,
-            "reason": "esop",
-            "trade_date": "2026-06-08",
-            "status": "executed"
-          }
-        ],
-        "exits": [
-          {
-            "symbol": "002625",
-            "name": "光启技术",
-            "name_en": "光启技术",
-            "weight": 0.07,
-            "reason": "ma200_swap",
-            "trade_date": "2026-06-04",
-            "status": "executed"
-          },
-          {
-            "symbol": "601899",
-            "name": "紫金矿业",
-            "name_en": "紫金矿业",
-            "weight": 0.07,
-            "reason": "ma200_swap",
-            "trade_date": "2026-06-08",
-            "status": "executed"
-          }
-        ],
-        "unchanged": false
+        "entries": [],
+        "exits": [],
+        "unchanged": true
       },
       "metrics": {
-        "cagr": 0.20133967238876527,
-        "sharpe": 0.9818841064367586,
-        "max_drawdown": -0.2673322025779291,
-        "final_nav": 5.048899403789085,
-        "turnover_per_year": 2.416562663185379,
-        "excess_cagr": 0.17091865021274422
+        "cagr": 0.18294999427369452,
+        "sharpe": 0.8862758502552764,
+        "max_drawdown": -0.26733220257792945,
+        "final_nav": 4.438725569626442,
+        "turnover_per_year": 2.4065093603744154,
+        "excess_cagr": 0.15966045689773156
       },
       "benchmark_metrics": {
-        "cagr": 0.03042102217602105,
+        "cagr": 0.023289537375962954,
         "sharpe": null,
         "max_drawdown": null,
         "final_nav": null
@@ -1483,10 +1400,10 @@
       "core_symbols": 1191,
       "nav_start": "2017-09-01",
       "backtest_start": "2017-09-01",
-      "backtest_end": "2026-06-30",
+      "backtest_end": "2026-07-16",
       "cost_bps": 20.0,
       "nav_src": "nav/equity.json",
-      "nav_points": 2139
+      "nav_points": 2151
     }
   }
 }
