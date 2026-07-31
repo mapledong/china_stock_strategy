@@ -654,15 +654,30 @@ def compute_dividend_chinext_state() -> dict:
     ]
     comparison = _compare_holdings(drift_holdings, projected_holdings, "symbol")
 
-    load_prices("tushare")
+    # HS300 for metrics/NAV: use saved pair NAV when present so export works offline.
     nav_start = summary["pair_best_metrics"]["start_date"]
     start_dt = _first_on_or_after(equity.index, nav_start)
     window = equity.index >= start_dt
 
     strategy_nav = (equity / equity.loc[start_dt]).loc[window]
-    hs300_close = get_hs300_index().reindex(equity.index).ffill()
-    hs300_nav = (hs300_close / hs300_close.loc[start_dt]).loc[window]
-    hs300_returns = hs300_close.pct_change(fill_method=None).fillna(0.0)
+    saved_nav_path = DIVIDEND_CHINEXT_DIR / "pair_best_strategy_daily_nav.csv"
+    if saved_nav_path.exists():
+        saved_nav = pd.read_csv(saved_nav_path, index_col=0, parse_dates=True).sort_index()
+        if "hs300_nav" in saved_nav.columns:
+            hs300_nav = saved_nav["hs300_nav"].reindex(strategy_nav.index).ffill()
+            if hs300_nav.isna().all() or float(hs300_nav.loc[start_dt]) == 0:
+                hs300_nav = strategy_nav * 0 + 1.0
+            else:
+                hs300_nav = hs300_nav / hs300_nav.loc[start_dt]
+        else:
+            load_prices("tushare")
+            hs300_close = get_hs300_index().reindex(equity.index).ffill()
+            hs300_nav = (hs300_close / hs300_close.loc[start_dt]).loc[window]
+    else:
+        load_prices("tushare")
+        hs300_close = get_hs300_index().reindex(equity.index).ffill()
+        hs300_nav = (hs300_close / hs300_close.loc[start_dt]).loc[window]
+    hs300_returns = hs300_nav.pct_change(fill_method=None).fillna(0.0)
 
     daily = pd.DataFrame({"strategy_nav": strategy_nav, "hs300_nav": hs300_nav})
     nav_rows = daily_nav_rows(daily, "strategy_nav", "hs300_nav")
