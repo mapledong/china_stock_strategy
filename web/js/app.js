@@ -245,7 +245,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 20;
+const APP_VERSION = 19;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
