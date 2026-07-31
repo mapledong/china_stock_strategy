@@ -1,6 +1,6 @@
 {
-  "data_version": 20,
-  "generated_at": "2026-07-29 18:01",
+  "data_version": 21,
+  "generated_at": "2026-07-31 19:42",
   "strategy_order": [
     "composite",
     "etf",
@@ -991,7 +991,7 @@
       },
       "benchmark_metrics": {
         "cagr": 0.029794984215847586,
-        "sharpe": 0.15882338638477553,
+        "sharpe": 0.1588233863847755,
         "max_drawdown": -0.4560262048486472,
         "final_nav": 1.2364075229063678
       },

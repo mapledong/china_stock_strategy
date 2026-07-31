@@ -690,7 +690,7 @@ def compute_dividend_chinext_state() -> dict:
     )
     benchmark_metrics = _metrics(
         hs300_nav,
-        hs300_returns.loc[window],
+        hs300_returns,
         pd.Series(0.0, index=hs300_nav.index),
         pd.Series(1.0, index=hs300_nav.index),
     )
