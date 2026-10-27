@@ -1,6 +1,6 @@
 {
-  "data_version": 21,
-  "generated_at": "2026-07-31 19:42",
+  "data_version": 22,
+  "generated_at": "2026-10-27 21:43",
   "strategy_order": [
     "composite",
     "etf",
@@ -1024,118 +1024,90 @@
       "id": "equity",
       "featured_variant": "daily_7x14_ma200_swap_esop_filter",
       "execution_note": "Daily event-driven entries at 7% per slot; displayed weights drift with prices since entry (no intra-hold rebalance).",
-      "latest_rebalance": "2026-07-27",
-      "holdings_as_of": "2026-07-27",
+      "latest_rebalance": "2026-10-27",
+      "holdings_as_of": "2026-10-27",
       "holdings": [
         {
           "symbol": "688002",
           "name": "睿创微纳",
           "name_en": "睿创微纳",
-          "weight": 0.09050008666668169,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "002203",
-          "name": "海亮股份",
-          "name_en": "海亮股份",
-          "weight": 0.08668323977260624,
+          "weight": 0.09575518409661256,
           "entry_weight": 0.07
         },
         {
           "symbol": "000739",
           "name": "普洛药业",
           "name_en": "普洛药业",
-          "weight": 0.07738385410446758,
+          "weight": 0.0852406545308174,
           "entry_weight": 0.07
         },
         {
-          "symbol": "688301",
-          "name": "奕瑞科技",
-          "name_en": "奕瑞科技",
-          "weight": 0.0763802035063303,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "002273",
-          "name": "水晶光电",
-          "name_en": "水晶光电",
-          "weight": 0.07626836419987211,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "000301",
-          "name": "东方盛虹",
-          "name_en": "东方盛虹",
-          "weight": 0.07529444044525105,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "000967",
-          "name": "盈峰环境",
-          "name_en": "盈峰环境",
-          "weight": 0.07488554296104541,
+          "symbol": "603129",
+          "name": "春风动力",
+          "name_en": "春风动力",
+          "weight": 0.08115016816013913,
           "entry_weight": 0.07
         },
         {
           "symbol": "000100",
           "name": "TCL 科技",
           "name_en": "TCL 科技",
-          "weight": 0.07263295252667637,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "300012",
-          "name": "华测检测",
-          "name_en": "华测检测",
-          "weight": 0.06582833327307223,
-          "entry_weight": 0.07
-        },
-        {
-          "symbol": "600141",
-          "name": "兴发集团",
-          "name_en": "兴发集团",
-          "weight": 0.06322296970905669,
+          "weight": 0.07203108504446294,
           "entry_weight": 0.07
         },
         {
           "symbol": "002648",
           "name": "卫星石化",
           "name_en": "卫星石化",
-          "weight": 0.061582889333984175,
+          "weight": 0.07193670920167486,
           "entry_weight": 0.07
         },
         {
-          "symbol": "002318",
-          "name": "久立特材",
-          "name_en": "久立特材",
-          "weight": 0.057859584518369145,
+          "symbol": "300124",
+          "name": "汇川技术",
+          "name_en": "Inovance Technology",
+          "weight": 0.06760194084548013,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "002436",
+          "name": "兴森科技",
+          "name_en": "兴森科技",
+          "weight": 0.06073248433307495,
           "entry_weight": 0.07
         },
         {
           "symbol": "603077",
           "name": "和邦生物",
           "name_en": "和邦生物",
-          "weight": 0.05722513284997685,
+          "weight": 0.0569577409413733,
           "entry_weight": 0.07
         },
         {
-          "symbol": "601799",
-          "name": "星宇股份",
-          "name_en": "星宇股份",
-          "weight": 0.044252406132610556,
+          "symbol": "600141",
+          "name": "兴发集团",
+          "name_en": "兴发集团",
+          "weight": 0.05680220576392933,
+          "entry_weight": 0.07
+        },
+        {
+          "symbol": "002371",
+          "name": "北方华创",
+          "name_en": "NAURA Technology",
+          "weight": 0.05179182708243577,
           "entry_weight": 0.07
         }
       ],
       "slot_meta": {
-        "positions": 14,
+        "positions": 10,
         "max_slots": 14,
         "slot_weight": 0.07,
-        "gross_weight": 0.9800000000000004,
-        "book_gross_weight": 0.9800000000000004,
+        "gross_weight": 0.7000000000000004,
+        "book_gross_weight": 0.7000000000000002,
         "hold_months": 9,
         "replacement": "ma200_swap",
         "universe": "hs300_csi500",
-        "avg_positions": 9.863157894736842
+        "avg_positions": 9.914285714285715
       },
       "rules_zh": [
         "事件：股权激励 strict core；员工持股仅限「X年/第N期员工持股计划（草案）」。",
@@ -1153,96 +1125,136 @@
       ],
       "watchlist": [
         {
-          "symbol": "600031",
-          "name": "三一重工",
-          "name_en": "Sany Heavy Industry",
-          "announcement_time": "2026-06-25",
-          "title": "三一重工股份有限公司2026年A股员工持股计划（草案）"
-        },
-        {
-          "symbol": "000651",
-          "name": "格力电器",
-          "name_en": "格力电器",
-          "announcement_time": "2026-06-18",
-          "title": "第四期员工持股计划（草案）"
-        },
-        {
-          "symbol": "002493",
-          "name": "荣盛石化",
-          "name_en": "荣盛石化",
-          "announcement_time": "2026-06-10",
-          "title": "荣盛石化股份有限公司2026年员工持股计划（草案）"
-        },
-        {
-          "symbol": "603260",
-          "name": "合盛硅业",
-          "name_en": "合盛硅业",
-          "announcement_time": "2026-06-06",
-          "title": "合盛硅业2026年员工持股计划（草案）"
-        },
-        {
-          "symbol": "601899",
-          "name": "紫金矿业",
-          "name_en": "紫金矿业",
-          "announcement_time": "2026-05-09",
-          "title": "紫金矿业集团股份有限公司2026年员工持股计划（草案）"
-        },
-        {
-          "symbol": "600690",
-          "name": "海尔智家",
-          "name_en": "青岛海尔",
-          "announcement_time": "2026-05-01",
-          "title": "海尔智家股份有限公司2026年度A股核心员工持股计划（草案）"
-        },
-        {
-          "symbol": "002252",
-          "name": "上海莱士",
-          "name_en": "上海莱士",
-          "announcement_time": "2026-04-29",
-          "title": "第二期员工持股计划（草案）"
-        },
-        {
-          "symbol": "603605",
-          "name": "珀莱雅",
-          "name_en": "珀莱雅",
-          "announcement_time": "2026-04-22",
-          "title": "珀莱雅化妆品股份有限公司2026年员工持股计划（草案）"
-        },
-        {
-          "symbol": "300274",
-          "name": "阳光电源",
-          "name_en": "Sungrow Power",
-          "announcement_time": "2026-04-01",
+          "symbol": "000034",
+          "name": "神州数码",
+          "name_en": "神州数码",
+          "announcement_time": "2026-10-17",
           "title": "2026年员工持股计划（草案）"
         },
         {
-          "symbol": "688349",
-          "name": "三一重能",
-          "name_en": "三一重能",
-          "announcement_time": "2026-04-01",
-          "title": "三一重能2026年员工持股计划（草案）"
+          "symbol": "603806",
+          "name": "福斯特",
+          "name_en": "福斯特",
+          "announcement_time": "2026-10-10",
+          "title": "福斯特第五期员工持股计划（草案）"
+        },
+        {
+          "symbol": "300750",
+          "name": "宁德时代",
+          "name_en": "CATL",
+          "announcement_time": "2026-09-30",
+          "title": "《2026年A股第二期员工持股计划（草案）》"
+        },
+        {
+          "symbol": "601021",
+          "name": "春秋航空",
+          "name_en": "春秋航空",
+          "announcement_time": "2026-09-30",
+          "title": "春秋航空2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "300474",
+          "name": "景嘉微",
+          "name_en": "景嘉微",
+          "announcement_time": "2026-09-24",
+          "title": "2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "002601",
+          "name": "龙佰集团",
+          "name_en": "龙蟒佰利",
+          "announcement_time": "2026-09-15",
+          "title": "第三期员工持股计划（草案）"
+        },
+        {
+          "symbol": "002120",
+          "name": "韵达股份",
+          "name_en": "韵达股份",
+          "announcement_time": "2026-09-15",
+          "title": "2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "300454",
+          "name": "深信服",
+          "name_en": "深信服",
+          "announcement_time": "2026-09-08",
+          "title": "深信服科技股份有限公司2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "600516",
+          "name": "方大炭素",
+          "name_en": "方大炭素",
+          "announcement_time": "2026-09-03",
+          "title": "方大炭素2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "300408",
+          "name": "三环集团",
+          "name_en": "三环集团",
+          "announcement_time": "2026-08-28",
+          "title": "2026年A股员工持股计划（草案）"
+        },
+        {
+          "symbol": "002602",
+          "name": "世纪华通",
+          "name_en": "世纪华通",
+          "announcement_time": "2026-08-28",
+          "title": "2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "002335",
+          "name": "科华数据",
+          "name_en": "科华恒盛",
+          "announcement_time": "2026-08-28",
+          "title": "2026年—2028年长效激励员工持股计划（草案）"
+        },
+        {
+          "symbol": "300896",
+          "name": "爱美客",
+          "name_en": "爱美客",
+          "announcement_time": "2026-08-21",
+          "title": "爱美客技术发展股份有限公司2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "600276",
+          "name": "恒瑞医药",
+          "name_en": "恒瑞医药",
+          "announcement_time": "2026-08-20",
+          "title": "恒瑞医药2026年A股员工持股计划（草案）"
+        },
+        {
+          "symbol": "002756",
+          "name": "永兴材料",
+          "name_en": "永兴材料",
+          "announcement_time": "2026-08-08",
+          "title": "2026年员工持股计划（草案）"
+        },
+        {
+          "symbol": "603259",
+          "name": "药明康德",
+          "name_en": "药明康德",
+          "announcement_time": "2026-08-04",
+          "title": "2026年A股员工持股计划（草案）"
+        },
+        {
+          "symbol": "600570",
+          "name": "恒生电子",
+          "name_en": "恒生电子",
+          "announcement_time": "2026-08-01",
+          "title": "恒生电子股份有限公司2026年员工持股计划（草案）"
         }
       ],
-      "watchlist_month": "2026-06-30",
+      "watchlist_month": "2026-10-31",
       "projected_month_end": {
-        "signal_date": "2026-07-27",
-        "month": "2026-07",
-        "as_of": "2026-07-27",
+        "signal_date": "2026-10-27",
+        "month": "2026-10",
+        "as_of": "2026-10-27",
         "holdings": [
           {
             "symbol": "000100",
             "name": "TCL 科技",
             "name_en": "TCL 科技",
-            "weight": 0.07263295252667637,
-            "reason": "",
-            "trade_date": "",
-            "status": "held"
-          },
-          {
-            "symbol": "000301",
-            "name": "东方盛虹",
-            "name_en": "东方盛虹",
-            "weight": 0.07529444044525105,
+            "weight": 0.07203108504446294,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1251,43 +1263,25 @@
             "symbol": "000739",
             "name": "普洛药业",
             "name_en": "普洛药业",
-            "weight": 0.07738385410446758,
+            "weight": 0.0852406545308174,
             "reason": "",
             "trade_date": "",
             "status": "held"
           },
           {
-            "symbol": "000967",
-            "name": "盈峰环境",
-            "name_en": "盈峰环境",
-            "weight": 0.07488554296104541,
+            "symbol": "002371",
+            "name": "北方华创",
+            "name_en": "NAURA Technology",
+            "weight": 0.05179182708243577,
             "reason": "",
             "trade_date": "",
             "status": "held"
           },
           {
-            "symbol": "002203",
-            "name": "海亮股份",
-            "name_en": "海亮股份",
-            "weight": 0.08668323977260624,
-            "reason": "",
-            "trade_date": "",
-            "status": "held"
-          },
-          {
-            "symbol": "002273",
-            "name": "水晶光电",
-            "name_en": "水晶光电",
-            "weight": 0.07626836419987211,
-            "reason": "",
-            "trade_date": "",
-            "status": "held"
-          },
-          {
-            "symbol": "002318",
-            "name": "久立特材",
-            "name_en": "久立特材",
-            "weight": 0.057859584518369145,
+            "symbol": "002436",
+            "name": "兴森科技",
+            "name_en": "兴森科技",
+            "weight": 0.06073248433307495,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1296,16 +1290,16 @@
             "symbol": "002648",
             "name": "卫星石化",
             "name_en": "卫星石化",
-            "weight": 0.061582889333984175,
+            "weight": 0.07193670920167486,
             "reason": "",
             "trade_date": "",
             "status": "held"
           },
           {
-            "symbol": "300012",
-            "name": "华测检测",
-            "name_en": "华测检测",
-            "weight": 0.06582833327307223,
+            "symbol": "300124",
+            "name": "汇川技术",
+            "name_en": "Inovance Technology",
+            "weight": 0.06760194084548013,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1314,16 +1308,7 @@
             "symbol": "600141",
             "name": "兴发集团",
             "name_en": "兴发集团",
-            "weight": 0.06322296970905669,
-            "reason": "",
-            "trade_date": "",
-            "status": "held"
-          },
-          {
-            "symbol": "601799",
-            "name": "星宇股份",
-            "name_en": "星宇股份",
-            "weight": 0.044252406132610556,
+            "weight": 0.05680220576392933,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1332,7 +1317,16 @@
             "symbol": "603077",
             "name": "和邦生物",
             "name_en": "和邦生物",
-            "weight": 0.05722513284997685,
+            "weight": 0.0569577409413733,
+            "reason": "",
+            "trade_date": "",
+            "status": "held"
+          },
+          {
+            "symbol": "603129",
+            "name": "春风动力",
+            "name_en": "春风动力",
+            "weight": 0.08115016816013913,
             "reason": "",
             "trade_date": "",
             "status": "held"
@@ -1341,35 +1335,54 @@
             "symbol": "688002",
             "name": "睿创微纳",
             "name_en": "睿创微纳",
-            "weight": 0.09050008666668169,
-            "reason": "",
-            "trade_date": "",
-            "status": "held"
-          },
-          {
-            "symbol": "688301",
-            "name": "奕瑞科技",
-            "name_en": "奕瑞科技",
-            "weight": 0.0763802035063303,
+            "weight": 0.09575518409661256,
             "reason": "",
             "trade_date": "",
             "status": "held"
           }
         ],
         "entries": [],
-        "exits": [],
-        "unchanged": true
+        "exits": [
+          {
+            "symbol": "002203",
+            "name": "海亮股份",
+            "name_en": "海亮股份",
+            "weight": 0.07,
+            "reason": "exit",
+            "trade_date": "2026-10-12",
+            "status": "executed"
+          },
+          {
+            "symbol": "000301",
+            "name": "东方盛虹",
+            "name_en": "东方盛虹",
+            "weight": 0.07,
+            "reason": "exit",
+            "trade_date": "2026-10-15",
+            "status": "executed"
+          },
+          {
+            "symbol": "688301",
+            "name": "奕瑞科技",
+            "name_en": "奕瑞科技",
+            "weight": 0.07,
+            "reason": "exit",
+            "trade_date": "2026-10-26",
+            "status": "executed"
+          }
+        ],
+        "unchanged": false
       },
       "metrics": {
-        "cagr": 0.18424773195118993,
-        "sharpe": 0.8877829691252397,
-        "max_drawdown": -0.26733220257792933,
-        "final_nav": 4.50499272757335,
-        "turnover_per_year": 2.3996460980036303,
-        "excess_cagr": 0.16094024801231277
+        "cagr": 0.16544585295868375,
+        "sharpe": 0.794150088658437,
+        "max_drawdown": -0.26733220257792956,
+        "final_nav": 4.060485289739471,
+        "turnover_per_year": 2.421434540389973,
+        "excess_cagr": 0.159352521167478
       },
       "benchmark_metrics": {
-        "cagr": 0.02330748393887716,
+        "cagr": 0.006093331791205747,
         "sharpe": null,
         "max_drawdown": null,
         "final_nav": null
@@ -1462,10 +1475,10 @@
       "core_symbols": 1191,
       "nav_start": "2017-09-01",
       "backtest_start": "2017-09-01",
-      "backtest_end": "2026-07-27",
+      "backtest_end": "2026-10-27",
       "cost_bps": 20.0,
       "nav_src": "nav/equity.json",
-      "nav_points": 2158
+      "nav_points": 2218
     }
   }
 }
