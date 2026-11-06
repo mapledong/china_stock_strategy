@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.mapledong.china-stock-strategy-weekly</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/maple/Projects/quant-traffic-light/web/scripts/weekly_update.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/maple/Projects/quant-traffic-light</string>
+  <!-- Friday 17:00 Beijing time — set Mac system timezone to Asia/Shanghai -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>5</integer>
+    <key>Hour</key>
+    <integer>17</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/maple/Projects/quant-traffic-light/results/weekly_update.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/maple/Projects/quant-traffic-light/results/weekly_update.log</string>
+</dict>
+</plist>
