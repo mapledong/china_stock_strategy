@@ -245,7 +245,7 @@ const ETF_NAMES_EN = {
   "HYDRO_EQ": "Hydro Equal-Weight",
 };
 
-const APP_VERSION = 24;
+const APP_VERSION = 25;
 
 const STOCK_NAMES_EN = {
   "300124": "Inovance Technology",
@@ -285,7 +285,7 @@ let activeStrategy = "composite";
 const CHART_CONFIG = {
   composite: { canvasId: "chart-composite", strategyField: "strategy_nav", benchField: "hs300_nav" },
   etf: { canvasId: "chart-etf", strategyField: "strategy_nav", benchField: "hs300_nav" },
-  ah: { canvasId: "chart-ah", strategyField: "AH_low_premium_top10_tushare", benchField: "CSI300_ETF_proxy" },
+  ah: { canvasId: "chart-ah", strategyField: "AH_low_premium_top15_tushare", benchField: "CSI300_ETF_proxy" },
   dividend: { canvasId: "chart-dividend", strategyField: "strategy_nav", benchField: "hs300_nav" },
   equity: { canvasId: "chart-equity", strategyField: "strategy_nav", benchField: "hs300_nav" },
 };

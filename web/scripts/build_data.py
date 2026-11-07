@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 OUT = Path(__file__).resolve().parents[1] / "data" / "strategies.json"
 NAV_DIR = Path(__file__).resolve().parents[1] / "data" / "nav"
-DATA_VERSION = 24
+DATA_VERSION = 25
 SRC = ROOT / "src"
 WEB_DIR = Path(__file__).resolve().parents[1]
 INDEX_HTML = WEB_DIR / "index.html"
@@ -150,7 +150,7 @@ PAIR_NAMES_EN = {
 
 ETF_STRATEGY = "6M skip 1M"
 ETF_NAV_START = "2017-09-01"
-AH_TOP_N = 10
+AH_TOP_N = 15
 DIVIDEND_CHINEXT_DIR = RESULTS / "dividend_chinext_momentum"
 DIVIDEND_CHINEXT_STRATEGY = "12M momentum"
 PAIR_NAMES = {"510880": "红利ETF", "159915": "创业板ETF"}
@@ -518,7 +518,7 @@ def build_ah() -> dict:
     holdings_rows = read_csv(RESULTS / "ah_tushare_holdings.csv")
     latest_date, holdings = latest_holdings_by_date(holdings_rows, "date", ["pair", "weight", "ah_premium"])
     nav_df = pd.read_csv(RESULTS / "ah_tushare_equity.csv", parse_dates=["date"]).set_index("date")
-    strategy_col = "AH_low_premium_top10_tushare"
+    strategy_col = "AH_low_premium_top15_tushare"
     bench_col = "CSI300_ETF_proxy"
     start_dt = nav_df.index[0]
     nav_df = nav_df.assign(
